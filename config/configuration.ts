@@ -16,7 +16,7 @@ export default () => {
       password: env('DATABASE_PASSWORD'),
     },
     logger: {
-      on: env('LOGGER_ON'),
+      on: env('LOG_ON'),
     },
   };
 };

@@ -11,7 +11,7 @@ import { Length } from 'class-validator';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  uid: number;
+  id: number;
 
   @Column({ unique: true })
   @Length(8, 20)

@@ -16,7 +16,7 @@ import * as winston from 'winston';
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.ms(),
-            nestWinstonModuleUtilities.format.nestLike('MyApp', {
+            nestWinstonModuleUtilities.format.nestLike('Log ', {
               colors: true,
               prettyPrint: true,
             }),

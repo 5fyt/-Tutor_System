@@ -7,10 +7,12 @@ export class UserController {
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
   ) {
-    this.logger.log('log init');
+    this.logger.log('sssslog init');
   }
   @Get()
   getUserInfo() {
+    this.logger.log('ssss');
+    this.logger.error('error');
     return {
       code: 200,
       message: 'success',
