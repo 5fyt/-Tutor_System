@@ -15,5 +15,8 @@ export default () => {
       type: env('DATABASE_TYPE'),
       password: env('DATABASE_PASSWORD'),
     },
+    logger: {
+      on: env('LOGGER_ON'),
+    },
   };
 };

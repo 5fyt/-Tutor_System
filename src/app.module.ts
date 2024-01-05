@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import loadEnv from '../config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
+import { LogModule } from './shared/logger/log.module';
 console.log(process.env.NEST_ENVIRONMENT);
 @Module({
   imports: [
@@ -36,6 +37,7 @@ console.log(process.env.NEST_ENVIRONMENT);
       inject: [ConfigService],
     }),
     UserModule,
+    LogModule,
   ],
   controllers: [],
   providers: [],
