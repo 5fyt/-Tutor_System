@@ -1,4 +1,10 @@
-import { Controller, LoggerService, Inject, Get } from '@nestjs/common';
+import {
+  Controller,
+  LoggerService,
+  Inject,
+  Get,
+  ForbiddenException,
+} from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Controller('user')
@@ -13,9 +19,10 @@ export class UserController {
   getUserInfo() {
     this.logger.log('ssss');
     this.logger.error('error');
-    return {
-      code: 200,
-      message: 'success',
-    };
+    throw new ForbiddenException();
+    // return {
+    //   code: 200,
+    //   message: 'success',
+    // };
   }
 }
