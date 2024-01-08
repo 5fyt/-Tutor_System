@@ -1,6 +1,7 @@
 function env(targetName: string) {
   return process.env[targetName];
 }
+
 export default () => {
   return {
     server: {
@@ -14,9 +15,16 @@ export default () => {
       name: env('DATABASE_NAME'),
       type: env('DATABASE_TYPE'),
       password: env('DATABASE_PASSWORD'),
+      logging: ['error'],
     },
     logger: {
       on: env('LOG_ON'),
+      timestamp: false,
+      dir: env('LOGGER_DIR'),
+      maxFileSize: env('OGGER_MAX_SIZE'),
+      maxFiles: env('LOGGER_MAX_FILES'),
+      errorLogName: env('LOGGER_ERROR_FILENAME'),
+      appLogName: env('LOGGER_APP_FILENAME0'),
     },
   };
 };

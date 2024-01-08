@@ -1,25 +1,23 @@
 import {
   Controller,
-  LoggerService,
-  Inject,
   Get,
-  ForbiddenException,
+  // ForbiddenException,
 } from '@nestjs/common';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { LoggerService } from 'src/shared/logger/logger.service';
 
 @Controller('user')
 export class UserController {
-  constructor(
-    @Inject(WINSTON_MODULE_NEST_PROVIDER)
-    private readonly logger: LoggerService,
-  ) {
+  constructor(private readonly logger: LoggerService) {
     this.logger.log('sssslog init');
   }
   @Get()
   getUserInfo() {
     this.logger.log('ssss');
     this.logger.error('error');
-    throw new ForbiddenException();
+    // throw new ForbiddenException();
+    return {
+      data: 'user info',
+    };
     // return {
     //   code: 200,
     //   message: 'success',

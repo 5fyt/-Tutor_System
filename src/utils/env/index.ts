@@ -7,6 +7,9 @@ export function handleEnvFilePath() {
     : envFilePath.unshift('.env.production');
   return envFilePath;
 }
+export function isDev(): boolean {
+  return process.env.NODE_ENV === 'development';
+}
 export function handleValidationSchema() {
   return Joi.object({
     SERVER_PORT: Joi.number().default(9090),
