@@ -23,11 +23,11 @@ export class Role {
   @Column({ unique: true })
   roleKey: string;
 
-  @Column({ type: 'varchar' })
-  createdBy: string;
+  // @Column({ type: 'varchar' })
+  // createdBy: string;
 
-  @Column({ type: 'tinyint' })
-  status: number;
+  // @Column({ type: 'tinyint' })
+  // status: number;
 
   @Column({ nullable: true })
   nickName: string;

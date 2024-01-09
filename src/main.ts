@@ -15,6 +15,7 @@ async function bootstrap() {
   //注册全局拦截器
   app.useGlobalInterceptors(new TransformInterceptor(app.get(LoggerService)));
   const port = configService.get<number>('server.port');
+  app.setGlobalPrefix('api/v1');
   await app.listen(port);
 }
 bootstrap();

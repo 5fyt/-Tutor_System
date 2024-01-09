@@ -36,6 +36,8 @@ export class AuthGuard implements CanActivate {
     // const url = request.url;
     // const path = url.split('?')[0];
     const token = request.headers['authorization'] as string;
+    console.log('sss', isEmpty(token));
+
     if (isEmpty(token)) {
       throw new ApiException(11001);
     }

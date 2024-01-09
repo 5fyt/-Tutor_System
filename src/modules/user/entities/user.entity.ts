@@ -32,8 +32,8 @@ export class User {
   @Column({ nullable: true })
   avatar: string;
 
-  @Column()
-  status: 0 | 1;
+  // @Column()
+  // status: 0 | 1;
 
   @Column({ nullable: true })
   email: string;

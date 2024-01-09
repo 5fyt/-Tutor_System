@@ -5,11 +5,6 @@ import { Injectable } from '@nestjs/common';
 import { LoginFormParams } from './login-auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { LoggerService } from 'src/shared/logger/logger.service';
-// import * as log4js from 'log4js';
-
-// const logger = log4js.getLogger();
-// logger.level = 'all';
-
 @Injectable()
 export class LoginService {
   constructor(
