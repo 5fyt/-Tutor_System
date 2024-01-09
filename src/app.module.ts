@@ -11,7 +11,7 @@ import { UserModule } from './modules/user/user.module';
 import { LoggerModule } from './shared/logger/logger.module';
 import { TypeORMLoggerService } from './shared/logger/typeorm-logger.service';
 import { LOGGER_MODULE_OPTIONS } from './shared/logger/logger.constants';
-console.log(process.env.NEST_ENVIRONMENT);
+import { LoginModule } from './modules/login/login.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -74,7 +74,7 @@ console.log(process.env.NEST_ENVIRONMENT);
       true,
     ),
     UserModule,
-    LoggerModule,
+    LoginModule,
   ],
   controllers: [],
   providers: [],

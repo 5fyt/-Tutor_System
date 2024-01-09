@@ -5,8 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Length } from 'class-validator';
+import { Role } from 'src/modules/role/entitites/role.entity';
 
 @Entity()
 export class User {
@@ -24,8 +26,14 @@ export class User {
   @Column({ nullable: true })
   nickName: string;
 
+  @ManyToOne(() => Role, (role) => role.users)
+  role: Role;
+
   @Column({ nullable: true })
   avatar: string;
+
+  @Column()
+  status: 0 | 1;
 
   @Column({ nullable: true })
   email: string;

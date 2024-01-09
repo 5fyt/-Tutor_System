@@ -1,6 +1,6 @@
-function env(targetName: string) {
+export const env = (targetName: string) => {
   return process.env[targetName];
-}
+};
 
 export default () => {
   return {
@@ -25,6 +25,10 @@ export default () => {
       maxFiles: env('LOGGER_MAX_FILES'),
       errorLogName: env('LOGGER_ERROR_FILENAME'),
       appLogName: env('LOGGER_APP_FILENAME0'),
+    },
+    authSecret: {
+      secret: env('SECRET_KEY'),
+      encryptedPwdKey: env('ENCRYPTED_PWD_KEY'),
     },
   };
 };
