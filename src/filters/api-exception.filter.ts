@@ -35,6 +35,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
     message =
       exception instanceof HttpException ? exception.message : `${exception}`;
     // }
+    // console.log(message);
     // 记录 500 日志
     if (status >= 500) {
       this.logger.error(exception, ApiExceptionFilter.name);

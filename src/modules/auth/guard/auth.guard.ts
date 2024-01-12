@@ -6,10 +6,11 @@ import { isEmpty } from 'lodash';
 import { ApiException } from 'src/common/exceptions/api.exception';
 import {
   // ADMIN_PREFIX,
-  // ADMIN_USER,
+  ADMIN_USER,
   PERMISSION_OPTIONAL_KEY_METADATA,
   // AUTHORIZE_KEY_METADATA,
 } from '../constants/admin.constants';
+import { ConfigService } from '@nestjs/config';
 
 // import { LoginService } from 'src/modules/admin/login/login.service';
 
@@ -22,6 +23,7 @@ export class AuthGuard implements CanActivate {
     private reflector: Reflector,
     private jwtService: JwtService,
     // private loginService: LoginService,
+    private configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -37,8 +39,6 @@ export class AuthGuard implements CanActivate {
     // const url = request.url;
     // const path = url.split('?')[0];
     const token = request.headers['authorization'] as string;
-    // const token = this.extractTokenFromHeader(request);
-    console.log('sss', isEmpty(token));
 
     if (isEmpty(token)) {
       throw new ApiException(11001);
@@ -46,20 +46,16 @@ export class AuthGuard implements CanActivate {
 
     try {
       // 挂载对象到当前请求上
-      // request[ADMIN_USER] = await this.jwtService.verify(token);
-      console.log(
-        await this.jwtService.verify(token, {
-          secret: 'Q3m8F7w4Z1r6T9y2',
-        }),
-      );
+      request[ADMIN_USER] = await this.jwtService.verify(token, {
+        secret: this.configService.get('authSecret.secret'),
+      });
     } catch (e) {
-      console.log('sss');
       // 无法通过token校验
       throw new ApiException(11001);
     }
-    // if (isEmpty(request[ADMIN_USER])) {
-    //   throw new ApiException(11001);
-    // }
+    if (isEmpty(request[ADMIN_USER])) {
+      throw new ApiException(11001);
+    }
     // const pv = await this.loginService.getRedisPasswordVersionById(
     //   request[ADMIN_USER].uid,
     // );

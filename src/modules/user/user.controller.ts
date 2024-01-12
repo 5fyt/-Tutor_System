@@ -14,7 +14,6 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SearchQuery } from 'src/common/class/search.query';
-// import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guard/role.guard';
 import { AuthGuard } from '../auth/guard/auth.guard';
@@ -26,7 +25,7 @@ export class UserController {
 
   @Post('/add')
   @HttpCode(200)
-  @Roles('user:add')
+  // @Roles('user:add')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }

@@ -15,19 +15,19 @@ export class LoginService {
   ) {}
   async login(loginParams: LoginFormParams) {
     const user = await this.userService.findOneByUserName(loginParams.userName);
-    const auths = await this.roleService.getAuthList(user.role.id, 'menus');
-    const authList: string[] = [];
-    auths.map((item) => {
-      if (item.apiPerms === '') return;
-      if (item.apiPerms === null) return;
-      authList.push(item.apiPerms);
-    });
+    // const auths = await this.roleService.getAuthList(user.role.id, 'menus');
+    // const authList: string[] = [];
+    // auths.map((item) => {
+    //   if (item.apiPerms === '') return;
+    //   if (item.apiPerms === null) return;
+    //   authList.push(item.apiPerms);
+    // });
     if (user && user.password === loginParams.password) {
       const payload = {
         userName: user.userName,
         userId: user.id,
         roleId: user.role.id,
-        authList,
+        // authList,
       };
       this.loggerService.log(`${user.userName} 上线了~`);
       return {
