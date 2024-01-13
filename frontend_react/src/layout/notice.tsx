@@ -24,10 +24,10 @@ const HeaderNoticeComponent: FC = () => {
   // loads the notices belonging to logged in user
   // and sets loading flag in-process
   const getNotice = async () => {
-    setLoading(true);
+    // setLoading(true);
     const data = await getNoticeList();
 
-    setLoading(false);
+    // setLoading(false);
     setNoticeList(data);
   };
 

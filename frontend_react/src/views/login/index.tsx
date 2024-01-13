@@ -57,7 +57,7 @@ const LoginForm: FC = () => {
   return (
     <div className="login-page">
       <Form<API.LoginParams> onFinish={onFinished} className="login-page-form" initialValues={initialValues}>
-        <h2>REACT ANTD ADMIN</h2>
+        <h2 className="login-page-form_title">Tutor System Backage</h2>
         <Form.Item name="username" rules={[{ required: true, message: '请输入用户名！' }]}>
           <Input placeholder="用户名" prefix={<UserOutlined />} size="large" />
         </Form.Item>
