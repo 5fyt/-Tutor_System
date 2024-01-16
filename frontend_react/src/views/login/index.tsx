@@ -2,7 +2,7 @@ import './index.less';
 
 import { LockOutlined, SafetyOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
-import type { Location } from 'history';
+// import type { Location } from 'history';
 import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ const initialValues: API.LoginParams = {
 
 const LoginForm: FC = () => {
   const navigate = useNavigate();
-  const location = useLocation() as Location<{ from: string }>;
+  const location = useLocation() as any;
   const [capatcha, setCapatcha] = useState<API.CaptchaResult>({
     id: '',
     img: ''

@@ -12,23 +12,23 @@ const PrivateRoute: FC<RouteProps> = props => {
   const { formatMessage } = useLocale();
   const { pathname } = useLocation();
 
-  return token ? (
-    props.element || null
-  ) : (
-    <Result
-      status="403"
-      title="403"
-      subTitle={formatMessage({ id: 'gloabal.tips.unauthorized' })}
-      extra={
-        <Button
-          type="primary"
-          onClick={() => navigate({ pathname: 'login' }, { replace: true, state: { from: pathname } })}
-        >
-          {formatMessage({ id: 'gloabal.tips.goToLogin' })}
-        </Button>
-      }
-    />
-  );
+  return token
+    ? props.element || null
+    : ((
+        <Result
+          status="403"
+          title="403"
+          subTitle={formatMessage({ id: 'gloabal.tips.unauthorized' })}
+          extra={
+            <Button
+              type="primary"
+              onClick={() => navigate({ pathname: 'login' }, { replace: true, state: { from: pathname } })}
+            >
+              {formatMessage({ id: 'gloabal.tips.goToLogin' })}
+            </Button>
+          }
+        />
+      ) as any);
 };
 
 export default PrivateRoute;

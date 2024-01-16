@@ -53,6 +53,7 @@ const errorPages = [
 
 const DynamicRouter: FC = () => {
   const { token, menuList = [] } = userStore;
+  console.log('menuList', menuList);
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
 
@@ -73,7 +74,7 @@ const DynamicRouter: FC = () => {
   const newRoutes = useMemo(() => {
     const routes = cloneDeep(defaultRouteList);
     const layoutRoute = routes.find(item => item.path === '/')?.children;
-    layoutRoute?.push(...cloneDeep([...defaultMenuRoutes, ...menuList]), ...errorPages);
+    layoutRoute?.push(...cloneDeep(...[menuList]), ...errorPages);
     return routes;
   }, [menuList]);
 
