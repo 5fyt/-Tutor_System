@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // import { BullModule } from '@nestjs/bull';
 // import { ConfigModule, ConfigService } from '@nestjs/config';
-import {
-  ROOT_ROLE_ID,
-  // SYS_TASK_QUEUE_NAME,
-  // SYS_TASK_QUEUE_PREFIX,
-} from 'src/modules/auth/constants/admin.constants';
+// import {
+//   // ROOT_ROLE_ID,
+//   // SYS_TASK_QUEUE_NAME,
+//   // SYS_TASK_QUEUE_PREFIX,
+// } from 'src/modules/auth/constants/admin.constants';
 // import SysDepartment from 'src/entities/admin/sys-department.entity';
 // import SysLoginLog from 'src/entities/admin/sys-login-log.entity';
 // import SysMenu from 'src/entities/admin/sys-menu.entity';
@@ -98,7 +98,7 @@ import { SysUserService } from './user/user.service';
     // SysServeService,
   ],
   exports: [
-    ROOT_ROLE_ID,
+    // ROOT_ROLE_ID,
     TypeOrmModule,
     SysUserService,
     // SysMenuService,

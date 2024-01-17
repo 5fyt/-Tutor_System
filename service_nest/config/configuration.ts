@@ -33,7 +33,7 @@ export default () => {
     redis: {
       host: env('REDIS_HOST'),
       port: parseInt(env('REDIS_PORT'), 10) || 6379,
-      password: env('REDIS_PASSWORD'),
+      // password: env('REDIS_PASSWORD'),
       db: parseInt(env('REDIS_DB'), 10) || 0,
     },
   };
