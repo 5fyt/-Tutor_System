@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // import { BullModule } from '@nestjs/bull';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+// import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
   ROOT_ROLE_ID,
-  SYS_TASK_QUEUE_NAME,
-  SYS_TASK_QUEUE_PREFIX,
+  // SYS_TASK_QUEUE_NAME,
+  // SYS_TASK_QUEUE_PREFIX,
 } from 'src/modules/auth/constants/admin.constants';
 // import SysDepartment from 'src/entities/admin/sys-department.entity';
 // import SysLoginLog from 'src/entities/admin/sys-login-log.entity';
@@ -39,7 +39,7 @@ import { SysUserService } from './user/user.service';
 // import { SysParamConfigService } from './param-config/param-config.service';
 // import { SysServeController } from './serve/serve.controller';
 // import { SysServeService } from './serve/serve.service';
-import { ConfigurationKeyPaths } from '@/config/configuration';
+// import { ConfigurationKeyPaths } from '@/config/configuration';
 
 @Module({
   imports: [

@@ -6,10 +6,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PaginatedResponseDto } from 'src/common/class/res.class';
-import { ADMIN_PREFIX } from '../../admin.constants';
+import { ADMIN_PREFIX } from '../../auth/constants/admin.constants';
 import { IAdminUser } from '../../admin.interface';
-import { AdminUser } from '../../core/decorators/admin-user.decorator';
-import { SysMenuService } from '../menu/menu.service';
+import { AdminUser } from '../../../decorators/admin-user.decorator';
+// import { SysMenuService } from '../menu/menu.service';
 import {
   CreateUserDto,
   DeleteUserDto,
@@ -27,7 +27,7 @@ import { SysUserService } from './user.service';
 export class SysUserController {
   constructor(
     private userService: SysUserService,
-    private menuService: SysMenuService,
+    // private menuService: SysMenuService,
   ) {}
 
   @ApiOperation({
@@ -83,7 +83,7 @@ export class SysUserController {
   @Post('update')
   async update(@Body() dto: UpdateUserDto): Promise<void> {
     await this.userService.update(dto);
-    await this.menuService.refreshPerms(dto.id);
+    // await this.menuService.refreshPerms(dto.id);
   }
 
   @ApiOperation({
