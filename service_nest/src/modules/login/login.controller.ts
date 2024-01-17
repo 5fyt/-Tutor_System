@@ -1,25 +1,58 @@
-import { Controller, Post, Body, HttpCode, Get, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FastifyRequest } from 'fastify';
+import { UtilService } from 'src/shared/services/util.service';
+import { Authorize } from 'src/decorators/authorize.decorator';
+import { LogDisabled } from 'src/decorators/log-disabled.decorator';
+import { ImageCaptchaDto, LoginInfoDto } from './login.dto';
+import { ImageCaptcha, LoginToken } from './login.class';
 import { LoginService } from './login.service';
-import { LoginFormParams } from './login-auth.dto';
 
+@ApiTags('登录模块')
 @Controller()
 export class LoginController {
-  constructor(private readonly authService: LoginService) {}
+  constructor(
+    private loginService: LoginService,
+    private utils: UtilService,
+  ) {}
 
-  @HttpCode(200)
-  @Post('/login')
-  async login(@Body() createAuthDto: LoginFormParams) {
-    return this.authService.login(createAuthDto);
+  @ApiOperation({
+    summary: '获取登录图片验证码',
+  })
+  @ApiOkResponse({ type: ImageCaptcha })
+  @Get('captcha/img')
+  @Authorize()
+  async captchaByImg(@Query() dto: ImageCaptchaDto): Promise<ImageCaptcha> {
+    return await this.loginService.createImageCaptcha(dto);
   }
 
-  @Post('/updateToken')
-  async refreshToken(@Body() updateToken: { refreshToken: string }) {
-    return this.authService.refreshToken(updateToken.refreshToken);
-  }
-
-  @Get('list')
-  @HttpCode(200)
-  getAuthList(@Req() req: any) {
-    console.log(req.user);
+  @ApiOperation({
+    summary: '管理员登录',
+  })
+  @ApiOkResponse({ type: LoginToken })
+  @Post('login')
+  @LogDisabled()
+  @Authorize()
+  async login(
+    @Body() dto: LoginInfoDto,
+    @Req() req: FastifyRequest,
+    @Headers('user-agent') ua: string,
+  ): Promise<LoginToken> {
+    await this.loginService.checkImgCaptcha(dto.captchaId, dto.verifyCode);
+    const token = await this.loginService.getLoginSign(
+      dto.username,
+      dto.password,
+      this.utils.getReqIP(req),
+      ua,
+    );
+    return { token };
   }
 }

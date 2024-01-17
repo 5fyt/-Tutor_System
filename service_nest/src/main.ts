@@ -8,6 +8,8 @@ import { TransformInterceptor } from './intercepts/transform.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+  app.enableCors();
+
   app.useLogger(app.get(LoggerService));
   //注册全局错误过滤器
   app.useGlobalFilters(new ApiExceptionFilter(app.get(LoggerService)));

@@ -1,57 +1,140 @@
-import { RoleService } from './../role/role.service';
-import { authSecret } from '../../../config';
-import { UserService } from './../user/user.service';
 import { Injectable } from '@nestjs/common';
-import { LoginFormParams } from './login-auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import { LoggerService } from 'src/shared/logger/logger.service';
+import { isEmpty } from 'lodash';
+import * as svgCaptcha from 'svg-captcha';
+import { UtilService } from 'src/shared/services/util.service';
+import { ApiException } from 'src/common/exceptions/api.exception';
+import { RedisService } from 'src/shared/services/redis.service';
+// import { SysLogService } from '../system/log/log.service';
+import { SysUserService } from '../system/user/user.service';
+// import { SysMenuService } from '../system/menu/menu.service';
+import { ImageCaptchaDto } from './login.dto';
+import { ImageCaptcha } from './login.class';
+
 @Injectable()
 export class LoginService {
   constructor(
-    private readonly userService: UserService,
-    private readonly jwtService: JwtService,
-    private readonly roleService: RoleService,
-    private readonly loggerService: LoggerService,
+    private redisService: RedisService,
+    // private menuService: SysMenuService,
+    private userService: SysUserService,
+    // private logService: SysLogService,
+    private util: UtilService,
+    private jwtService: JwtService,
   ) {}
-  async login(loginParams: LoginFormParams) {
-    const user = await this.userService.findOneByUserName(loginParams.userName);
-    // const auths = await this.roleService.getAuthList(user.role.id, 'menus');
-    // const authList: string[] = [];
-    // auths.map((item) => {
-    //   if (item.apiPerms === '') return;
-    //   if (item.apiPerms === null) return;
-    //   authList.push(item.apiPerms);
-    // });
-    if (user && user.password === loginParams.password) {
-      const payload = {
-        userName: user.userName,
-        userId: user.id,
-        roleId: user.role.id,
-        // authList,
-      };
-      this.loggerService.log(`${user.userName} 上线了~`);
-      return {
-        refreshToken: this.jwtService.sign(payload, {
-          expiresIn: '8d',
-        }),
-        token: this.jwtService.sign(payload),
-      };
-    }
-    return null;
+
+  /**
+   * 创建验证码并缓存加入redis缓存
+   * @param captcha 验证码长宽
+   * @returns svg & id obj
+   */
+  async createImageCaptcha(captcha: ImageCaptchaDto): Promise<ImageCaptcha> {
+    const svg = svgCaptcha.create({
+      size: 4,
+      color: true,
+      noise: 4,
+      width: isEmpty(captcha.width) ? 100 : captcha.width,
+      height: isEmpty(captcha.height) ? 50 : captcha.height,
+      charPreset: '1234567890',
+    });
+    const result = {
+      img: `data:image/svg+xml;base64,${Buffer.from(svg.data).toString(
+        'base64',
+      )}`,
+      id: this.util.generateUUID(), // this.utils.generateUUID()
+    };
+    // 5分钟过期时间
+    await this.redisService
+      .getRedis()
+      .set(`admin:captcha:img:${result.id}`, svg.text, 'EX', 60 * 5);
+    return result;
   }
 
-  async refreshToken(refreshToken: string) {
-    const res = await this.jwtService.verify(refreshToken, {
-      secret: authSecret.secret,
-    });
-
-    if (res) {
-      const user = await this.userService.findOneByUserName(res.userName);
-      return await this.login({
-        userName: user.userName,
-        password: user.password,
-      });
+  /**
+   * 校验验证码
+   */
+  async checkImgCaptcha(id: string, code: string): Promise<void> {
+    const result = await this.redisService
+      .getRedis()
+      .get(`admin:captcha:img:${id}`);
+    if (isEmpty(result) || code.toLowerCase() !== result.toLowerCase()) {
+      throw new ApiException(10002);
     }
-    return null;
+    // 校验成功后移除验证码
+    await this.redisService.getRedis().del(`admin:captcha:img:${id}`);
+  }
+
+  /**
+   * 获取登录JWT
+   * 返回null则账号密码有误，不存在该用户
+   */
+  async getLoginSign(
+    username: string,
+    password: string,
+    ip: string,
+    ua: string,
+  ): Promise<string> {
+    const user = await this.userService.findUserByUserName(username);
+    if (isEmpty(user)) {
+      throw new ApiException(10003);
+    }
+    const comparePassword = this.util.md5(`${password}${user.psalt}`);
+    if (user.password !== comparePassword) {
+      throw new ApiException(10003);
+    }
+    // const perms = await this.menuService.getPerms(user.id);
+    // TODO 系统管理员开放多点登录
+    // if (user.id === 1) {
+    //   const oldToken = await this.getRedisTokenById(user.id);
+    //   if (oldToken) {
+    //     this.logService.saveLoginLog(user.id, ip, ua);
+    //     return oldToken;
+    //   }
+    // }
+    const redis = await this.redisService.getRedis();
+    const pv = Number(await redis.get(`admin:passwordVersion:${user.id}`)) || 1;
+
+    const jwtSign = this.jwtService.sign(
+      {
+        uid: parseInt(user.id.toString()),
+        pv,
+      },
+      // {
+      //   expiresIn: '24h',
+      // },
+    );
+    await redis.set(`admin:passwordVersion:${user.id}`, pv);
+    // Token设置过期时间 24小时
+    await redis.set(`admin:token:${user.id}`, jwtSign, 'EX', 60 * 60 * 24);
+    // await redis.set(`admin:perms:${user.id}`, JSON.stringify(perms));
+    // await this.logService.saveLoginLog(user.id, ip, ua);
+    return jwtSign;
+  }
+
+  /**
+   * 清除登录状态信息
+   */
+  async clearLoginStatus(uid: number): Promise<void> {
+    await this.userService.forbidden(uid);
+  }
+
+  /**
+   * 获取权限菜单
+   */
+  // async getPermMenu(uid: number): Promise<PermMenuInfo> {
+  //   const menus = await this.menuService.getMenus(uid);
+  //   const perms = await this.menuService.getPerms(uid);
+  //   return { menus, perms };
+  // }
+
+  async getRedisPasswordVersionById(id: number): Promise<string> {
+    return this.redisService.getRedis().get(`admin:passwordVersion:${id}`);
+  }
+
+  async getRedisTokenById(id: number): Promise<string> {
+    return this.redisService.getRedis().get(`admin:token:${id}`);
+  }
+
+  async getRedisPermsById(id: number): Promise<string> {
+    return this.redisService.getRedis().get(`admin:perms:${id}`);
   }
 }

@@ -7,11 +7,13 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import loadEnv from '../config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './modules/user/user.module';
+// import { UserModule } from './modules/user/user.module';
 import { LoggerModule } from './shared/logger/logger.module';
 import { TypeORMLoggerService } from './shared/logger/typeorm-logger.service';
 import { LOGGER_MODULE_OPTIONS } from './shared/logger/logger.constants';
-import { LoginModule } from './modules/login/login.module';
+// import { LoginModule } from './modules/login/login.module';
+import { AdminModule } from './modules/admin.module';
+import { SharedModule } from './shared/shared.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -73,8 +75,8 @@ import { LoginModule } from './modules/login/login.module';
       // global module
       true,
     ),
-    UserModule,
-    LoginModule,
+    SharedModule,
+    AdminModule,
   ],
   controllers: [],
   providers: [],
