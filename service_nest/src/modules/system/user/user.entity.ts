@@ -13,9 +13,9 @@ export default class SysUser {
   @ApiProperty()
   id: number;
 
-  @Column({ name: 'department_id' })
-  @ApiProperty()
-  departmentId: number;
+  // @Column({ name: 'department_id' })
+  // @ApiProperty()
+  // departmentId: number;
 
   @Column()
   @ApiProperty()

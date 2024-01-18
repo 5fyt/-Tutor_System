@@ -43,15 +43,14 @@ export class LoginController {
   @Authorize()
   async login(
     @Body() dto: LoginInfoDto,
-    @Req() req: FastifyRequest,
-    @Headers('user-agent') ua: string,
+    // @Headers('user-agent') ua: string,
   ): Promise<LoginToken> {
     await this.loginService.checkImgCaptcha(dto.captchaId, dto.verifyCode);
     const token = await this.loginService.getLoginSign(
       dto.username,
       dto.password,
-      this.utils.getReqIP(req),
-      ua,
+      // this.utils.getReqIP(req),
+      // ua,
     );
     return { token };
   }
