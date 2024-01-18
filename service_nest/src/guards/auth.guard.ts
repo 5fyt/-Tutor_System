@@ -11,6 +11,7 @@ import {
   AUTHORIZE_KEY_METADATA,
 } from './constants/admin.contants';
 import { LoginService } from 'src/modules/login/login.service';
+import { ConfigService } from '@nestjs/config';
 
 /**
  * admin perm check guard
@@ -21,6 +22,7 @@ export class AuthGuard implements CanActivate {
     private reflector: Reflector,
     private jwtService: JwtService,
     private loginService: LoginService,
+    private configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -29,6 +31,7 @@ export class AuthGuard implements CanActivate {
       AUTHORIZE_KEY_METADATA,
       context.getHandler(),
     );
+    console.log(authorize);
     if (authorize) {
       return true;
     }
@@ -36,12 +39,16 @@ export class AuthGuard implements CanActivate {
     const url = request.url;
     const path = url.split('?')[0];
     const token = request.headers['authorization'] as string;
+    console.log('token', token);
     if (isEmpty(token)) {
+      console.log('token');
       throw new ApiException(11001);
     }
     try {
       // 挂载对象到当前请求上
-      request[ADMIN_USER] = this.jwtService.verify(token);
+      request[ADMIN_USER] = this.jwtService.verify(token, {
+        secret: this.configService.get('authSecret.secret'),
+      });
     } catch (e) {
       // 无法通过token校验
       throw new ApiException(11001);
@@ -72,22 +79,22 @@ export class AuthGuard implements CanActivate {
     if (notNeedPerm) {
       return true;
     }
-    const perms: string = await this.loginService.getRedisPermsById(
-      request[ADMIN_USER].uid,
-    );
-    // 安全判空
-    if (isEmpty(perms)) {
-      throw new ApiException(11001);
-    }
-    // 将sys:admin:user等转换成sys/admin/user
-    const permArray: string[] = (JSON.parse(perms) as string[]).map((e) => {
-      return e.replace(/:/g, '/');
-    });
-    // 遍历权限是否包含该url，不包含则无访问权限
-    if (!permArray.includes(path.replace(`/${ADMIN_PREFIX}/`, ''))) {
-      throw new ApiException(11003);
-    }
-    // pass
+    // const perms: string = await this.loginService.getRedisPermsById(
+    //   request[ADMIN_USER].uid,
+    // );
+    // // 安全判空
+    // if (isEmpty(perms)) {
+    //   throw new ApiException(11001);
+    // }
+    // // 将sys:admin:user等转换成sys/admin/user
+    // const permArray: string[] = (JSON.parse(perms) as string[]).map((e) => {
+    //   return e.replace(/:/g, '/');
+    // });
+    // // 遍历权限是否包含该url，不包含则无访问权限
+    // if (!permArray.includes(path.replace(`/${ADMIN_PREFIX}/`, ''))) {
+    //   throw new ApiException(11003);
+    // }
+    // // pass
     return true;
   }
 }

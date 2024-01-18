@@ -6,7 +6,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PaginatedResponseDto } from 'src/common/class/res.class';
-import { ADMIN_PREFIX } from '../../auth/constants/admin.constants';
+import { ADMIN_PREFIX } from 'src/guards/constants/admin.contants';
 import { IAdminUser } from '../../admin.interface';
 import { AdminUser } from '../../../decorators/admin-user.decorator';
 // import { SysMenuService } from '../menu/menu.service';
