@@ -67,12 +67,7 @@ export class LoginService {
    * 获取登录JWT
    * 返回null则账号密码有误，不存在该用户
    */
-  async getLoginSign(
-    username: string,
-    password: string,
-    ip: string,
-    ua: string,
-  ): Promise<string> {
+  async getLoginSign(username: string, password: string): Promise<string> {
     const user = await this.userService.findUserByUserName(username);
     if (isEmpty(user)) {
       throw new ApiException(10003);
@@ -83,13 +78,13 @@ export class LoginService {
     }
     // const perms = await this.menuService.getPerms(user.id);
     // TODO 系统管理员开放多点登录
-    // if (user.id === 1) {
-    //   const oldToken = await this.getRedisTokenById(user.id);
-    //   if (oldToken) {
-    //     this.logService.saveLoginLog(user.id, ip, ua);
-    //     return oldToken;
-    //   }
-    // }
+    if (user.id === 1) {
+      const oldToken = await this.getRedisTokenById(user.id);
+      if (oldToken) {
+        // this.logService.saveLoginLog(user.id, ip, ua);
+        return oldToken;
+      }
+    }
     const redis = await this.redisService.getRedis();
     const pv = Number(await redis.get(`admin:passwordVersion:${user.id}`)) || 1;
 
@@ -102,7 +97,7 @@ export class LoginService {
       //   expiresIn: '24h',
       // },
     );
-    await redis.set(`admin:passwordVersion:${user.id}`, pv);
+    // await redis.set(`admin:passwordVersion:${user.id}`, pv);
     // Token设置过期时间 24小时
     await redis.set(`admin:token:${user.id}`, jwtSign, 'EX', 60 * 60 * 24);
     // await redis.set(`admin:perms:${user.id}`, JSON.stringify(perms));

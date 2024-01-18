@@ -31,7 +31,6 @@ export class AuthGuard implements CanActivate {
       AUTHORIZE_KEY_METADATA,
       context.getHandler(),
     );
-    console.log(authorize);
     if (authorize) {
       return true;
     }
@@ -39,9 +38,8 @@ export class AuthGuard implements CanActivate {
     const url = request.url;
     const path = url.split('?')[0];
     const token = request.headers['authorization'] as string;
-    console.log('token', token);
+
     if (isEmpty(token)) {
-      console.log('token');
       throw new ApiException(11001);
     }
     try {
