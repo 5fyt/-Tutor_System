@@ -1,12 +1,10 @@
-import 'virtual:windi.css';
-import 'virtual:windi-devtools';
-import 'antd/dist/antd.less';
-import 'antd/lib/style/index.css';
-import './styles/index.less';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
 
-import ReactDOM from 'react-dom';
-
-import App from './App';
-// import {RootStoreContext,} from '@/stores'
-
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)

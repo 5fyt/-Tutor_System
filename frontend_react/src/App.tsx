@@ -1,58 +1,35 @@
-import 'moment/locale/zh-cn';
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
-import { ConfigProvider } from 'antd';
-import enUS from 'antd/es/locale/en_US';
-import zhCN from 'antd/es/locale/zh_CN';
-import { observer } from 'mobx-react-lite';
-import moment from 'moment';
-import React, { useEffect } from 'react';
-import { IntlProvider } from 'react-intl';
-import { HashRouter } from 'react-router-dom';
-
-import { userStore } from '@/stores/user';
-
-import { localeConfig } from './locales';
-import RenderRouter from './routes';
-
-const App: React.FC = () => {
-  const { locale } = userStore;
-
-  // set the locale for the user
-  // more languages options can be added here
-  useEffect(() => {
-    if (locale === 'en_US') {
-      moment.locale('en');
-    } else if (locale === 'zh_CN') {
-      moment.locale('zh-cn');
-    }
-  }, [locale]);
-
-  /**
-   * handler function that passes locale
-   * information to ConfigProvider for
-   * setting language across text components
-   */
-  const getAntdLocale = () => {
-    if (locale === 'en_US') {
-      return enUS;
-    } else if (locale === 'zh_CN') {
-      return zhCN;
-    }
-  };
+function App() {
+  const [count, setCount] = useState(0)
 
   return (
-    // <React.StrictMode>
-    <ConfigProvider locale={getAntdLocale()} componentSize="middle">
-      <IntlProvider locale={locale.split('_')[0]} messages={localeConfig[locale]}>
-        <HashRouter>
-          {/* <Suspense fallback={'loa'}> */}
-          <RenderRouter />
-          {/* </Suspense> */}
-        </HashRouter>
-      </IntlProvider>
-    </ConfigProvider>
-    // </React.StrictMode>
-  );
-};
+    <>
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
+}
 
-export default observer(App);
+export default App
