@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD, RouterModule } from '@nestjs/core';
 // import { AccountModule } from './account/account.module';
 // import { ADMIN_PREFIX } from './admin.constants';
-import { AuthGuard } from './auth/guard/auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { LoginModule } from './login/login.module';
 // import { NetdiskModule } from './netdisk/netdisk.module';
 import { SystemModule } from './system/system.module';

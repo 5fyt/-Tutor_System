@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { ADMIN_USER } from 'src/modules/auth/constants/admin.constants';
+import { ADMIN_USER } from 'src/guards/constants/admin.contants';
 
 export const AdminUser = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {

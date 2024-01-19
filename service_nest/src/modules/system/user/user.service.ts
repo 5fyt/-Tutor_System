@@ -130,7 +130,6 @@ export class SysUserService {
       const password = this.util.md5(`${'123456'}${salt}`);
 
       const u = manager.create(SysUser, {
-        departmentId: param.departmentId,
         username: param.username,
         password,
         name: param.name,
@@ -161,7 +160,6 @@ export class SysUserService {
   async update(param: UpdateUserDto): Promise<void> {
     await this.entityManager.transaction(async (manager) => {
       await manager.update(SysUser, param.id, {
-        departmentId: param.departmentId,
         username: param.username,
         name: param.name,
         nickName: param.nickName,
