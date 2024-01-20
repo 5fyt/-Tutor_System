@@ -19,12 +19,9 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh','@typescript-eslint','prettier'],
+  plugins: ['react-refresh', '@typescript-eslint', 'prettier'],
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
+    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
@@ -39,6 +36,7 @@ module.exports = {
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'react-refresh/only-export-components': 'off',
     '@typescript-eslint/no-unused-vars': [
       'error',
       {
@@ -53,7 +51,7 @@ module.exports = {
         varsIgnorePattern: '^_'
       }
     ],
-    "no-undef":'off',
+    'no-undef': 'off',
     'space-before-function-paren': 'off'
-  },
-}
+  }
+};

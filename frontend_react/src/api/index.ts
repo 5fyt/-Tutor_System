@@ -12,7 +12,7 @@ import { isObject, isBlod, isFormData, isFunction } from '@/utils/is';
 // import { AxiosCanceler } from './helper/cancelToken';
 const defaultConfig = {
   // 默认地址请求地址，可在 .env.** 文件中修改
-  baseURL: import.meta.env.VITE_API_PREFIX,
+  baseURL: import.meta.env.VITE_BASE_API,
   // 设置超时时间
   timeout: 50000,
   // 跨域时候允许携带凭证
@@ -70,9 +70,7 @@ class RequestHttp {
         // }
         return config;
       },
-      (error: AxiosError) => {
-        return Promise.reject(error);
-      }
+      (error: AxiosError) => Promise.reject(error)
     );
     /**
      * @description 响应拦截器
@@ -99,11 +97,11 @@ class RequestHttp {
     );
   }
   // 请求成功处理
-  successHandler(options: IOptions) {
-    if (options.successDialog) {
-      $message.success(options.successText || 'success');
-    }
-  }
+  // successHandler(options: IOptions) {
+  //   if (options.successDialog) {
+  //     $message.success(options.successText || 'success');
+  //   }
+  // }
   // 请求失败处理
   errorHandler(error: any, options: IOptions): any {
     try {
@@ -276,7 +274,7 @@ class RequestHttp {
         const { data, result } = responseData;
 
         if (result) {
-          this.successHandler(finalOptions);
+          // this.successHandler(finalOptions);
           return [null, data];
         } else {
           return this.errorHandler(responseData, finalOptions);
