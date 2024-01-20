@@ -4,11 +4,7 @@ import { RouteObject, useRoutes } from 'react-router-dom';
 interface RouteProps {
   routeList: RouteObject[];
 }
-/**
- * @description 路由懒加载
- * @param {Element} Comp 需要访问的组件
- * @returns element
- */
+
 const RenderRoute: FC<RouteProps> = ({ routeList }): React.ReactNode => {
   const element = useRoutes(routeList);
   return (
