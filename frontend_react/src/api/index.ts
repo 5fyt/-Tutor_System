@@ -80,6 +80,7 @@ class RequestHttp {
       (response: any) => {
         const { config = {}, data = {} } = response;
         // this.axiosCanceler.removePending(config);
+        config['cache-control'] = 'no-cache';
         if (config.onlyData) {
           return data;
         }
@@ -164,7 +165,7 @@ class RequestHttp {
     };
   }
 
-  uploadFile<T = any, U = any>(config: AxiosRequestConfig, options?: IOptions) {
+  uploadFile<T = any>(config: AxiosRequestConfig, options?: IOptions) {
     let formData = {} as FormData;
     if (isFormData(config?.data)) {
       formData = config?.data;
@@ -185,7 +186,7 @@ class RequestHttp {
       }
     }
 
-    return this.request<T, U>(
+    return this.request<T>(
       {
         ...config,
         method: MethodEnum.POST,
@@ -198,16 +199,19 @@ class RequestHttp {
     );
   }
 
-  get<T = any, U = any>(config: AxiosRequestConfig, options?: IOptions) {
-    return this.request<T, U>({ ...config, method: MethodEnum.GET }, options);
+  get<T = any>(config: AxiosRequestConfig, options?: IOptions) {
+    return this.request<T>(
+      { ...config, headers: { 'Content-type': ContentTypeEnum.JSON }, method: MethodEnum.GET },
+      options
+    );
   }
 
-  post<T = any, U = any>(config: AxiosRequestConfig, options?: IOptions) {
-    return this.request<T, U>({ ...config, method: MethodEnum.POST }, options);
+  post<T = any>(config: AxiosRequestConfig, options?: IOptions) {
+    return this.request<T>({ ...config, method: MethodEnum.POST }, options);
   }
 
-  postJson<T = any, U = any>(config: AxiosRequestConfig, options?: IOptions) {
-    return this.request<T, U>(
+  postJson<T = any>(config: AxiosRequestConfig, options?: IOptions) {
+    return this.request<T>(
       { ...config, headers: { 'Content-type': ContentTypeEnum.JSON }, method: MethodEnum.POST },
       options
     );
@@ -231,10 +235,7 @@ class RequestHttp {
   //   return await this.downloadFile({ ...config, headers: { 'Content-type': ContentTypeEnum.JSON } }, options);
   // }
 
-  private request<T = any, U = any>(
-    config: AxiosRequestConfig,
-    options?: IOptions
-  ): Promise<[null, T] | [U, undefined]> {
+  private request<T = any>(config: AxiosRequestConfig, options?: IOptions): Promise<T> {
     // const cloneConfig = cloneDeep(config);
     // if (options?.repeatRequest === 'forbid') {
     //   const result = this.axiosCanceler.addPendingItem(cloneConfig);
@@ -265,7 +266,7 @@ class RequestHttp {
 
     return this.service
       .request(config)
-      .then<[null, any]>((res: any) => {
+      .then<any>((res: any) => {
         const responseData = finalOptions.onlyData ? res : res.data;
         if (isBlod(responseData)) {
           return [null, responseData];
@@ -280,7 +281,7 @@ class RequestHttp {
           return this.errorHandler(responseData, finalOptions);
         }
       })
-      .catch<[U, undefined]>((e: U) => {
+      .catch((e: any) => {
         return this.errorHandler(e, finalOptions);
       });
   }

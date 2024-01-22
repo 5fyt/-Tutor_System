@@ -6,16 +6,10 @@ export class AccountInfo {
   name: string;
 
   @ApiProperty()
-  nickName: string;
-
-  @ApiProperty()
   email: string;
 
   @ApiProperty()
   phone: string;
-
-  @ApiProperty()
-  remark: string;
 
   @ApiProperty()
   headImg: string;
@@ -48,12 +42,6 @@ export class PageSearchUserInfo {
 
   @ApiProperty()
   phone: string;
-
-  @ApiProperty()
-  remark: string;
-
-  @ApiProperty()
-  status: number;
 
   @ApiProperty()
   updatedAt: string;

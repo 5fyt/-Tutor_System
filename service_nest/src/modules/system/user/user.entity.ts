@@ -33,10 +33,6 @@ export default class SysUser {
   @ApiProperty()
   psalt: string;
 
-  @Column({ name: 'nick_name', nullable: true })
-  @ApiProperty()
-  nickName: string;
-
   @Column({ name: 'head_img', nullable: true })
   @ApiProperty()
   headImg: string;
@@ -48,14 +44,6 @@ export default class SysUser {
   @Column({ nullable: true, default: '' })
   @ApiProperty()
   phone: string;
-
-  @Column({ nullable: true, default: '' })
-  @ApiProperty()
-  remark: string;
-
-  @Column({ type: 'tinyint', nullable: true, default: 1 })
-  @ApiProperty()
-  status: number;
 
   @CreateDateColumn({ name: 'created_at' })
   @ApiProperty()

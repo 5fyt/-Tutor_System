@@ -8,21 +8,18 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { FastifyRequest } from 'fastify';
 import { UtilService } from 'src/shared/services/util.service';
 import { Authorize } from 'src/decorators/authorize.decorator';
 import { LogDisabled } from 'src/decorators/log-disabled.decorator';
 import { ImageCaptchaDto, LoginInfoDto } from './login.dto';
 import { ImageCaptcha, LoginToken } from './login.class';
 import { LoginService } from './login.service';
+import { SysUserService } from '../system/user/user.service';
 
 @ApiTags('登录模块')
 @Controller()
 export class LoginController {
-  constructor(
-    private loginService: LoginService,
-    private utils: UtilService,
-  ) {}
+  constructor(private loginService: LoginService) {}
 
   @ApiOperation({
     summary: '获取登录图片验证码',
@@ -52,6 +49,7 @@ export class LoginController {
       // this.utils.getReqIP(req),
       // ua,
     );
+
     return { token };
   }
 }

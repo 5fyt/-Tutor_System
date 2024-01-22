@@ -72,13 +72,6 @@ export class UpdatePasswordDto {
 
 export class CreateUserDto {
   @ApiProperty({
-    description: '所属部门编号',
-  })
-  @IsInt()
-  @Min(0)
-  departmentId: number;
-
-  @ApiProperty({
     description: '用户姓名',
   })
   @IsString()
@@ -126,20 +119,6 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   phone: string;
-
-  @ApiProperty({
-    required: false,
-    description: '备注',
-  })
-  @IsString()
-  @IsOptional()
-  remark: string;
-
-  @ApiProperty({
-    description: '状态',
-  })
-  @IsIn([0, 1])
-  status: number;
 }
 
 export class UpdateUserDto extends CreateUserDto {

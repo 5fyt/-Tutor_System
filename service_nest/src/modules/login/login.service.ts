@@ -104,6 +104,7 @@ export class LoginService {
     await redis.set(`admin:token:${user.id}`, jwtSign, 'EX', 60 * 60 * 24);
     // await redis.set(`admin:perms:${user.id}`, JSON.stringify(perms));
     // await this.logService.saveLoginLog(user.id, ip, ua);
+
     return jwtSign;
   }
 

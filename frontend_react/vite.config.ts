@@ -27,16 +27,16 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         }
       ]
     },
-    // server: {
-    //   port: 8889,
-    //   proxy: {
-    //     '/api': {
-    //       target: `http://175.24.200.3:7001`,
-    //       // changeOrigin: true,
-    //       rewrite: path => path.replace(/^\/api/, '')
-    //     }
-    //   }
-    // },
+    server: {
+      port: 9090
+      // proxy: {
+      //   '/api': {
+      //     target: `http://175.24.200.3:7001`,
+      //     // changeOrigin: true,
+      //     rewrite: path => path.replace(/^\/api/, '')
+      //   }
+      // }
+    },
     css: {
       preprocessorOptions: {
         less: {

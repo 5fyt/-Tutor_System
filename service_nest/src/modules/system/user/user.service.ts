@@ -40,7 +40,7 @@ export class SysUserService {
    */
   async findUserByUserName(username: string): Promise<SysUser | undefined> {
     return await this.userRepository.findOne({
-      where: { username: username, status: 1 },
+      where: { username: username },
     });
   }
 
@@ -58,10 +58,8 @@ export class SysUserService {
     }
     return {
       name: user.name,
-      nickName: user.nickName,
       email: user.email,
       phone: user.phone,
-      remark: user.remark,
       headImg: user.headImg,
       loginIp: ip,
     };
@@ -133,11 +131,9 @@ export class SysUserService {
         username: param.username,
         password,
         name: param.name,
-        nickName: param.nickName,
+
         email: param.email,
         phone: param.phone,
-        remark: param.remark,
-        status: param.status,
         psalt: salt,
       });
       await manager.save(u);
@@ -162,11 +158,8 @@ export class SysUserService {
       await manager.update(SysUser, param.id, {
         username: param.username,
         name: param.name,
-        nickName: param.nickName,
         email: param.email,
         phone: param.phone,
-        remark: param.remark,
-        status: param.status,
       });
       // 先删除原来的角色关系
       // await manager.delete(SysUserRole, { userId: param.id });
