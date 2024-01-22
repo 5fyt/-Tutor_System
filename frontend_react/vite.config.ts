@@ -28,14 +28,17 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       ]
     },
     server: {
-      port: 9090
-      // proxy: {
-      //   '/api': {
-      //     target: `http://175.24.200.3:7001`,
-      //     // changeOrigin: true,
-      //     rewrite: path => path.replace(/^\/api/, '')
-      //   }
-      // }
+      port: 8080,
+      cors: true,
+      open: true,
+      proxy: {
+        'v1/api': {
+          target: `http://localhost:9090`,
+          changeOrigin: true
+
+          // rewrite: path => path.replace(/^\/api/, 'v1/api')
+        }
+      }
     },
     css: {
       preprocessorOptions: {
