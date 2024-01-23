@@ -80,11 +80,10 @@ class RequestHttp {
       (response: any) => {
         const { config = {}, data = {} } = response;
         // this.axiosCanceler.removePending(config);
-        config['cache-control'] = 'no-cache';
         if (config.onlyData) {
           return data;
         }
-        return response;
+        return data;
       },
       (error: AxiosError) => {
         // if (axios.isAxiosError(error)) {
@@ -131,7 +130,7 @@ class RequestHttp {
       // } else {
       //   globalErrorHandler(error);
       // }
-
+      console.log('sss');
       return [dataInfo, undefined];
     } catch (error) {
       // globalErrorHandler(error);
@@ -271,12 +270,10 @@ class RequestHttp {
         if (isBlod(responseData)) {
           return [null, responseData];
         }
-
-        const { data, result } = responseData;
-
-        if (result) {
+        const { data, code } = responseData;
+        if (code === 200) {
           // this.successHandler(finalOptions);
-          return [null, data];
+          return data;
         } else {
           return this.errorHandler(responseData, finalOptions);
         }

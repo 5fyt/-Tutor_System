@@ -32,11 +32,10 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       cors: true,
       open: true,
       proxy: {
-        'v1/api': {
-          target: `http://localhost:9090`,
-          changeOrigin: true
-
-          // rewrite: path => path.replace(/^\/api/, 'v1/api')
+        '/api': {
+          target: `http://localhost:9090/api`,
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/api/, '')
         }
       }
     },
