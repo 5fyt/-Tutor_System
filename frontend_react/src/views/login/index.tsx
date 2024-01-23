@@ -50,7 +50,6 @@ const LoginForm: FC = () => {
     const { token } = await login(form);
     console.log(token);
     const search = new URLSearchParams(location.search);
-    console.log('location.search', location.search);
 
     const from = location.state?.from || search.get('from') || { pathname: '/dashboard' };
     navigate(from, { replace: true });
@@ -71,6 +70,7 @@ const LoginForm: FC = () => {
             placeholder="验证码"
             prefix={<SafetyOutlined />}
             size="large"
+            autoComplete="off"
             maxLength={4}
             suffix={<img src={capatcha.img} onClick={getCapatcha} className="login-page-form_capatcha" alt="验证码" />}
           />
