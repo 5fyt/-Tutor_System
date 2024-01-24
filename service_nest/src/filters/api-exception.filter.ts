@@ -41,6 +41,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
       this.logger.error(exception, ApiExceptionFilter.name);
     }
     const result = new ResponseDto(code, null, message);
+    console.log(status);
     response.status(status).send(result);
   }
 }

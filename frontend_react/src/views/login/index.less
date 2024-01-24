@@ -1,15 +1,40 @@
 .login-page {
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: url(../../assets/login-bg.svg);
-  &-form {
-    width: 300px;
+  justify-content: center;
+  background: url('../../assets/login/bg-2.png') no-repeat;
+  background-size: 100% 100%;
+  &-box{
+    width: 900px;
+    height: 440px;
+    display: flex;
+    justify-content: start;
+    &-img{
+      width: 60%;
+      height: 100%;
+      background: url('../../assets/login/bg-1.png') no-repeat;
+      background-size: cover;
+    }
+    &-form {
+      padding: 40px 30px;
+      width: 400px;
+      background-color: #fff;
+
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+
+      // &_input{
+      //   height: 32px;
+
+      // }
     h2 {
-      text-align: center;
+      text-align: left;
+      font-size: 18px;
+      color: #1677FF;
     }
     &_button {
       width: 100%;
+      margin-top: 20px;
     }
     &_capatcha {
       position: absolute;
@@ -20,4 +45,6 @@
       cursor: pointer;
     }
   }
+  }
+
 }

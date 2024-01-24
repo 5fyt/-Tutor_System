@@ -3,18 +3,17 @@ import {
   Controller,
   Get,
   Headers,
+  HttpCode,
   Post,
   Query,
   Req,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { UtilService } from 'src/shared/services/util.service';
 import { Authorize } from 'src/decorators/authorize.decorator';
 import { LogDisabled } from 'src/decorators/log-disabled.decorator';
 import { ImageCaptchaDto, LoginInfoDto } from './login.dto';
 import { ImageCaptcha, LoginToken } from './login.class';
 import { LoginService } from './login.service';
-import { SysUserService } from '../system/user/user.service';
 
 @ApiTags('登录模块')
 @Controller()
@@ -36,6 +35,7 @@ export class LoginController {
   })
   @ApiOkResponse({ type: LoginToken })
   @Post('login')
+  @HttpCode(200)
   @LogDisabled()
   @Authorize()
   async login(
