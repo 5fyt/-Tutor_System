@@ -9,6 +9,8 @@ interface ImportMetaEnv {
   readonly VITE_BASE_SOCKET_PATH: string;
   /** socket 命名空间 */
   readonly VITE_BASE_SOCKET_NSP: string;
+
+  readonly VITE_PASSWORD_KEY: string;
 }
 
 interface ImportMeta {

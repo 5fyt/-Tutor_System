@@ -4,6 +4,8 @@ import type { MenuList } from './type';
 import WrapperRouteComponent from './WrapperRoute';
 import Layout from '@/Layout';
 import RenderRoute from './RenderRoute';
+import Storage from '@/utils/Storage';
+import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
 
 const NotFound = lazy(() => import('@/views/error/index'));
 const LoginPage = lazy(() => import('@/views/login'));
@@ -40,7 +42,7 @@ export const defaultMenuRoutes: MenuList = [
 export const DynamicRouter: FC = () => {
   const { pathname, state } = useLocation();
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const token = Storage.get(ACCESS_TOKEN_KEY, null);
 
   //判断token鉴权
   useEffect(() => {
