@@ -15,7 +15,7 @@ const setToken = (state: Store.loginState, params: string) => {
 };
 // const resetToken = (state: Store.loginState) => {
 //   state.token = '';
-//   Storage.clear();
+//   Storage.remove(ACCESS_TOKEN_KEY);
 // };
 /**
  * 用户登入异步

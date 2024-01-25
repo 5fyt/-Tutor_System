@@ -1,8 +1,6 @@
-// import Utf8 from 'crypto-js/enc-utf8';
-// import AES from 'crypto-js/aes';
 import * as CryptoJS from 'crypto-js';
 export class AESCipher {
-  private key: any;
+  private key: string;
 
   constructor(key: string) {
     this.key = key;

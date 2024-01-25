@@ -2,7 +2,7 @@ import { FC, lazy, useEffect } from 'react';
 import { useLocation, type RouteObject, useNavigate } from 'react-router-dom';
 import type { MenuList } from './type';
 import WrapperRouteComponent from './WrapperRoute';
-import Layout from '@/Layout';
+import LayoutPage from '@/Layout';
 import RenderRoute from './RenderRoute';
 import Storage from '@/utils/Storage';
 import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
@@ -18,7 +18,7 @@ const defaultRouteList: RouteObject[] = [
   },
   {
     path: '/',
-    element: <WrapperRouteComponent element={<Layout />} />
+    element: <WrapperRouteComponent element={<LayoutPage />} />
   }
 ];
 
