@@ -1,6 +1,6 @@
 //import { LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-
+import Logo from '@/assets/header/logo.png';
 // import { Avatar, Dropdown, Layout, Menu } from 'antd';
 import { Layout } from 'antd';
 
@@ -65,9 +65,9 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
   // );
   return (
     <Header className="layout-page-header">
-      <div className="logo" style={{ width: collapsed ? 80 : 200 }}>
-        {/* <img src={ReactSvg} alt="" style={{ marginRight: collapsed ? '2px' : '20px' }} />
-        <img src={AntdSvg} alt="" /> */}
+      <div className="logo">
+        <img src={Logo} alt="" style={{ marginRight: collapsed ? '2px' : '5px' }} />
+        <span>Tutor System</span>
       </div>
       <div className="layout-page-header-main">
         <div onClick={toggle}>

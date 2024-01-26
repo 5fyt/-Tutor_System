@@ -1,4 +1,5 @@
-import { FC, lazy, useEffect } from 'react';
+import { FC, lazy, useEffect, useMemo } from 'react';
+import { cloneDeep } from 'lodash';
 import { useLocation, type RouteObject, useNavigate } from 'react-router-dom';
 import type { MenuList } from './type';
 import WrapperRouteComponent from './WrapperRoute';
@@ -18,7 +19,8 @@ const defaultRouteList: RouteObject[] = [
   },
   {
     path: '/',
-    element: <WrapperRouteComponent element={<LayoutPage />} />
+    element: <WrapperRouteComponent element={<LayoutPage />} />,
+    children: []
   }
 ];
 
@@ -56,13 +58,12 @@ export const DynamicRouter: FC = () => {
     }
   }, [pathname, state, token, navigate]);
 
-  // const newRoutes = useMemo(() => {
-  //   const routes = cloneDeep(defaultRouteList);
-  //   const layoutRoute = routes.find(item => item.path === '/')?.children;
-  //   layoutRoute?.push(...cloneDeep([...defaultMenuRoutes, ...menuList]), ...errorPages);
-  //   return routes;
-  // }, [menuList]);
-  const newRoutes = [...defaultMenuRoutes, ...errorRoute, ...defaultRouteList];
+  const newRoutes = useMemo(() => {
+    const routes = cloneDeep(defaultRouteList);
+    const layoutRoute = routes.find((item: RouteObject) => item.path === '/')?.children;
+    layoutRoute?.push(...cloneDeep([...defaultMenuRoutes]), ...errorRoute);
+    return routes;
+  }, []);
   return <RenderRoute routeList={newRoutes} />;
 };
 export default DynamicRouter;

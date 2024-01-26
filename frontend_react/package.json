@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
+    "@types/lodash": "^4.14.202",
     "@types/qs": "^6.9.11",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
@@ -45,6 +46,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "eslint-plugin-simple-import-sort": "^10.0.0",
+    "lodash": "^4.17.21",
     "postcss-html": "^1.6.0",
     "prettier": "^3.2.4",
     "stylelint": "^16.1.0",
