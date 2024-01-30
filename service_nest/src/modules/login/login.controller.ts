@@ -55,6 +55,7 @@ export class LoginController {
   }
   @ApiOperation({ summary: '登出' })
   @Post('logout')
+  @HttpCode(200)
   async logout(@AdminUser() user: IAdminUser): Promise<void> {
     await this.loginService.clearLoginStatus(user.uid);
   }

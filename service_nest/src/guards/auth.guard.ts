@@ -55,9 +55,11 @@ export class AuthGuard implements CanActivate {
     if (isEmpty(request[ADMIN_USER])) {
       throw new ApiException(11001);
     }
+
     const pv = await this.loginService.getRedisPasswordVersionById(
       request[ADMIN_USER].uid,
     );
+    console.log('pv', pv);
     if (pv !== `${request[ADMIN_USER].pv}`) {
       // 密码版本不一致，登录期间已更改过密码
       throw new ApiException(11002);
@@ -65,7 +67,7 @@ export class AuthGuard implements CanActivate {
     const redisToken = await this.loginService.getRedisTokenById(
       request[ADMIN_USER].uid,
     );
-    console.log(redisToken);
+
     if (token !== redisToken) {
       // 与redis保存不一致
       throw new ApiException(11002);

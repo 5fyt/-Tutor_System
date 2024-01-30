@@ -5,8 +5,8 @@ import UserAvatar from '@/assets/header/avatar.jpg';
 import { Layout, Avatar, Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
-import { useAppSelector } from '@/store';
-import { user_name } from '@/store/module/login';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { user_name, loginOut } from '@/store/module/login';
 // import { ReactComponent as EnUsSvg } from '@/assets/header/en_US.svg';
 // import { ReactComponent as LanguageSvg } from '@/assets/header/language.svg';
 // import { ReactComponent as ZhCnSvg } from '@/assets/header/zh_CN.svg';
@@ -29,13 +29,16 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
   const navigate = useNavigate();
   // const { formatMessage } = useLocale();
   const username = useAppSelector(user_name);
+  const dispatch = useAppDispatch();
   // const selectLocale = ({ key }: { key: any }) => {
   //   userStore.setLocale(key);
   // };
   const goToDetailPage = () => {
     navigate({ pathname: '/profile' });
   };
-  const logout = () => {};
+  const logout = async () => {
+    await dispatch(loginOut());
+  };
   const items: MenuProps['items'] = [
     {
       label: (

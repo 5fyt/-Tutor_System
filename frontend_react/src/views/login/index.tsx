@@ -10,7 +10,7 @@ import { getCode } from '@/api/login';
 // import { userStore } from '@/stores/user';
 import { useNavigate, useLocation, Location } from 'react-router-dom';
 import { useAppDispatch } from '@/store';
-import { loginUser } from '@/store/module/login';
+import { afterLogin, loginUser } from '@/store/module/login';
 import Storage from '@/utils/Storage';
 import { ACCESS_TOKEN_KEY, ACCESS_PASSWORD_KEY, ACCESS_USER_KEY } from '@/enums/cacheEnum';
 import { AESCipher } from '@/utils/aes';
@@ -62,6 +62,7 @@ const LoginForm: FC = () => {
   const onFinished = async (form: API.LoginParams) => {
     form.captchaId = capatcha.id;
     await dispatch(loginUser(form));
+    await dispatch(afterLogin());
     if (checked) {
       const aseCipher = new AESCipher(import.meta.env.VITE_PASSWORD_KEY);
       const password = aseCipher.encrypt(form.password);
