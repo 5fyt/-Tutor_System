@@ -1,14 +1,12 @@
-//import { LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import Logo from '@/assets/header/logo.png';
-// import { Avatar, Dropdown, Layout, Menu } from 'antd';
-import { Layout } from 'antd';
-
-// import { observer } from 'mobx-react-lite';
 import { FC, memo } from 'react';
-// import { useNavigate } from 'react-router-dom';
-
-// import UserAvatar from '@/assets/header/avatar.jpg';
+import { useNavigate } from 'react-router-dom';
+import Logo from '@/assets/header/logo.png';
+import UserAvatar from '@/assets/header/avatar.jpg';
+import { Layout, Avatar, Dropdown } from 'antd';
+import type { MenuProps } from 'antd';
+import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { useAppSelector } from '@/store';
+import { user_name } from '@/store/module/login';
 // import { ReactComponent as EnUsSvg } from '@/assets/header/en_US.svg';
 // import { ReactComponent as LanguageSvg } from '@/assets/header/language.svg';
 // import { ReactComponent as ZhCnSvg } from '@/assets/header/zh_CN.svg';
@@ -26,43 +24,42 @@ interface HeaderProps {
   toggle: () => void;
 }
 
-// type Action = 'userInfo' | 'userSetting' | 'logout';
-
 const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
   // const { name, locale } = userStore;
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const { formatMessage } = useLocale();
-
-  // const onActionClick = async (action: Action) => {
-  //   switch (action) {
-  //     case 'userInfo':
-  //       return;
-  //     case 'userSetting':
-  //       return;
-  //     case 'logout':
-  //       // eslint-disable-next-line no-case-declarations
-  //       // const res = Boolean(await userStore.logout());
-  //       // res && navigate('/login');
-  //       return;
-  //   }
-  // };
-
+  const username = useAppSelector(user_name);
   // const selectLocale = ({ key }: { key: any }) => {
   //   userStore.setLocale(key);
   // };
-  // const menu = (
-  //   <Menu>
-  //     <Menu.Item key="1">
-  //       <UserOutlined className="align-baseline" />
-  //       {/* {formatMessage({ id: 'header.avator.account' })} */}
-  //     </Menu.Item>
-  //     <Menu.Divider />
-  //     <Menu.Item key="2" onClick={() => onActionClick('logout')}>
-  //       <LogoutOutlined className="align-baseline" />
-  //       {/* {formatMessage({ id: 'header.avator.logout' })} */}
-  //     </Menu.Item>
-  //   </Menu>
-  // );
+  const goToDetailPage = () => {
+    navigate({ pathname: '/profile' });
+  };
+  const logout = () => {};
+  const items: MenuProps['items'] = [
+    {
+      label: (
+        <div onClick={goToDetailPage}>
+          <UserOutlined />
+          <span style={{ marginLeft: '3px' }}>个人详情</span>
+        </div>
+      ),
+      key: '0'
+    },
+    {
+      type: 'divider'
+    },
+
+    {
+      label: (
+        <div onClick={logout}>
+          <LogoutOutlined />
+          <span style={{ marginLeft: '3px' }}>退出登录</span>
+        </div>
+      ),
+      key: '2'
+    }
+  ];
   return (
     <Header className="layout-page-header">
       <div className="logo">
@@ -71,10 +68,20 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
       </div>
       <div className="layout-page-header-main">
         <div onClick={toggle}>
-          <span id="sidebar-trigger">{collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}</span>
+          <span id="sidebar-trigger">
+            {collapsed ? (
+              <MenuUnfoldOutlined style={{ fontSize: '20px' }} />
+            ) : (
+              <MenuFoldOutlined style={{ fontSize: '20px' }} />
+            )}
+          </span>
         </div>
         <div className="actions">
           {/* <HeaderNoticeComponent /> */}
+          <div className="">
+            <BellOutlined />
+          </div>
+
           {/* <Dropdown
             trigger={['click']}
             overlay={
@@ -93,12 +100,12 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
             </span>
           </Dropdown> */}
           <div>
-            {/* <Dropdown overlay={menu} trigger={['click']}>
+            <Dropdown menu={{ items }} trigger={['click']}>
               <span className="user-action">
                 <Avatar src={UserAvatar} />
               </span>
-            </Dropdown> */}
-            {/* <span>{name}</span> */}
+            </Dropdown>
+            <span>{username}</span>
           </div>
         </div>
       </div>

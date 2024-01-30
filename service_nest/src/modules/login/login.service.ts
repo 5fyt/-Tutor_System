@@ -99,7 +99,7 @@ export class LoginService {
       //   expiresIn: '24h',
       // },
     );
-    // await redis.set(`admin:passwordVersion:${user.id}`, pv);
+    await redis.set(`admin:passwordVersion:${user.id}`, pv);
     // Token设置过期时间 24小时
     await redis.set(`admin:token:${user.id}`, jwtSign, 'EX', 60 * 60 * 24);
     // await redis.set(`admin:perms:${user.id}`, JSON.stringify(perms));

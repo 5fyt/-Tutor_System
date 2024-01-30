@@ -11,10 +11,11 @@ import {
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Authorize } from 'src/decorators/authorize.decorator';
 import { LogDisabled } from 'src/decorators/log-disabled.decorator';
+import { AdminUser } from 'src/decorators/admin-user.decorator';
 import { ImageCaptchaDto, LoginInfoDto } from './login.dto';
 import { ImageCaptcha, LoginToken } from './login.class';
 import { LoginService } from './login.service';
-
+import { IAdminUser } from '../admin.interface';
 @ApiTags('登录模块')
 @Controller()
 export class LoginController {
@@ -51,5 +52,10 @@ export class LoginController {
     );
 
     return { token };
+  }
+  @ApiOperation({ summary: '登出' })
+  @Post('logout')
+  async logout(@AdminUser() user: IAdminUser): Promise<void> {
+    await this.loginService.clearLoginStatus(user.uid);
   }
 }
