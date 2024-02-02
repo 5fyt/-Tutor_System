@@ -1,7 +1,7 @@
 import httpService, { IOptions } from '@/api/index';
 enum ACCOUNT_API {
   lOGON_OUT = '/logout',
-  PROFILE = '/info'
+  PROFILE = '/user/info'
 }
 export const logout = (options?: IOptions) => {
   return httpService.post({ url: ACCOUNT_API.lOGON_OUT }, options);

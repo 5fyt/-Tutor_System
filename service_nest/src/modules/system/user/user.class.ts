@@ -63,9 +63,4 @@ export class UserDetailInfo extends SysUser {
     description: '关联角色',
   })
   roles: number[];
-
-  @ApiProperty({
-    description: '关联部门名称',
-  })
-  departmentName: string;
 }

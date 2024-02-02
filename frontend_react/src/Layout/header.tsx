@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '@/assets/header/logo.png';
 import UserAvatar from '@/assets/header/avatar.jpg';
-import { Layout, Avatar, Dropdown } from 'antd';
+import { Layout, Avatar, Dropdown, message } from 'antd';
 import type { MenuProps } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -26,6 +26,7 @@ interface HeaderProps {
 
 const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
   // const { name, locale } = userStore;
+  const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   // const { formatMessage } = useLocale();
   const username = useAppSelector(user_name);
@@ -38,6 +39,9 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
   };
   const logout = async () => {
     await dispatch(loginOut());
+    messageApi.open({ type: 'success', content: '退出成功', duration: 0.5 }).then(() => {
+      navigate('/login');
+    });
   };
   const items: MenuProps['items'] = [
     {
@@ -65,6 +69,7 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
   ];
   return (
     <Header className="layout-page-header">
+      {contextHolder}
       <div className="logo">
         <img src={Logo} alt="" style={{ marginRight: collapsed ? '2px' : '5px' }} />
         <span>Tutor System</span>
@@ -103,12 +108,12 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
             </span>
           </Dropdown> */}
           <div>
-            <Dropdown menu={{ items }} trigger={['click']}>
-              <span className="user-action">
+            <Dropdown menu={{ items }} trigger={['hover']}>
+              <span className="user-avatar">
                 <Avatar src={UserAvatar} />
               </span>
             </Dropdown>
-            <span>{username}</span>
+            <span className="user-name">{username}</span>
           </div>
         </div>
       </div>

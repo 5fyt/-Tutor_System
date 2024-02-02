@@ -21,6 +21,7 @@ const resetToken = (state: Store.loginState) => {
   state.name = '';
   state.avatarUrl = '';
   Storage.remove(ACCESS_TOKEN_KEY);
+  Storage.remove(ACCESS_ADMIN_NAME);
 };
 /**
  * 用户登入异步
@@ -31,6 +32,7 @@ export const loginUser = createAsyncThunk('login', async (data: API.LoginParams)
 });
 export const afterLogin = createAsyncThunk('login/after', async () => {
   const data = await getAccount();
+  Storage.set(ACCESS_ADMIN_NAME, data.name);
   return data;
 });
 export const loginOut = createAsyncThunk('loginout', async () => {
@@ -51,7 +53,7 @@ const loginReducer = createSlice({
         setToken(state, payload);
       })
       .addCase(afterLogin.fulfilled, (state, { payload }) => {
-        state.name = payload.username;
+        state.name = payload.name;
         state.avatarUrl = payload.headImg;
       })
       .addCase(loginOut.fulfilled, state => {

@@ -6,6 +6,8 @@ import qs from 'qs';
 // import { objectPick, trimSpace } from '@/utils/util';
 // import { globalErrorHandler } from '@/utils/errorHandler';
 import { isObject, isBlod, isFormData, isFunction } from '@/utils/is';
+import Storage from '@/utils/Storage';
+import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
 // import { useUserStore } from '@/store/user';
 // import { useDownload } from '@/hooks/useDownload';
 // import { useMessage } from '@/hooks/useMessage';
@@ -65,6 +67,8 @@ class RequestHttp {
         // if (config.withToken && config.headers && typeof config.headers.set === 'function') {
         //   config.headers.set('loginToken', userStore.loginToken);
         // }
+        const token = Storage.get(ACCESS_TOKEN_KEY, null);
+        token && config.headers.set('Authorization', token);
         // if (config?.repeatRequest === 'cancel') {
         //   this.axiosCanceler.addPending(config);
         // }

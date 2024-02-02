@@ -13,12 +13,11 @@ import { AdminUser } from '../../../decorators/admin-user.decorator';
 import {
   CreateUserDto,
   DeleteUserDto,
-  InfoUserDto,
   PageSearchUserDto,
   PasswordUserDto,
   UpdateUserDto,
 } from './user.dto';
-import { PageSearchUserInfo, UserDetailInfo } from './user.class';
+import { AccountInfo, PageSearchUserInfo, UserDetailInfo } from './user.class';
 import { SysUserService } from './user.service';
 
 @ApiSecurity(ADMIN_PREFIX)
@@ -43,8 +42,8 @@ export class SysUserController {
   })
   @ApiOkResponse({ type: UserDetailInfo })
   @Get('info')
-  async info(@Query() dto: InfoUserDto): Promise<UserDetailInfo> {
-    return await this.userService.info(dto.userId);
+  async info(@AdminUser() user: IAdminUser): Promise<AccountInfo> {
+    return await this.userService.getAccountInfo(user.uid);
   }
 
   @ApiOperation({

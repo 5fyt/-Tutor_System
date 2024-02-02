@@ -182,9 +182,7 @@ export class SysUserService {
    * 查找用户信息
    * @param id 用户id
    */
-  async info(
-    id: number,
-  ): Promise<SysUser & { roles: number[]; departmentName: string }> {
+  async info(id: number): Promise<SysUser & { roles: number[] }> {
     const user: any = await this.userRepository.findOne({ where: { id } });
     if (isEmpty(user)) {
       throw new ApiException(10017);
