@@ -1,45 +1,46 @@
-import { FC, lazy, useEffect, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { cloneDeep } from 'lodash';
 import { useLocation, type RouteObject, useNavigate } from 'react-router-dom';
-import type { MenuList } from './type';
-import WrapperRouteComponent from './WrapperRoute';
-import LayoutPage from '@/Layout';
+// import type { MenuList } from './type';
+// import WrapperRouteComponent from './WrapperRoute';
+import { defaultRouteList, errorRoute, defaultMenuRoutes } from './routeList/staticRoute';
+// import LayoutPage from '@/Layout';
 import RenderRoute from './RenderRoute';
 import Storage from '@/utils/Storage';
 import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
 
-const NotFound = lazy(() => import('@/views/error/index'));
-const LoginPage = lazy(() => import('@/views/login'));
-const Dashboard = lazy(() => import('@/views/dashboard'));
+// const NotFound = lazy(() => import('@/views/error/index'));
+// const LoginPage = lazy(() => import('@/views/login'));
+// const Dashboard = lazy(() => import('@/views/dashboard'));
 
-const defaultRouteList: RouteObject[] = [
-  {
-    path: '/login',
-    element: <WrapperRouteComponent element={<LoginPage />} />
-  },
-  {
-    path: '/',
-    element: <WrapperRouteComponent element={<LayoutPage />} />,
-    children: []
-  }
-];
+// const defaultRouteList: RouteObject[] = [
+//   {
+//     path: '/login',
+//     element: <WrapperRouteComponent element={<LoginPage />} />
+//   },
+//   {
+//     path: '/',
+//     element: <WrapperRouteComponent element={<LayoutPage />} />,
+//     children: []
+//   }
+// ];
 
-const errorRoute: RouteObject[] = [
-  {
-    path: '*',
-    element: <WrapperRouteComponent element={<NotFound />} />
-  }
-];
+// const errorRoute: RouteObject[] = [
+//   {
+//     path: '*',
+//     element: <WrapperRouteComponent element={<NotFound />} />
+//   }
+// ];
 
-//默认菜单
-export const defaultMenuRoutes: MenuList = [
-  {
-    path: '/dashboard',
-    key: '/dashboard',
-    element: <WrapperRouteComponent element={<Dashboard />} />,
-    meta: {}
-  }
-];
+// //默认菜单
+// export const defaultMenuRoutes: MenuList = [
+//   {
+//     path: '/dashboard',
+//     key: '/dashboard',
+//     element: <WrapperRouteComponent element={<Dashboard />} />,
+//     meta: {}
+//   }
+// ];
 
 export const DynamicRouter: FC = () => {
   const { pathname, state } = useLocation();

@@ -92,6 +92,7 @@ const LoginForm: FC = () => {
     } else {
       const defaultLoginFailureMessage = '登录失败，请重试！';
       await messageApi.error(defaultLoginFailureMessage);
+      getCapatcha();
     }
   };
 
