@@ -12,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // import SysMenu from 'src/entities/admin/sys-menu.entity';
 // import SysRoleDepartment from 'src/entities/admin/sys-role-department.entity';
 // import SysRoleMenu from 'src/entities/admin/sys-role-menu.entity';
-// import SysRole from 'src/entities/admin/sys-role.entity';
+import SysRole from '../system/role/role.entity';
 // import SysTaskLog from 'src/entities/admin/sys-task-log.entity';
 // import SysTask from 'src/entities/admin/sys-task.entity';
 // import SysUserRole from 'src/entities/admin/sys-user-role.entity';
@@ -26,8 +26,8 @@ import SysUser from '../system/user/user.entity';
 // import { SysLogService } from './log/log.service';
 // import { SysMenuController } from './menu/menu.controller';
 // import { SysMenuService } from './menu/menu.service';
-// import { SysRoleController } from './role/role.controller';
-// import { SysRoleService } from './role/role.service';
+import { SysRoleController } from './role/role.controller';
+import { SysRoleService } from './role/role.service';
 import { SysUserController } from './user/user.controller';
 import { SysUserService } from './user/user.service';
 // import { SysTaskController } from './task/task.controller';
@@ -49,7 +49,7 @@ import { SysUserService } from './user/user.service';
       // SysUserRole,
       // SysMenu,
       // SysRoleMenu,
-      // SysRole,
+      SysRole,
       // SysRoleDepartment,
       // SysUserRole,
       // SysLoginLog,
@@ -75,7 +75,7 @@ import { SysUserService } from './user/user.service';
   ],
   controllers: [
     SysUserController,
-    // SysRoleController,
+    SysRoleController,
     // SysMenuController,
     // SysDeptController,
     // SysLogController,
@@ -87,7 +87,7 @@ import { SysUserService } from './user/user.service';
   providers: [
     // rootRoleIdProvider(),
     SysUserService,
-    // SysRoleService,
+    SysRoleService,
     // SysMenuService,
     // SysDeptService,
     // SysLogService,

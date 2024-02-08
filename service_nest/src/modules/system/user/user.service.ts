@@ -2,15 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { camelCase, isEmpty } from 'lodash';
 import { ApiException } from 'src/common/exceptions/api.exception';
-// import SysDepartment from 'src/entities/admin/sys-department.entity';
-// import SysUserRole from 'src/entities/admin/sys-user-role.entity';
 import SysUser from './user.entity';
 import { UtilService } from 'src/shared/services/util.service';
-import { EntityManager, In, Not, Repository } from 'typeorm';
-// import { ROOT_ROLE_ID } from 'src/modules/auth/constants/admin.constants';
+import { EntityManager, In, Repository } from 'typeorm';
 import { RedisService } from 'src/shared/services/redis.service';
-// import { SYS_USER_INITPASSWORD } from 'src/common/contants/param-config.contants';
-// import { SysParamConfigService } from '../param-config/param-config.service';
 import { AccountInfo, PageSearchUserInfo } from './user.class';
 import {
   CreateUserDto,
@@ -24,14 +19,8 @@ import {
 export class SysUserService {
   constructor(
     @InjectRepository(SysUser) private userRepository: Repository<SysUser>,
-    // @InjectRepository(SysDepartment)
-    // private departmentRepository: Repository<SysDepartment>,
-    // @InjectRepository(SysUserRole)
-    // private userRoleRepository: Repository<SysUserRole>,
     private redisService: RedisService,
-    // private paramConfigService: SysParamConfigService,
     @InjectEntityManager() private entityManager: EntityManager,
-    // @Inject(ROOT_ROLE_ID) private rootRoleId: number,
     private util: UtilService,
   ) {}
 

@@ -5,17 +5,15 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
+import SysRole from '../role/role.entity';
 
 @Entity({ name: 'sys_user' })
 export default class SysUser {
   @PrimaryGeneratedColumn()
   @ApiProperty()
   id: number;
-
-  // @Column({ name: 'department_id' })
-  // @ApiProperty()
-  // departmentId: number;
 
   @Column()
   @ApiProperty()
@@ -52,4 +50,7 @@ export default class SysUser {
   @UpdateDateColumn({ name: 'updated_at' })
   @ApiProperty()
   updatedAt: Date;
+
+  @OneToOne(() => SysRole, (role) => role.user)
+  role: SysRole;
 }
