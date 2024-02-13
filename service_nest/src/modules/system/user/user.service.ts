@@ -41,6 +41,7 @@ export class SysUserService {
   async getAccountInfo(uid: number, ip?: string): Promise<AccountInfo> {
     const user: SysUser = await this.userRepository.findOne({
       where: { id: uid },
+      relations: { role: true },
     });
     if (isEmpty(user)) {
       throw new ApiException(10017);
@@ -50,6 +51,7 @@ export class SysUserService {
       email: user.email,
       phone: user.phone,
       headImg: user.headImg,
+      role: user.role[0].name,
       loginIp: ip,
     };
   }

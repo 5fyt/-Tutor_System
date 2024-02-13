@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, OneToOne, PrimaryGeneratedColumn, Entity } from 'typeorm';
+import {
+  Column,
+  PrimaryGeneratedColumn,
+  Entity,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import SysUser from '../user/user.entity';
 
 @Entity({ name: 'sys_role' })
@@ -14,6 +20,7 @@ export default class SysRole {
   @Column({ nullable: true, default: '' })
   remark: string;
 
-  @OneToOne(() => SysUser, (user) => user.role)
-  user: SysUser;
+  @ManyToMany(() => SysUser, (user) => user.role)
+  @JoinTable({ name: 'sys_user_role' })
+  user: SysUser[];
 }

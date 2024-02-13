@@ -5,7 +5,7 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
+  ManyToMany,
 } from 'typeorm';
 import SysRole from '../role/role.entity';
 
@@ -51,6 +51,6 @@ export default class SysUser {
   @ApiProperty()
   updatedAt: Date;
 
-  @OneToOne(() => SysRole, (role) => role.user)
-  role: SysRole;
+  @ManyToMany(() => SysRole, (role) => role.user)
+  role: SysRole[];
 }
