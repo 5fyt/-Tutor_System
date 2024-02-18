@@ -3,44 +3,12 @@ import { cloneDeep } from 'lodash';
 import { useLocation, type RouteObject, useNavigate } from 'react-router-dom';
 // import type { MenuList } from './type';
 // import WrapperRouteComponent from './WrapperRoute';
-import { defaultRouteList, errorRoute, defaultMenuRoutes } from './routeList/staticRoute';
+import { defaultRouteList, errorRoute, defaultRoutes } from './routeList/staticRoute';
 // import LayoutPage from '@/Layout';
 import RenderRoute from './RenderRoute';
 import Storage from '@/utils/Storage';
 import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
-
-// const NotFound = lazy(() => import('@/views/error/index'));
-// const LoginPage = lazy(() => import('@/views/login'));
-// const Dashboard = lazy(() => import('@/views/dashboard'));
-
-// const defaultRouteList: RouteObject[] = [
-//   {
-//     path: '/login',
-//     element: <WrapperRouteComponent element={<LoginPage />} />
-//   },
-//   {
-//     path: '/',
-//     element: <WrapperRouteComponent element={<LayoutPage />} />,
-//     children: []
-//   }
-// ];
-
-// const errorRoute: RouteObject[] = [
-//   {
-//     path: '*',
-//     element: <WrapperRouteComponent element={<NotFound />} />
-//   }
-// ];
-
-// //默认菜单
-// export const defaultMenuRoutes: MenuList = [
-//   {
-//     path: '/dashboard',
-//     key: '/dashboard',
-//     element: <WrapperRouteComponent element={<Dashboard />} />,
-//     meta: {}
-//   }
-// ];
+import { dynamicRouteList } from './routeList/dynamicRoute';
 
 export const DynamicRouter: FC = () => {
   const { pathname, state } = useLocation();
@@ -62,7 +30,7 @@ export const DynamicRouter: FC = () => {
   const newRoutes = useMemo(() => {
     const routes = cloneDeep(defaultRouteList);
     const layoutRoute = routes.find((item: RouteObject) => item.path === '/')?.children;
-    layoutRoute?.push(...cloneDeep([...defaultMenuRoutes]), ...errorRoute);
+    layoutRoute?.push(...cloneDeep([...defaultRoutes, ...dynamicRouteList]), ...errorRoute);
     return routes;
   }, []);
   return <RenderRoute routeList={newRoutes} />;

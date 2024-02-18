@@ -1,14 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { login } from '@/api/login';
 import { Storage } from '@/utils/Storage';
-import { ACCESS_TOKEN_KEY, ACCESS_ADMIN_NAME } from '@/enums/cacheEnum';
+import { ACCESS_TOKEN_KEY, ACCESS_ADMIN_NAME, ACCESS_ADMIN_ROLE } from '@/enums/cacheEnum';
 import { RootState } from '..';
 import { getAccount, logout } from '@/api/account';
 
 const initialState: Store.loginState = {
   token: Storage.get(ACCESS_TOKEN_KEY, null),
   name: Storage.get(ACCESS_ADMIN_NAME, null),
-  avatarUrl: ''
+  avatarUrl: '',
+  role: '',
+  menuList: []
 };
 
 const setToken = (state: Store.loginState, params: string) => {
@@ -31,9 +33,10 @@ export const loginUser = createAsyncThunk('login', async (data: API.LoginParams)
   return token;
 });
 export const afterLogin = createAsyncThunk('login/after', async () => {
-  const data = await getAccount();
-  Storage.set(ACCESS_ADMIN_NAME, data.name);
-  return data;
+  const { name, role, headImg } = await getAccount();
+  Storage.set(ACCESS_ADMIN_NAME, name);
+  Storage.set(ACCESS_ADMIN_ROLE, role);
+  return { name, role, headImg };
 });
 export const loginOut = createAsyncThunk('loginout', async () => {
   const data = await logout();
@@ -62,4 +65,5 @@ const loginReducer = createSlice({
   }
 });
 export const user_name = (state: RootState) => state.login.name;
+export const menuList = (state: RootState) => state.login.menuList;
 export default loginReducer.reducer;

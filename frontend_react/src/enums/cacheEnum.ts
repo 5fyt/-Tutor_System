@@ -5,3 +5,5 @@ export const ACCESS_PASSWORD_KEY = 'ACCESS_PASSWORD';
 export const ACCESS_USER_KEY = 'ACCESS_USER';
 //用户账号
 export const ACCESS_ADMIN_NAME = 'ACCESS_NAME';
+//用户角色
+export const ACCESS_ADMIN_ROLE = 'ACCESS_ROLE';

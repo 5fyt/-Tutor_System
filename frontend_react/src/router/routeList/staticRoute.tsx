@@ -1,5 +1,4 @@
 import { lazy } from 'react';
-import type { MenuList } from '../type';
 import { type RouteObject } from 'react-router-dom';
 import WrapperRouteComponent from '../WrapperRoute';
 import LayoutPage from '@/Layout';
@@ -28,11 +27,9 @@ export const errorRoute: RouteObject[] = [
 ];
 
 //默认菜单
-export const defaultMenuRoutes: MenuList = [
+export const defaultRoutes: RouteObject[] = [
   {
     path: '/dashboard',
-    key: '/dashboard',
-    element: <WrapperRouteComponent element={<Dashboard />} />,
-    meta: {}
+    element: <WrapperRouteComponent element={<Dashboard />} />
   }
 ];
