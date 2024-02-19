@@ -29,7 +29,7 @@ export const dynamicRouteList: RouteObject[] = [
     element: <WrapperRouteElement element={<Comment />} />
   },
   {
-    path: '/permission/perlist',
+    path: '/permission/perList',
     element: <WrapperRouteElement element={<PermissionList />} />
   },
   {

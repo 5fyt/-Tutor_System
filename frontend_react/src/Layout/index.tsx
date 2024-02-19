@@ -1,7 +1,7 @@
 import './index.less';
 
 import { Layout } from 'antd';
-import { FC, useEffect, useState, memo } from 'react';
+import { FC, useEffect, memo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { RouteView } from '@/router/routeView';
@@ -9,15 +9,16 @@ import { RouteView } from '@/router/routeView';
 
 import HeaderComponent from './header';
 import MenuComponent from './menu';
-import { useAppSelector } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 // import TagsView from './tagView';
-
+import { toggleCollapsed } from '../store/module/login';
 const { Content, Sider } = Layout;
 
 const LayoutPage: FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const collapsed = useAppSelector(state => state.login.collapsed);
+  const dispatch = useAppDispatch();
   const menuList = useAppSelector(state => state.login.menuList);
   useEffect(() => {
     if (location.pathname === '/') {
@@ -25,13 +26,9 @@ const LayoutPage: FC = () => {
     }
   }, [navigate, location]);
 
-  const toggle = () => {
-    setCollapsed(!collapsed);
-  };
-
   return (
     <Layout className="layout-page">
-      <HeaderComponent collapsed={collapsed} toggle={toggle} />
+      <HeaderComponent collapsed={collapsed} toggle={() => dispatch(toggleCollapsed())} />
       <Layout>
         <Sider className="layout-page-sider" trigger={null} collapsible collapsed={collapsed} breakpoint="md">
           <MenuComponent menuList={menuList} />

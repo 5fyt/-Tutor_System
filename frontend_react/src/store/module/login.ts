@@ -6,14 +6,13 @@ import { RootState } from '..';
 import { getAccount, logout } from '@/api/account';
 import { MenuList } from '@/router/type';
 import { dynamicMenuRoute } from '@/router/routeList/dynamicRoute';
-
+const device = /(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent) ? 'MOBILE' : 'DESKTOP';
 const initialState: Store.loginState = {
   token: Storage.get(ACCESS_TOKEN_KEY, null),
   name: Storage.get(ACCESS_ADMIN_USERINFO, null)?.name || '',
   avatarUrl: Storage.get(ACCESS_ADMIN_USERINFO, null)?.headImg || '',
-  // name: '',
-  // avatarUrl: '',
   role: '',
+  collapsed: device !== 'DESKTOP',
   menuList: Storage.get(ACCESS_ADMIN_MENULIST, null) || []
 };
 
@@ -29,6 +28,13 @@ const resetToken = (state: Store.loginState) => {
   Storage.remove(ACCESS_TOKEN_KEY);
   Storage.remove(ACCESS_ADMIN_USERINFO);
 };
+/**
+ * 筛选菜单
+ * @param state
+ * @param menuList
+ * @param newArr
+ * @returns
+ */
 const filterMenu = (state: Store.loginState, menuList: MenuList, newArr: MenuList = []) => {
   newArr = menuList
     .map(item => {
@@ -45,6 +51,7 @@ const filterMenu = (state: Store.loginState, menuList: MenuList, newArr: MenuLis
   Storage.set(ACCESS_ADMIN_MENULIST, newArr);
   return newArr;
 };
+
 /**
  * 用户登入异步
  */
@@ -67,8 +74,11 @@ export const loginOut = createAsyncThunk('loginout', async () => {
 const loginReducer = createSlice({
   name: 'loginStore',
   initialState,
-  // reducers: { setToken, resetToken },
-  reducers: {},
+  reducers: {
+    toggleCollapsed: (state: Store.loginState) => {
+      state.collapsed = !state.collapsed;
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(loginUser.fulfilled, (state, { payload }) => {
@@ -85,6 +95,8 @@ const loginReducer = createSlice({
       });
   }
 });
+export const { toggleCollapsed } = loginReducer.actions;
 export const user_name = (state: RootState) => state.login.name;
 export const menuList = (state: RootState) => state.login.menuList;
+export const collapsed = (state: RootState) => state.login.collapsed;
 export default loginReducer.reducer;

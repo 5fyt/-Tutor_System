@@ -72,7 +72,7 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
       {contextHolder}
       <div className="logo">
         <img src={Logo} alt="" style={{ marginRight: collapsed ? '2px' : '5px' }} />
-        <span>Tutor System</span>
+        {!collapsed && <span>Tutor System</span>}
       </div>
       <div className="layout-page-header-main">
         <div onClick={toggle}>

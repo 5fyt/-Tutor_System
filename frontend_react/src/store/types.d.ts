@@ -4,6 +4,7 @@ declare namespace Store {
     name: string;
     role: string;
     avatarUrl: string;
+    collapsed: boolean;
     menuList: any[];
   };
 }
