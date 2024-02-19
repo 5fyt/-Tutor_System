@@ -8,6 +8,7 @@ const store = configureStore({
     login: loginReducer
   }
 });
+
 export type RootState = ReturnType<typeof store.getState>;
 type AppDispatch = typeof store.dispatch;
 export const useAppDispatch: () => AppDispatch = useDispatch;

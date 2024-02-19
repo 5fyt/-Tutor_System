@@ -1,4 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
+// import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
+
 import * as Icons from '@ant-design/icons';
 import type { GetProp, MenuProps } from 'antd';
 import { Menu } from 'antd';
@@ -39,10 +41,10 @@ const MenuComponent: FC<MenuCProps> = ({ menuList }) => {
   // const navigate = useNavigate();
   // const dispatch = useAppDispatch();
   // const collapsedApp = useAppSelector(collapse);
-  const [activeMenu, setActiveMenu] = useState<string[]>([]);
+  // const [activeMenu, setActiveMenu] = useState<string[]>([]);
   //用本地存储管理主要是因为收缩菜单栏需要
-  const openKey = JSON.parse(localStorage.getItem('openKeys') as string);
-  const [openKeys, setOpenKeys] = useState<string[]>(openKey ? openKey : []);
+  // const openKey = JSON.parse(localStorage.getItem('openKeys') as string);
+  // const [openKeys, setOpenKeys] = useState<string[]>(openKey ? openKey : []);
 
   //当手动输入路由路由表发生变化时，将路由对应的sub展开，其他的隐藏
   const deepLoopFloat = (menuList: MenuList, newArr: MenuItems[] = []) => {
@@ -54,9 +56,13 @@ const MenuComponent: FC<MenuCProps> = ({ menuList }) => {
     return newArr;
   };
   const items: MenuItems[] = deepLoopFloat(menuList);
-  useEffect(() => {
-    setActiveMenu([]);
-  }, []);
+
+  // useEffect(() => {
+  //   console.log(items);
+  //   if (menuList.length >= 3) {
+  //     setActiveMenu([]);
+  //   }
+  // }, [items]);
   // useEffect(() => {
   //   // 直接监听路由变化
   //   if (pathname.split('/').length > 2) {
@@ -79,17 +85,18 @@ const MenuComponent: FC<MenuCProps> = ({ menuList }) => {
   // }, [pathname]);
 
   //当点击SubItem时需要展开菜单，如果点击第二个subItem需要同时展开两个，如果在点击MenuItem，就需要将上一个SubItems收缩
-  const onOpenChange: MenuProps['onOpenChange'] = openKeys => {
-    //获取点击的subKey
-
-    if (openKeys.length === 0 || openKeys.length === 1) {
-      localStorage.setItem('openKeys', JSON.stringify(openKeys));
-      setOpenKeys(openKeys);
-    } else {
-      localStorage.setItem('openKeys', JSON.stringify(openKeys));
-      setOpenKeys(openKeys);
-    }
-  };
+  // const onOpenChange: MenuProps['onOpenChange'] = openKeys => {
+  //   console.log(openKeys);
+  //   setOpenKeys([]);
+  //   //获取点击的subKey
+  //   // if (openKeys.length === 0 || openKeys.length === 1) {
+  //   //   localStorage.setItem('openKeys', JSON.stringify(openKeys));
+  //   //   setOpenKeys(openKeys);
+  //   // } else {
+  //   //   localStorage.setItem('openKeys', JSON.stringify(openKeys));
+  //   //   setOpenKeys(openKeys);
+  //   // }
+  // };
   const toPage = () => {
     // if (key) {
     //   //分割路由 /business/goods ['','business','goods'],
@@ -114,9 +121,9 @@ const MenuComponent: FC<MenuCProps> = ({ menuList }) => {
   return (
     <Menu
       mode="inline"
-      onOpenChange={onOpenChange}
-      openKeys={openKeys}
-      selectedKeys={activeMenu}
+      // onOpenChange={onOpenChange}
+      // openKeys={openKeys}
+      // selectedKeys={activeMenu}
       onClick={toPage}
       items={items}
     />

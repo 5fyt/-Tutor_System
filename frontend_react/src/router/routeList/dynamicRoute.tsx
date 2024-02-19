@@ -2,7 +2,7 @@ import { lazy } from 'react';
 import { MenuList } from '../type';
 import WrapperRouteElement from '../WrapperRoute';
 import { RouteObject } from 'react-router-dom';
-import { ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER } from '../type';
+import { ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER } from '../../enums/menuEnum';
 const NoticeList = lazy(() => import('@/views/notice'));
 const Profile = lazy(() => import('@/views/system/profile'));
 const Order = lazy(() => import('@/views/system/order'));
@@ -48,16 +48,55 @@ export const dynamicMenuRoute: MenuList = [
     name: '首页',
     meta: {
       icon: 'DashboardOutlined',
-      role: [ROLE_ADMIN]
+      role: [ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER]
     }
+  },
+
+  {
+    path: 'permission',
+    key: 'permission',
+    name: '权限管理',
+    meta: {
+      icon: 'TeamOutlined',
+      role: [ROLE_ADMIN]
+    },
+    children: [
+      {
+        path: '/permission/role',
+        key: '/permission/role',
+        name: '角色管理',
+        meta: {
+          icon: 'ControlOutlined',
+          role: [ROLE_ADMIN]
+        }
+      },
+      {
+        path: '/permission/perList',
+        key: '/permission/perList',
+        name: '权限列表',
+        meta: {
+          icon: 'DeleteColumnOutlined',
+          role: [ROLE_ADMIN]
+        }
+      },
+      {
+        path: '/permission/user',
+        key: '/permission/user',
+        name: '角色管理',
+        meta: {
+          icon: 'DeliveredProcedureOutlined',
+          role: [ROLE_ADMIN]
+        }
+      }
+    ]
   },
   {
     path: 'system',
-    name: '权限管理',
+    name: '系统管理',
     key: 'system',
     meta: {
       icon: 'RadiusSettingOutlined',
-      role: [ROLE_ADMIN]
+      role: [ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER]
     },
     children: [
       {
@@ -85,44 +124,6 @@ export const dynamicMenuRoute: MenuList = [
         meta: {
           icon: 'FileOutlined',
           role: [ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER]
-        }
-      }
-    ]
-  },
-  {
-    path: 'permission',
-    key: 'permission',
-    name: '权限管理',
-    meta: {
-      icon: 'TeamOutlined',
-      role: [ROLE_ADMIN]
-    },
-    children: [
-      {
-        path: '/permission/role',
-        key: '/permission/role',
-        name: '角色管理',
-        meta: {
-          icon: '',
-          role: [ROLE_ADMIN]
-        }
-      },
-      {
-        path: '/permission/perList',
-        key: '/permission/perList',
-        name: '权限列表',
-        meta: {
-          icon: '',
-          role: [ROLE_ADMIN]
-        }
-      },
-      {
-        path: '/permission/user',
-        key: '/permission/user',
-        name: '角色管理',
-        meta: {
-          icon: '',
-          role: [ROLE_ADMIN]
         }
       }
     ]

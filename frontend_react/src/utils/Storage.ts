@@ -15,7 +15,7 @@ const createStorage = ({ prefixKey = '', storage = localStorage } = {}) => {
      * @param value 缓存值
      * @param expire 过期期限值
      */
-    set(key: string, value: string, expire: number | null = DEFAULT_CACHE_TIME) {
+    set(key: string, value: string | any, expire: number | null = DEFAULT_CACHE_TIME) {
       const stringData = JSON.stringify({
         value,
         expire: expire !== null ? new Date().getTime() + expire * 1000 : null
