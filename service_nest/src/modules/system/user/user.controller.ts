@@ -9,12 +9,10 @@ import { PaginatedResponseDto } from 'src/common/class/res.class';
 import { ADMIN_PREFIX } from 'src/guards/constants/admin.contants';
 import { IAdminUser } from '../../admin.interface';
 import { AdminUser } from '../../../decorators/admin-user.decorator';
-// import { SysMenuService } from '../menu/menu.service';
 import {
   CreateUserDto,
   DeleteUserDto,
   PageSearchUserDto,
-  PasswordUserDto,
   UpdateUserDto,
 } from './user.dto';
 import { AccountInfo, PageSearchUserInfo, UserDetailInfo } from './user.class';
@@ -24,10 +22,7 @@ import { SysUserService } from './user.service';
 @ApiTags('管理员模块')
 @Controller('user')
 export class SysUserController {
-  constructor(
-    private userService: SysUserService,
-    // private menuService: SysMenuService,
-  ) {}
+  constructor(private userService: SysUserService) {}
 
   @ApiOperation({
     summary: '新增管理员',
@@ -37,14 +32,14 @@ export class SysUserController {
     await this.userService.add(dto);
   }
 
-  @ApiOperation({
-    summary: '查询管理员信息',
-  })
-  @ApiOkResponse({ type: UserDetailInfo })
-  @Get('info')
-  async info(@AdminUser() user: IAdminUser): Promise<AccountInfo> {
-    return await this.userService.getAccountInfo(user.uid);
-  }
+  // @ApiOperation({
+  //   summary: '查询管理员信息',
+  // })
+  // @ApiOkResponse({ type: UserDetailInfo })
+  // @Get('info')
+  // async info(@AdminUser() user: IAdminUser): Promise<AccountInfo> {
+  //   return await this.userService.getAccountInfo(user.uid);
+  // }
 
   @ApiOperation({
     summary: '根据ID列表删除管理员',
@@ -59,16 +54,15 @@ export class SysUserController {
     summary: '分页获取管理员列表',
   })
   @ApiOkResponse({ type: [PageSearchUserInfo] })
-  @Post('page')
+  @Post('search')
   async page(
     @Body() dto: PageSearchUserDto,
     @AdminUser() user: IAdminUser,
   ): Promise<PaginatedResponseDto<PageSearchUserInfo>> {
     const [list, total] = await this.userService.page(user.uid, dto);
-    // const total = await this.userService.count(user.uid, dto.departmentIds);
     return {
       list,
-      pagination: {
+      result: {
         total,
         page: dto.page,
         size: dto.limit,
@@ -83,13 +77,5 @@ export class SysUserController {
   async update(@Body() dto: UpdateUserDto): Promise<void> {
     await this.userService.update(dto);
     // await this.menuService.refreshPerms(dto.id);
-  }
-
-  @ApiOperation({
-    summary: '更改指定管理员密码',
-  })
-  @Post('password')
-  async password(@Body() dto: PasswordUserDto): Promise<void> {
-    await this.userService.forceUpdatePassword(dto.userId, dto.password);
   }
 }

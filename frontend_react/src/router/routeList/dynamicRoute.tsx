@@ -82,7 +82,7 @@ export const dynamicMenuRoute: MenuList = [
       {
         path: '/permission/user',
         key: '/permission/user',
-        name: '角色管理',
+        name: '用户管理',
         meta: {
           icon: 'DeliveredProcedureOutlined',
           role: [ROLE_ADMIN]

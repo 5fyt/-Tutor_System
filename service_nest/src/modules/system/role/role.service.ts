@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { isEmpty, map } from 'lodash';
 
-import SysRole from './role.entity';
-import SysUserRole from '../user/user.entity';
+import SysRole from 'src/entities/role.entity';
+import SysUserRole from 'src/entities/user.entity';
 import { EntityManager, Like, Repository } from 'typeorm';
 
 import { CreateRoleDto, PageSearchRoleDto, UpdateRoleDto } from './role.dto';

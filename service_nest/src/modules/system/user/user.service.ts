@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { camelCase, isEmpty } from 'lodash';
 import { ApiException } from 'src/common/exceptions/api.exception';
-import SysUser from './user.entity';
+import SysUser from 'src/entities/user.entity';
+import SysUserRole from 'src/entities/user-role.entity';
 import { UtilService } from 'src/shared/services/util.service';
 import { EntityManager, In, Repository } from 'typeorm';
 import { RedisService } from 'src/shared/services/redis.service';
@@ -20,6 +21,8 @@ export class SysUserService {
   constructor(
     @InjectRepository(SysUser) private userRepository: Repository<SysUser>,
     private redisService: RedisService,
+    @InjectRepository(SysUserRole)
+    private userRoleRepository: Repository<SysUserRole>,
     @InjectEntityManager() private entityManager: EntityManager,
     private util: UtilService,
   ) {}
@@ -38,23 +41,23 @@ export class SysUserService {
    * @param uid user id
    * @param ip login ip
    */
-  async getAccountInfo(uid: number, ip?: string): Promise<AccountInfo> {
-    const user: SysUser = await this.userRepository.findOne({
-      where: { id: uid },
-      relations: { role: true },
-    });
-    if (isEmpty(user)) {
-      throw new ApiException(10017);
-    }
-    return {
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      headImg: user.headImg,
-      role: user.role[0].name,
-      loginIp: ip,
-    };
-  }
+  // async getAccountInfo(uid: number, ip?: string): Promise<AccountInfo> {
+  //   const user: SysUser = await this.userRepository.findOne({
+  //     where: { id: uid },
+  //     relations: { role: true },
+  //   });
+  //   if (isEmpty(user)) {
+  //     throw new ApiException(10017);
+  //   }
+  //   return {
+  //     name: user.name,
+  //     email: user.email,
+  //     phone: user.phone,
+  //     headImg: user.headImg,
+  //     role: user.role[0].name,
+  //     loginIp: ip,
+  //   };
+  // }
 
   /**
    * 更新个人信息
@@ -82,19 +85,6 @@ export class SysUserService {
   }
 
   /**
-   * 直接更改管理员密码
-   */
-  async forceUpdatePassword(uid: number, password: string): Promise<void> {
-    const user = await this.userRepository.findOne({ where: { id: uid } });
-    if (isEmpty(user)) {
-      throw new ApiException(10017);
-    }
-    const newPassword = this.util.md5(`${password}${user.psalt}`);
-    await this.userRepository.update({ id: uid }, { password: newPassword });
-    await this.upgradePasswordV(user.id);
-  }
-
-  /**
    * 增加系统用户，如果返回false则表示已存在该用户
    * @param param Object 对应SysUser实体类
    */
@@ -109,35 +99,27 @@ export class SysUserService {
     // 所有用户初始密码为123456
     await this.entityManager.transaction(async (manager) => {
       const salt = this.util.generateRandomValue(32);
-
-      // 查找配置的初始密码
-      // const initPassword = await this.paramConfigService.findValueByKey(
-      //   SYS_USER_INITPASSWORD,
-      // );
-
-      // const password = this.util.md5(`${initPassword ?? '123456'}${salt}`);
       const password = this.util.md5(`${'123456'}${salt}`);
 
       const u = manager.create(SysUser, {
         username: param.username,
         password,
         name: param.name,
-
         email: param.email,
         phone: param.phone,
         psalt: salt,
       });
       await manager.save(u);
-      // const result = await manager.save(u);
-      // const { roles } = param;
-      // const insertRoles = roles.map((e) => {
-      //   return {
-      //     roleId: e,
-      //     userId: result.id,
-      //   };
-      // });
-      // // 分配角色
-      // await manager.insert(SysUserRole, insertRoles);
+      const result = await manager.save(u);
+      const { roles } = param;
+      const insertRoles = roles.map((e) => {
+        return {
+          roleId: e,
+          userId: result.id,
+        };
+      });
+      // 分配角色
+      await manager.insert(SysUserRole, insertRoles);
     });
   }
 
@@ -249,37 +231,22 @@ export class SysUserService {
     uid: number,
     params: PageSearchUserDto,
   ): Promise<[PageSearchUserInfo[], number]> {
-    const { departmentIds, limit, page, name, username, phone, remark } =
-      params;
-    const queryAll: boolean = isEmpty(departmentIds);
-    // const rootUserId = await this.findRootUserId();
+    const { limit, page, name, username, phone } = params;
     const qb = this.userRepository
       .createQueryBuilder('user')
-      .innerJoinAndSelect(
-        'sys_department',
-        'dept',
-        'dept.id = user.departmentId',
-      )
       .innerJoinAndSelect(
         'sys_user_role',
         'user_role',
         'user_role.user_id = user.id',
       )
       .innerJoinAndSelect('sys_role', 'role', 'role.id = user_role.role_id')
-      .select([
-        'user.id,GROUP_CONCAT(role.name) as roleNames',
-        'dept.name',
-        'user.*',
-      ])
+      .select(['user.id,GROUP_CONCAT(role.name) as roleNames', 'user.*'])
       // .where('user.id NOT IN (:...ids)', { ids: [rootUserId, uid] })
       .where('user.id NOT IN (:...ids)', { ids: [uid] })
 
-      .andWhere(queryAll ? '1 = 1' : 'user.departmentId IN (:...deptIds)', {
-        deptIds: departmentIds,
-      })
       .andWhere('user.name LIKE :name', { name: `%${name}%` })
       .andWhere('user.username LIKE :username', { username: `%${username}%` })
-      .andWhere('user.remark LIKE :remark', { remark: `%${remark}%` })
+
       .andWhere('user.phone LIKE :phone', { phone: `%${phone}%` })
       .orderBy('user.updated_at', 'DESC')
       .groupBy('user.id')
@@ -293,7 +260,6 @@ export class SysUserService {
       );
       return {
         ...Object.fromEntries(convertData),
-        departmentName: n.dept_name,
         roleNames: n.roleNames.split(','),
       };
     });

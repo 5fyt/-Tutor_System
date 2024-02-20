@@ -41,7 +41,7 @@ export class PaginatedResponseDto<T> {
   list: Array<T>;
 
   @ApiProperty()
-  pagination: Pagination;
+  result: Pagination;
 }
 
 export const ApiResponse = <

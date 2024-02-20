@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { PaginatedResponseDto } from 'src/common/class/res.class';
-import SysRole from './role.entity';
+import SysRole from 'src/entities/role.entity';
 
 import { RoleInfo } from './role.class';
 import {
@@ -28,7 +28,7 @@ export class SysRoleController {
     const [list, total] = await this.roleService.page(dto);
     return {
       list,
-      pagination: {
+      result: {
         size: dto.limit,
         page: dto.page,
         total,

@@ -21,12 +21,11 @@ import { PageOptionsDto } from 'src/common/dto/page.dto';
 
 export class UpdateUserInfoDto {
   @ApiProperty({
-    required: false,
-    description: '用户呢称',
+    description: '用户姓名',
   })
   @IsString()
-  @IsOptional()
-  nickName: string;
+  @MinLength(2)
+  name: string;
 
   @ApiProperty({
     required: false,
@@ -37,20 +36,30 @@ export class UpdateUserInfoDto {
   email: string;
 
   @ApiProperty({
+    description: '登录账号',
+  })
+  @IsString()
+  @Matches(/^[a-z0-9A-Z]+$/)
+  @MinLength(6)
+  @MaxLength(20)
+  username: string;
+
+  @ApiProperty({
+    description: '归属角色',
+    type: [Number],
+  })
+  @ArrayNotEmpty()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(3)
+  roles: number[];
+
+  @ApiProperty({
     required: false,
     description: '用户手机号',
   })
   @IsString()
   @IsOptional()
   phone: string;
-
-  @ApiProperty({
-    required: false,
-    description: '用户备注',
-  })
-  @IsString()
-  @IsOptional()
-  remark: string;
 }
 
 export class UpdatePasswordDto {
@@ -96,13 +105,13 @@ export class CreateUserDto {
   @ArrayMaxSize(3)
   roles: number[];
 
-  @ApiProperty({
-    required: false,
-    description: '呢称',
-  })
-  @IsString()
-  @IsOptional()
-  nickName: string;
+  // @ApiProperty({
+  //   required: false,
+  //   description: '呢称',
+  // })
+  // @IsString()
+  // @IsOptional()
+  // nickName: string;
 
   @ApiProperty({
     required: false,
@@ -153,16 +162,6 @@ export class DeleteUserDto {
 export class PageSearchUserDto extends PageOptionsDto {
   @ApiProperty({
     required: false,
-    description: '部门列表',
-    type: [Number],
-  })
-  @IsArray()
-  @ArrayNotEmpty()
-  @IsOptional()
-  departmentIds: number[];
-
-  @ApiProperty({
-    required: false,
     description: '用户姓名',
   })
   @IsString()
@@ -184,27 +183,4 @@ export class PageSearchUserDto extends PageOptionsDto {
   @IsString()
   @IsOptional()
   phone = '';
-
-  @ApiProperty({
-    required: false,
-    description: '用户备注',
-  })
-  @IsString()
-  @IsOptional()
-  remark = '';
-}
-
-export class PasswordUserDto {
-  @ApiProperty({
-    description: '管理员ID',
-  })
-  @IsInt()
-  @Min(0)
-  userId: number;
-
-  @ApiProperty({
-    description: '更改后的密码',
-  })
-  @Matches(/^[a-z0-9A-Z`~!#%^&*=+\\|{};:'\\",<>/?]+$/)
-  password: string;
 }

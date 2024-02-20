@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import SysUser from './user.entity';
+import SysUser from 'src/entities/user.entity';
 
 export class AccountInfo {
   @ApiProperty()
@@ -26,9 +26,6 @@ export class PageSearchUserInfo {
   createdAt: string;
 
   @ApiProperty()
-  departmentId: number;
-
-  @ApiProperty()
   email: string;
 
   @ApiProperty()
@@ -41,19 +38,13 @@ export class PageSearchUserInfo {
   name: string;
 
   @ApiProperty()
-  nickName: string;
+  username: string;
 
   @ApiProperty()
   phone: string;
 
   @ApiProperty()
   updatedAt: string;
-
-  @ApiProperty()
-  username: string;
-
-  @ApiProperty()
-  departmentName: string;
 
   @ApiProperty({
     type: [String],

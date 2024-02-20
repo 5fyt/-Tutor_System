@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import SysRole from './role.entity';
+import SysRole from 'src/entities/role.entity';
 
 export class RoleInfo {
   @ApiProperty({
