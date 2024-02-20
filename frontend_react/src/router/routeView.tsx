@@ -5,14 +5,7 @@ import SuspendFallbackLoading from '@/Layout/suspendFallbackLoading';
 
 export const RouteView: FC = () => {
   return (
-    <Suspense
-      fallback={
-        <SuspendFallbackLoading
-          message="Alert message title"
-          description="Further details about the context of this alert."
-        />
-      }
-    >
+    <Suspense fallback={<SuspendFallbackLoading />}>
       <Outlet />
     </Suspense>
   );

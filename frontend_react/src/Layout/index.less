@@ -15,11 +15,13 @@
       justify-content: space-between;
       align-items: center;
     }
+
     .logo {
       height: 64px;
       box-sizing: border-box;
       display: flex;
       z-index: 9;
+      margin-right: 37px;
       img {
         width: 60px;
         height: 60px;
@@ -28,8 +30,10 @@
       span {
         font-size: 18px;
         color: #7ca4f1;
+        margin-left: 5px;
         background-image: linear-gradient(to bottom right, rgb(89, 192, 64), blue);
         background-clip: text;
+        transition: all 0.5s;
         -webkit-text-fill-color: transparent;
       }
     }
@@ -177,4 +181,38 @@
       margin-right: 0;
     }
   }
+}
+.ant-layout-sider-dark .layout-page-sider {
+  width: 300px !important;
+}
+.ant-layout-sider-collapsed {
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+.ant-menu-inline-collapsed {
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+.ant-layout-sider {
+  background-color: #fff !important;
+  overflow: hidden;
+}
+
+.ant-menu-item {
+  border-radius: 0 !important;
+}
+.ant-menu-item-selected {
+  border-right: 2px solid #1890ff;
+}
+.ant-menu-submenu-open {
+  background-color: #e6f4ff;
+  border-radius: 4px;
+}
+
+:where(.css-dev-only-do-not-override-18iikkb).ant-menu-light:not(.ant-menu-horizontal)
+  .ant-menu-item:not(.ant-menu-item-selected):hover {
+  background: #fafafa !important;
+}
+.ant-menu-item-active:hover {
+  color: #1677ff !important;
 }

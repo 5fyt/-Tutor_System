@@ -74,6 +74,7 @@ const MenuComponent: FC<MenuCProps> = ({ menuList }) => {
       selectedKeys={activeMenu}
       onClick={toPage}
       items={items}
+      style={{ width: '250px' }}
     />
   );
 };

@@ -7,7 +7,7 @@ interface RouteProps {
 
 const RenderRoute: FC<RouteProps> = ({ routeList }): React.ReactNode => {
   const element = useRoutes(routeList);
-  return <Suspense fallback={<SuspendFallbackLoading message="加载失败" />}>{element}</Suspense>;
+  return <Suspense fallback={<SuspendFallbackLoading />}>{element}</Suspense>;
 };
 
 export default RenderRoute;

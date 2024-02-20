@@ -30,7 +30,14 @@ const LayoutPage: FC = () => {
     <Layout className="layout-page">
       <HeaderComponent collapsed={collapsed} toggle={() => dispatch(toggleCollapsed())} />
       <Layout>
-        <Sider className="layout-page-sider" trigger={null} collapsible collapsed={collapsed} breakpoint="md">
+        <Sider
+          className="layout-page-sider"
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          breakpoint="md"
+          width={250}
+        >
           <MenuComponent menuList={menuList} />
         </Sider>
         <Content className="layout-page-content">
