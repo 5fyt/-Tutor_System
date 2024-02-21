@@ -15,7 +15,7 @@ export class AccountInfo {
   headImg: string;
 
   @ApiProperty()
-  role: string;
+  role: string[];
 
   @ApiProperty()
   loginIp: string;

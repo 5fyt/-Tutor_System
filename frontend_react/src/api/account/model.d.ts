@@ -5,7 +5,7 @@ declare namespace API {
     id: number;
     name: string;
     username: string;
-    role: string;
+    role: string[];
     password: string;
     psalt: string;
     headImg: string;

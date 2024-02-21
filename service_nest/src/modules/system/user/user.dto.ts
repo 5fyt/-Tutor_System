@@ -105,14 +105,6 @@ export class CreateUserDto {
   @ArrayMaxSize(3)
   roles: number[];
 
-  // @ApiProperty({
-  //   required: false,
-  //   description: '呢称',
-  // })
-  // @IsString()
-  // @IsOptional()
-  // nickName: string;
-
   @ApiProperty({
     required: false,
     description: '邮箱',

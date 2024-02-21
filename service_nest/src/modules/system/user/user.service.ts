@@ -7,6 +7,7 @@ import SysUserRole from 'src/entities/user-role.entity';
 import { UtilService } from 'src/shared/services/util.service';
 import { EntityManager, In, Repository } from 'typeorm';
 import { RedisService } from 'src/shared/services/redis.service';
+import { SysRoleService } from 'src/modules/system/role/role.service';
 import { AccountInfo, PageSearchUserInfo } from './user.class';
 import {
   CreateUserDto,
@@ -15,12 +16,14 @@ import {
   UpdateUserDto,
   UpdateUserInfoDto,
 } from './user.dto';
+import SysRole from 'src/entities/role.entity';
 
 @Injectable()
 export class SysUserService {
   constructor(
     @InjectRepository(SysUser) private userRepository: Repository<SysUser>,
     private redisService: RedisService,
+    private roleService: SysRoleService,
     @InjectRepository(SysUserRole)
     private userRoleRepository: Repository<SysUserRole>,
     @InjectEntityManager() private entityManager: EntityManager,
@@ -41,23 +44,31 @@ export class SysUserService {
    * @param uid user id
    * @param ip login ip
    */
-  // async getAccountInfo(uid: number, ip?: string): Promise<AccountInfo> {
-  //   const user: SysUser = await this.userRepository.findOne({
-  //     where: { id: uid },
-  //     relations: { role: true },
-  //   });
-  //   if (isEmpty(user)) {
-  //     throw new ApiException(10017);
-  //   }
-  //   return {
-  //     name: user.name,
-  //     email: user.email,
-  //     phone: user.phone,
-  //     headImg: user.headImg,
-  //     role: user.role[0].name,
-  //     loginIp: ip,
-  //   };
-  // }
+  async getAccountInfo(uid: number, ip?: string): Promise<AccountInfo> {
+    const user: SysUser = await this.userRepository.findOne({
+      where: { id: uid },
+    });
+    console.log(user);
+    const roles: number[] = await this.roleService.getRoleIdByUser(uid);
+    const roleNamePromises: Promise<string>[] = roles.map(async (role) => {
+      const { roleInfo } = await this.roleService.info(role);
+      return roleInfo.name;
+    });
+
+    const roleName: string[] = await Promise.all(roleNamePromises);
+
+    if (isEmpty(user)) {
+      throw new ApiException(10017);
+    }
+    return {
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      headImg: user.headImg,
+      role: roleName,
+      loginIp: ip,
+    };
+  }
 
   /**
    * 更新个人信息
@@ -241,12 +252,9 @@ export class SysUserService {
       )
       .innerJoinAndSelect('sys_role', 'role', 'role.id = user_role.role_id')
       .select(['user.id,GROUP_CONCAT(role.name) as roleNames', 'user.*'])
-      // .where('user.id NOT IN (:...ids)', { ids: [rootUserId, uid] })
       .where('user.id NOT IN (:...ids)', { ids: [uid] })
-
       .andWhere('user.name LIKE :name', { name: `%${name}%` })
       .andWhere('user.username LIKE :username', { username: `%${username}%` })
-
       .andWhere('user.phone LIKE :phone', { phone: `%${phone}%` })
       .orderBy('user.updated_at', 'DESC')
       .groupBy('user.id')

@@ -3,7 +3,7 @@ import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { isEmpty, map } from 'lodash';
 
 import SysRole from 'src/entities/role.entity';
-import SysUserRole from 'src/entities/user.entity';
+import SysUserRole from 'src/entities/user-role.entity';
 import { EntityManager, Like, Repository } from 'typeorm';
 
 import { CreateRoleDto, PageSearchRoleDto, UpdateRoleDto } from './role.dto';
@@ -86,9 +86,10 @@ export class SysRoleService {
    * 根据用户id查找角色信息
    */
   async getRoleIdByUser(id: number): Promise<number[]> {
+    console.log(id);
     const result = await this.userRoleRepository.find({
       where: {
-        id,
+        userId: id,
       },
     });
     if (!isEmpty(result)) {

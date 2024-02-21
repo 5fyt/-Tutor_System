@@ -11,7 +11,7 @@ const initialState: Store.loginState = {
   token: Storage.get(ACCESS_TOKEN_KEY, null),
   name: Storage.get(ACCESS_ADMIN_USERINFO, null)?.name || '',
   avatarUrl: Storage.get(ACCESS_ADMIN_USERINFO, null)?.headImg || '',
-  role: '',
+  role: [],
   collapsed: device !== 'DESKTOP',
   menuList: Storage.get(ACCESS_ADMIN_MENULIST, null) || []
 };
@@ -39,7 +39,7 @@ const filterMenu = (state: Store.loginState, menuList: MenuList, newArr: MenuLis
   newArr = menuList
     .map(item => {
       if (item.children?.length) {
-        const childrenMenu = item.children.filter(child => child.meta.role?.includes(state.role));
+        const childrenMenu = item.children.filter(child => state?.role?.every(role => child.meta.role?.includes(role)));
         if (childrenMenu.length) {
           return { ...item, children: childrenMenu };
         }
@@ -47,7 +47,7 @@ const filterMenu = (state: Store.loginState, menuList: MenuList, newArr: MenuLis
         return item;
       }
     })
-    .filter(menu => menu?.meta.role?.includes(state.role)) as MenuList;
+    .filter(menu => state?.role?.every(role => menu?.meta?.role?.includes(role))) as MenuList;
   Storage.set(ACCESS_ADMIN_MENULIST, newArr);
   return newArr;
 };

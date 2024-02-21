@@ -73,9 +73,9 @@ export class LoginService {
       throw new ApiException(10003);
     }
 
-    // const comparePassword = this.util.md5(`${password}${user.psalt}`);
+    const comparePassword = this.util.md5(`${password}${user.psalt}`);
     // console.log(comparePassword);
-    if (user.password !== password) {
+    if (user.password !== comparePassword) {
       throw new ApiException(10003);
     }
     // const perms = await this.menuService.getPerms(user.id);

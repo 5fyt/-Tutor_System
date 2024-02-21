@@ -35,11 +35,11 @@ export class SysUserController {
   // @ApiOperation({
   //   summary: '查询管理员信息',
   // })
-  // @ApiOkResponse({ type: UserDetailInfo })
-  // @Get('info')
-  // async info(@AdminUser() user: IAdminUser): Promise<AccountInfo> {
-  //   return await this.userService.getAccountInfo(user.uid);
-  // }
+  @ApiOkResponse({ type: UserDetailInfo })
+  @Get('info')
+  async info(@AdminUser() user: IAdminUser): Promise<AccountInfo> {
+    return await this.userService.getAccountInfo(user.uid);
+  }
 
   @ApiOperation({
     summary: '根据ID列表删除管理员',
