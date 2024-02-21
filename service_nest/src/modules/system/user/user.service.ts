@@ -16,7 +16,6 @@ import {
   UpdateUserDto,
   UpdateUserInfoDto,
 } from './user.dto';
-import SysRole from 'src/entities/role.entity';
 
 @Injectable()
 export class SysUserService {
@@ -183,12 +182,8 @@ export class SysUserService {
    * 根据ID列表删除用户
    */
   async delete(userIds: number[]): Promise<void | never> {
-    // const rootUserId = await this.findRootUserId();
-    // if (userIds.includes(rootUserId)) {
-    //   throw new Error('can not delete root user!');
-    // }
     await this.userRepository.delete(userIds);
-    // await this.userRoleRepository.delete({ userId: In(userIds) });
+    await this.userRoleRepository.delete({ userId: In(userIds) });
   }
 
   //分页查询用户

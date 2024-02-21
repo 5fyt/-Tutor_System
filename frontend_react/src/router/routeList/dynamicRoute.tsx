@@ -62,6 +62,15 @@ export const dynamicMenuRoute: MenuList = [
     },
     children: [
       {
+        path: '/permission/user',
+        key: '/permission/user',
+        name: '用户管理',
+        meta: {
+          icon: 'DeliveredProcedureOutlined',
+          role: [ROLE_ADMIN]
+        }
+      },
+      {
         path: '/permission/role',
         key: '/permission/role',
         name: '角色管理',
@@ -76,15 +85,6 @@ export const dynamicMenuRoute: MenuList = [
         name: '权限列表',
         meta: {
           icon: 'DeleteColumnOutlined',
-          role: [ROLE_ADMIN]
-        }
-      },
-      {
-        path: '/permission/user',
-        key: '/permission/user',
-        name: '用户管理',
-        meta: {
-          icon: 'DeliveredProcedureOutlined',
           role: [ROLE_ADMIN]
         }
       }

@@ -92,7 +92,7 @@ export class CreateUserDto {
   })
   @IsString()
   @Matches(/^[a-z0-9A-Z]+$/)
-  @MinLength(6)
+  @MinLength(4)
   @MaxLength(20)
   username: string;
 

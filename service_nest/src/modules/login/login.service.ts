@@ -78,33 +78,24 @@ export class LoginService {
     if (user.password !== comparePassword) {
       throw new ApiException(10003);
     }
-    // const perms = await this.menuService.getPerms(user.id);
+
     // TODO 系统管理员开放多点登录
     if (user.id === 1) {
       const oldToken = await this.getRedisTokenById(user.id);
       if (oldToken) {
-        // this.logService.saveLoginLog(user.id, ip, ua);
         return oldToken;
       }
     }
     const redis = await this.redisService.getRedis();
     const pv = Number(await redis.get(`admin:passwordVersion:${user.id}`)) || 1;
 
-    const jwtSign = this.jwtService.sign(
-      {
-        uid: parseInt(user.id.toString()),
-        pv,
-      },
-      // {
-      //   expiresIn: '24h',
-      // },
-    );
+    const jwtSign = this.jwtService.sign({
+      uid: parseInt(user.id.toString()),
+      pv,
+    });
     await redis.set(`admin:passwordVersion:${user.id}`, pv);
     // Token设置过期时间 24小时
     await redis.set(`admin:token:${user.id}`, jwtSign, 'EX', 60 * 60 * 24);
-    // await redis.set(`admin:perms:${user.id}`, JSON.stringify(perms));
-    // await this.logService.saveLoginLog(user.id, ip, ua);
-
     return jwtSign;
   }
 
@@ -114,15 +105,6 @@ export class LoginService {
   async clearLoginStatus(uid: number): Promise<void> {
     await this.userService.forbidden(uid);
   }
-
-  /**
-   * 获取权限菜单
-   */
-  // async getPermMenu(uid: number): Promise<PermMenuInfo> {
-  //   const menus = await this.menuService.getMenus(uid);
-  //   const perms = await this.menuService.getPerms(uid);
-  //   return { menus, perms };
-  // }
 
   async getRedisPasswordVersionById(id: number): Promise<string> {
     return this.redisService.getRedis().get(`admin:passwordVersion:${id}`);

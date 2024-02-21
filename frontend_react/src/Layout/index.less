@@ -206,7 +206,9 @@
 }
 .ant-menu-submenu-open {
   background-color: #e6f4ff;
-  border-radius: 4px;
+  border-radius: 10px;
+  margin-right: 4px;
+  margin-left: 4px;
 }
 
 :where(.css-dev-only-do-not-override-18iikkb).ant-menu-light:not(.ant-menu-horizontal)
@@ -215,4 +217,21 @@
 }
 .ant-menu-item-active:hover {
   color: #1677ff !important;
+}
+aside::-webkit-scrollbar {
+  width: 4px;
+  // height: 10px; // 高度写不写，都不影响，因为会根据内容的长度自动计算
+}
+aside::-webkit-scrollbar  {
+  width: 4px;
+  // height: 10px; // 高度写不写，都不影响，因为会根据内容的长度自动计算
+}
+
+aside::-webkit-scrollbar-thumb {
+  background: #ccc; // 滑块颜色
+  border-radius: 2px; // 滑块圆角
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+  background: #ffffff; // 鼠标移入滑块变红
 }
