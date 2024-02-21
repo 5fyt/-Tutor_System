@@ -146,19 +146,15 @@ export class SysUserService {
         phone: param.phone,
       });
       // 先删除原来的角色关系
-      // await manager.delete(SysUserRole, { userId: param.id });
-      // const insertRoles = param.roles.map((e) => {
-      //   return {
-      //     roleId: e,
-      //     userId: param.id,
-      //   };
-      // });
-      // // 重新分配角色
-      // await manager.insert(SysUserRole, insertRoles);
-      // if (param.status === 0) {
-      //   // 禁用状态
-      //   await this.forbidden(param.id);
-      // }
+      await manager.delete(SysUserRole, { userId: param.id });
+      const insertRoles = param.roles.map((e) => {
+        return {
+          roleId: e,
+          userId: param.id,
+        };
+      });
+      // 重新分配角色
+      await manager.insert(SysUserRole, insertRoles);
     });
   }
 
@@ -171,20 +167,7 @@ export class SysUserService {
     if (isEmpty(user)) {
       throw new ApiException(10017);
     }
-    // const departmentRow = await this.departmentRepository.findOne({
-    //   where: { id: user.departmentId },
-    // });
-    // if (isEmpty(departmentRow)) {
-    //   throw new ApiException(10018);
-    // }
-    // const roleRows = await this.userRoleRepository.find({
-    //   where: { userId: user.id },
-    // });
-    // const roles = roleRows.map((e) => {
-    //   return e.roleId;
-    // });
     delete user.password;
-    // return { ...user, roles, departmentName: departmentRow.name };
     return user;
   }
 
@@ -208,36 +191,7 @@ export class SysUserService {
     // await this.userRoleRepository.delete({ userId: In(userIds) });
   }
 
-  /**
-   * 根据部门ID列举用户条数：除去超级管理员
-   */
-  // async count(uid: number, deptIds: number[]): Promise<number> {
-  //   const queryAll: boolean = isEmpty(deptIds);
-  //   // const rootUserId = await this.findRootUserId();
-  //   if (queryAll) {
-  //     return await this.userRepository.count({
-  //       where: { id: Not(In([rootUserId, uid])) },
-  //     });
-  //   }
-  //   return await this.userRepository.count({
-  //     where: { id: Not(In([rootUserId, uid])), departmentId: In(deptIds) },
-  //   });
-  // }
-
-  /**
-   * 查找超管的用户ID
-   */
-  // async findRootUserId(): Promise<number> {
-  //   const result = await this.userRoleRepository.findOne({
-  //     where: { id: this.rootRoleId },
-  //   });
-  //   return result.userId;
-  // }
-
-  /**
-   * 根据部门ID进行分页查询用户列表
-   * deptId = -1 时查询全部
-   */
+  //分页查询用户
   async page(
     uid: number,
     params: PageSearchUserDto,
@@ -252,7 +206,7 @@ export class SysUserService {
       )
       .innerJoinAndSelect('sys_role', 'role', 'role.id = user_role.role_id')
       .select(['user.id,GROUP_CONCAT(role.name) as roleNames', 'user.*'])
-      .where('user.id NOT IN (:...ids)', { ids: [uid] })
+      .where('user.id NOT IN (:...ids)', { ids: [uid] }) //除去登录账号那项
       .andWhere('user.name LIKE :name', { name: `%${name}%` })
       .andWhere('user.username LIKE :username', { username: `%${username}%` })
       .andWhere('user.phone LIKE :phone', { phone: `%${phone}%` })
