@@ -1,17 +1,13 @@
 import './index.less';
-
 import { Layout } from 'antd';
 import { FC, useEffect, memo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import { RouteView } from '@/router/routeView';
-// import { userStore } from '@/stores/user';
-
 import HeaderComponent from './header';
 import MenuComponent from './menu';
 import { useAppDispatch, useAppSelector } from '@/store';
-// import TagsView from './tagView';
 import { toggleCollapsed } from '../store/module/login';
+import BreadcrumbView from './breadcrumbView';
 const { Content, Sider } = Layout;
 
 const LayoutPage: FC = () => {
@@ -42,6 +38,7 @@ const LayoutPage: FC = () => {
         </Sider>
         <Content className="layout-page-content">
           {/* <TagsView /> */}
+          <BreadcrumbView />
           <RouteView />
         </Content>
       </Layout>

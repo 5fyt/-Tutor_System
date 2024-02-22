@@ -27,12 +27,10 @@ export class SysRoleController {
   ): Promise<PaginatedResponseDto<SysRole>> {
     const [list, total] = await this.roleService.page(dto);
     return {
+      size: dto.limit,
+      page: dto.page,
+      total,
       list,
-      result: {
-        size: dto.limit,
-        page: dto.page,
-        total,
-      },
     };
   }
 

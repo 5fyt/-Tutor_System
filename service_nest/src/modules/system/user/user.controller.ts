@@ -61,12 +61,10 @@ export class SysUserController {
   ): Promise<PaginatedResponseDto<PageSearchUserInfo>> {
     const [list, total] = await this.userService.page(user.uid, dto);
     return {
+      total,
+      page: dto.page,
+      size: dto.limit,
       list,
-      result: {
-        total,
-        page: dto.page,
-        size: dto.limit,
-      },
     };
   }
 

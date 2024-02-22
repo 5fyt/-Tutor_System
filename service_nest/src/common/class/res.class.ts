@@ -37,11 +37,8 @@ export class Pagination {
   size: number;
 }
 
-export class PaginatedResponseDto<T> {
+export class PaginatedResponseDto<T> extends Pagination {
   list: Array<T>;
-
-  @ApiProperty()
-  result: Pagination;
 }
 
 export const ApiResponse = <

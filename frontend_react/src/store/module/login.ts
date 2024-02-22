@@ -35,8 +35,8 @@ const resetToken = (state: Store.loginState) => {
  * @param newArr
  * @returns
  */
-const filterMenu = (state: Store.loginState, menuList: MenuList, newArr: MenuList = []) => {
-  newArr = menuList
+const filterMenu = (state: Store.loginState, menuList: MenuList, filterMenuList: MenuList = []) => {
+  filterMenuList = menuList
     .map(item => {
       if (item.children?.length) {
         const childrenMenu = item.children.filter(child => state?.role?.every(role => child.meta.role?.includes(role)));
@@ -48,8 +48,8 @@ const filterMenu = (state: Store.loginState, menuList: MenuList, newArr: MenuLis
       }
     })
     .filter(menu => state?.role?.every(role => menu?.meta?.role?.includes(role))) as MenuList;
-  Storage.set(ACCESS_ADMIN_MENULIST, newArr);
-  return newArr;
+  Storage.set(ACCESS_ADMIN_MENULIST, filterMenuList);
+  return filterMenuList;
 };
 
 /**

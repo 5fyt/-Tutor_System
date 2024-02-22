@@ -215,8 +215,9 @@ export class SysUserService {
       const convertData = Object.entries<[string, any]>(n).map(
         ([key, value]) => [camelCase(key), value],
       );
+      const { password, ...data } = Object.fromEntries(convertData);
       return {
-        ...Object.fromEntries(convertData),
+        ...data,
         roleNames: n.roleNames.split(','),
       };
     });
