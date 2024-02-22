@@ -5,7 +5,8 @@
 .bread_header {
   padding: 40px 10px;
   display: flex;
-  min-height: 64px;
+  min-height: 140px;
+  background-color: #fcfcfc !important;
   flex-direction: column;
 }
 .title {
@@ -18,8 +19,11 @@
   text-align: center;
 }
 .ant-breadcrumb-link a {
-  color: #000;
+  color: #8c8686;
   text-decoration: none;
+  background-image: linear-gradient(to bottom right, rgb(89, 192, 64), blue);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .ant-breadcrumb-link a:hover {
   color: #1890ff;
