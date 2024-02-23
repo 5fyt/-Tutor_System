@@ -1,0 +1,270 @@
+import { memo, useState, FC } from 'react';
+import { Table, Button } from 'antd';
+import { ColumnsType } from 'antd/es/table';
+// import type { TableProps } from 'antd/es/table';
+// import Style from '../styles/list.module.scss';
+// import { useAppDispatch, useAppSelector } from '@/stores';
+// import { pageIndex, pageSize, updatePage } from '@/stores/module/goods';
+// import { results, totalCount } from '@/stores/module/goods';
+// import { SizeType } from 'antd/es/config-provider/SizeContext';
+// import { changeStatus, deleteGoods } from '@/services/api/goods';
+// import UploadExcel from '../../../UploadExcel';
+// interface DataType {
+//   key: React.Key;
+//   name: string;
+//   code: string;
+//   currentPrice: string;
+//   originalPrice: string;
+//   discount: string;
+//   salesVolume: number;
+//   type: string;
+//   status: number;
+//   hasExcel: boolean;
+// }
+// type Iprop = {
+//   checkKeys: any[];
+//   show: boolean;
+//   sz: SizeType;
+//   addShow: (value?: any) => void;
+//   loadList: (value?: any) => void;
+// };
+// interface ModalProps {
+//   showModal: (value: any) => void;
+// }
+interface ListProps {
+  defaultColums: ColumnsType<TableAPI.DataType>;
+}
+const List: FC<ListProps> = ({ defaultColums }) => {
+  // const defaultColumns: ColumnsType<DataType> = [
+  //   {
+  //     title: '套餐名字',
+  //     key: '1',
+  //     dataIndex: 'name',
+  //     render: text => {
+  //       return (
+  //         <>
+  //           <span style={{ color: '#2997fe' }}>{text}</span>
+  //         </>
+  //       );
+  //     }
+  //   },
+  //   {
+  //     title: '套餐编号',
+  //     key: '2',
+  //     dataIndex: 'code'
+  //   },
+  //   {
+  //     title: '现价',
+  //     key: '3',
+  //     dataIndex: 'currentPrice',
+  //     render: text => {
+  //       return (
+  //         <>
+  //           <span>￥{text}</span>
+  //         </>
+  //       );
+  //     },
+  //     sorter: {
+  //       compare: (a, b) => Number(a.currentPrice) - Number(b.currentPrice)
+  //     }
+  //   },
+  //   {
+  //     key: '4',
+  //     title: '原价',
+  //     dataIndex: 'originalPrice',
+  //     render: text => {
+  //       return (
+  //         <>
+  //           <span>￥{text}</span>
+  //         </>
+  //       );
+  //     },
+  //     sorter: {
+  //       compare: (a, b) => Number(a.originalPrice) - Number(b.originalPrice)
+  //     }
+  //   },
+  //   {
+  //     key: '5',
+  //     title: '促销方案',
+  //     dataIndex: 'discount'
+  //   },
+  //   {
+  //     key: '6',
+  //     title: '销量',
+  //     dataIndex: 'salesVolume',
+  //     sorter: {
+  //       compare: (a, b) => a.salesVolume - b.salesVolume
+  //     }
+  //   },
+
+  //   {
+  //     key: '10',
+  //     title: '操作',
+  //     dataIndex: 'action',
+  //     render: (_, record) => (
+  //       <Space>
+  //         <Button onClick={() => updateData(record)} disabled={record.status === 2 ? false : true} type="link">
+  //           修改
+  //         </Button>
+  //         <Button onClick={() => deleteData(record)} type="link" danger>
+  //           删除
+  //         </Button>
+  //       </Space>
+  //     )
+  //   }
+  // ];
+
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  //列选项数组
+  // const [columns, setColumns] = useState(defaultColumns);
+
+  // const size = useAppSelector(pageSize);
+  // const page = useAppSelector(pageIndex);
+  // const total = useAppSelector(totalCount);
+  // const data = useAppSelector(results);
+  // const loadRef = useRef<ModalProps>(null);
+  // const dispatch = useAppDispatch();
+
+  // const showFn = (value: any) => {
+  //   loadRef.current?.showModal(value);
+  // };
+  // //表格与设置按钮交互
+  // useEffect(() => {
+  //   if (checkKeys.length === 0 && show) {
+  //     setColumns(defaultColumns);
+  //   } else if (checkKeys.length > 0 && !show) {
+  //     const newColumns = columns.filter(item => checkKeys.includes(item.key));
+  //     setColumns(newColumns);
+  //   } else if (checkKeys.length === 0 && !show) {
+  //     setColumns([]);
+  //   } else {
+  //     setColumns(defaultColumns);
+  //   }
+  // }, [checkKeys, show, columns]);
+  // //操作表格数据
+  // const preView = (record: any) => {
+  //   console.log('fff');
+  //   console.log(record);
+  // };
+  // const updateData = (record: any) => {
+  //   const { id } = record;
+  //   addShow(id);
+  // };
+  // //更改上架下架状态
+  // const switchHandle = async (value: boolean, record: any) => {
+  //   try {
+  //     const { id } = record;
+  //     const data = {
+  //       id,
+  //       status: value ? 1 : 2
+  //     };
+  //     await changeStatus(data);
+  //     const status = Number(localStorage.getItem('status'));
+  //     if (status !== 0) {
+  //       loadList({ page: 1, size, status: status });
+  //     } else {
+  //       loadList({ page, size });
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  // const deleteList = async (ids: string[]) => {
+  //   try {
+  //     const res = await deleteGoods({ ids });
+  //     if (res.code === 200) {
+  //       message.success('删除成功');
+  //       loadList();
+  //     } else {
+  //       message.error(res.message);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  //删除套餐
+  // const deleteData = (record: any) => {
+  //   const { id } = record;
+  //   deleteList([id]);
+  // };
+  // //批量删除套餐
+  // const deleteMore = () => {
+  //   deleteList(selectedRowKeys as string[]);
+  // };
+  //监听表格选中项
+  const onSelectChange = (newSelectedRowKeys: React.Key[], selectedRows: any) => {
+    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    console.log(selectedRows);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  //表格选中配置项
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange
+  };
+  const hasSelected = selectedRowKeys.length > 0;
+  //表格监听变化
+  // const onChange: TableProps<DataType>['onChange'] = pagination => {
+  //   const { current, pageSize } = pagination;
+  //   // dispatch(updatePage({ current, pageSize }));
+  //   loadList({ page: current, size: pageSize });
+  //   // console.log('params', pagination, filters, sorter, extra)
+  // };
+  //取消选中
+  const cancelHandle = () => {
+    setSelectedRowKeys([]);
+  };
+
+  return (
+    <div className="content">
+      {hasSelected && (
+        <div className="tips">
+          <div className="title">
+            <span>{hasSelected ? `已选择 ${selectedRowKeys.length} 项` : ''}</span>
+          </div>
+          <div className="cancel">
+            <span onClick={cancelHandle}>取消选择</span>
+          </div>
+        </div>
+      )}
+
+      <Table
+        rowSelection={rowSelection}
+        columns={defaultColums}
+        // dataSource={data}
+        // onChange={onChange}
+        // size={sz}
+        pagination={{
+          // pageSize: size,
+          // total: total,
+          // current: page,
+          pageSizeOptions: [10, 20, 30],
+          showSizeChanger: true
+        }}
+      />
+      {hasSelected && (
+        <div className="footer_bar">
+          <div className="left">
+            {hasSelected ? (
+              <>
+                <div>
+                  已选择
+                  <span style={{ color: '#1e93ff' }}>&nbsp;{selectedRowKeys.length} &nbsp;</span>项
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="right">
+            <Button type="primary" ghost>
+              批量删除
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default memo(List);

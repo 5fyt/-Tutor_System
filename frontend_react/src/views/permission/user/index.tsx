@@ -1,12 +1,13 @@
-// import { FC, memo, useState, useRef, useEffect } from 'react';
-
 import './index.less';
 import { FC, memo } from 'react';
+import { options, defaultSettingData } from './constants/index';
+import type { ColumnsType } from 'antd/es/table';
 // import { Avatar, List, Button, Input, message } from 'antd';
 // import { useAppDispatch, useAppSelector } from '@/stores';
 // import { results, searchUserAsync, totalCount } from '@/stores/module/admin';
 // import AddUser from './UserDialog/index';
 import SearchForm from '@/components/SearchForm';
+import TableList from '@/components/TableList';
 
 // import { deleteUser } from '@/services/api/admin';
 // const { Search } = Input;
@@ -15,13 +16,20 @@ import SearchForm from '@/components/SearchForm';
 //   showModal: () => void;
 // }
 const User: FC = () => {
+  const defaultColumns: ColumnsType<TableAPI.DataType> = [{ title: '用户名', dataIndex: 'username', key: '1' }];
   const searchInfo = () => {};
-  const options = [
-    { id: 1, name: 'username', label: '用户名' },
-    { id: 2, name: 'name', label: '姓名' },
-    { id: 3, name: 'phone', label: '手机号' },
-    { id: 4, name: 'email', label: '邮箱' }
-  ];
-  return <SearchForm setSearchInfo={searchInfo} options={options} />;
+  const tableHeader = {
+    title: '用户名',
+    defaultSettingData
+  };
+  const tableList = {
+    defaultColumns
+  };
+  return (
+    <div className="user">
+      <SearchForm setSearchInfo={searchInfo} options={options} />
+      <TableList tableHeader={tableHeader} tableList={tableList} />
+    </div>
+  );
 };
 export default memo(User);
