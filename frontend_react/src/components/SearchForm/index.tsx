@@ -1,25 +1,19 @@
 import { FC, memo, useRef, useState } from 'react';
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { UpOutlined, DownOutlined } from '@ant-design/icons';
-import Style from './index.module.scss';
-// import type { SelectProps } from 'antd';
-// import { getTypes } from '@/services/api/goods';
+import './index.less';
 type searchType = {
   setSearchInfo: (value: any) => void;
   options: {
     name: string;
-    tooltips: string;
+    tooltips?: string;
     label: string;
-    placeholder: string;
+    placeholder?: string;
   }[];
 };
 const SearchForm: FC<searchType> = ({ setSearchInfo, options }) => {
-  const [visible, setVisible] = useState<boolean>(false);
-  const [show, setShow] = useState<boolean>(true);
+  const [show, setShow] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
-  // const [options, setOptions] = useState<SelectProps['options']>([]);
-  // const options = useRef<SelectProps['options'] | undefined>([])
-  // const optionRef = useRef<SelectProps['options'] | undefined>([]);
   const formRef = useRef<any>();
   //重置表单
   const resetBtn = () => {
@@ -38,56 +32,39 @@ const SearchForm: FC<searchType> = ({ setSearchInfo, options }) => {
     });
   };
   const clickHandle = () => {
-    setVisible(!visible);
     setShow(!show);
   };
-  const handleChange = (value: any) => {
-    console.log(value);
-  };
-  const InputForm = options.map(item => {
-    return <div>ddd</div>;
-  });
+
   return (
-    <>
+    <div className="searchContainer">
       <Form
         ref={formRef}
         style={{ minWidth: '800px' }}
         layout={'horizontal'}
-        wrapperCol={{ span: 14 }}
+        wrapperCol={{ span: 20 }}
         labelCol={{ span: 8 }}
       >
+        {/* 当展开时，遍历所有的input,当收缩时遍历前面两项input */}
         <div className="search">
-          {options.length < 2 ? (
-            options.slice(0, 1).map((item: any) => {
-              return <div>ddd{item}</div>;
-            })
-          ) : (
-            <></>
-          )}
-          {/* {!visible ? (
-            show && options.length > 2 && { options.map(item => {
-    return <div>ddd</div>;
-  }) }
-          ) : (
-            <>
-              <div className="input">
-                <Form.Item label="套餐名称" name="name" tooltip="商品套餐">
-                  <Input id="name" />
-                </Form.Item>
-              </div>
-              <div className="input">
-                <Form.Item label="套餐编号" name="code">
-                  <Input id="code" />
-                </Form.Item>
-              </div>
-              <div className="input">
-                <Form.Item label="商品类别" name="type" style={{ paddingLeft: '5px' }}>
-                  <Select style={{ width: 237 }} onChange={handleChange} options={optionRef.current} />
-                </Form.Item>
-              </div>
-            </>
-          )} */}
-
+          {show
+            ? options.map((item: any) => {
+                return (
+                  <div className="input" key={item.id}>
+                    <Form.Item label={item.label} name={item.name} tooltip={item.tooltip}>
+                      <Input id={item.name} />
+                    </Form.Item>
+                  </div>
+                );
+              })
+            : options.slice(0, 2).map((item: any) => {
+                return (
+                  <div className="input" key={item.id}>
+                    <Form.Item label={item.label} name={item.name} tooltip={item.tooltip}>
+                      <Input id={item.name} />
+                    </Form.Item>
+                  </div>
+                );
+              })}
           <div className="input">
             <div className="btn">
               <Button onClick={resetBtn}>重置</Button>
@@ -95,7 +72,7 @@ const SearchForm: FC<searchType> = ({ setSearchInfo, options }) => {
                 查询
               </Button>
               <div className="show" onClick={clickHandle}>
-                {visible ? (
+                {show ? (
                   <>
                     <span>
                       收起
@@ -119,7 +96,7 @@ const SearchForm: FC<searchType> = ({ setSearchInfo, options }) => {
           </div>
         </div>
       </Form>
-    </>
+    </div>
   );
 };
 export default memo(SearchForm);
