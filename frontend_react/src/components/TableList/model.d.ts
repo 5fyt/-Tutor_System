@@ -14,11 +14,14 @@ declare namespace TableAPI {
     username: string;
     phone: string;
     email: string;
-    roleName: number[];
+    roleNames: string[];
     psalt: string;
     headImg: string;
   };
   type TableList<T> = {
-    defaultColums: T;
-  };
+    defaultColumns: T;
+    total: number;
+    page: number;
+    limit: number;
+  } & { tableData: API.PageItem[] };
 }

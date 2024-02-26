@@ -1,4 +1,5 @@
 .table {
+  position: relative;
   margin-top: 15px;
   padding: 20px;
   min-height: 500px;
@@ -40,5 +41,49 @@
   }
   :where(.css-dev-only-do-not-override-18iikkb).ant-switch.ant-switch-checked:hover {
     background-color: #52c41a;
+  }
+}
+.content {
+  margin-top: 20px;
+  .tips {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: #e6f7ff;
+    border: 1px solid #91d5ff;
+    width: 100%;
+    color: #222526;
+
+    .cancel {
+      cursor: pointer;
+      color: #18acff;
+    }
+  }
+  .footer_bar {
+    position: fixed;
+    bottom: 10px;
+    width: 90%;
+    right: 20px;
+    right: 5px;
+    // left: 0;
+    z-index: 99;
+    height: 44px;
+    line-height: 44px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 -6px 16px -8px rgba(0, 0, 0, 0.08),
+      0 -9px 28px 0 rgba(0, 0, 0, 0.05),
+      0 -12px 48px 16px rgba(0, 0, 0, 0.03);
+    .left {
+      float: left;
+    }
   }
 }

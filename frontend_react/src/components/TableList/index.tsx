@@ -37,9 +37,11 @@ import { ColumnsType } from 'antd/es/table';
 interface TableProps {
   tableHeader: TableAPI.TableHeader;
   tableList: TableAPI.TableList<ColumnsType<TableAPI.DataType>>;
+  loadList: (value?: any) => void;
+  changePage: (value?: any) => void;
 }
 
-const TableList: FC<TableProps> = ({ tableHeader, tableList }) => {
+const TableList: FC<TableProps> = ({ tableHeader, tableList, loadList, changePage }) => {
   // const size = useAppSelector(pageSize);
   // const page = useAppSelector(pageIndex);
   // const dispatch = useAppDispatch();
@@ -116,7 +118,15 @@ const TableList: FC<TableProps> = ({ tableHeader, tableList }) => {
   return (
     <div className="table">
       <TableHeader searchName={tableHeader.title} element={<Content defaultData={tableHeader.defaultSettingData} />} />
-      <List defaultColums={tableList.defaultColums} />
+      <List
+        defaultColumns={tableList.defaultColumns}
+        loadList={loadList}
+        changePage={changePage}
+        tableData={tableList.tableData}
+        total={tableList.total}
+        limit={tableList.limit}
+        page={tableList.page}
+      />
     </div>
   );
 };

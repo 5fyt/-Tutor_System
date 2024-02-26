@@ -1,7 +1,7 @@
-import { memo, useState, FC } from 'react';
+import { memo, useState, FC, useEffect } from 'react';
 import { Table, Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-// import type { TableProps } from 'antd/es/table';
+import type { TableProps } from 'antd/es/table';
 // import Style from '../styles/list.module.scss';
 // import { useAppDispatch, useAppSelector } from '@/stores';
 // import { pageIndex, pageSize, updatePage } from '@/stores/module/goods';
@@ -32,91 +32,18 @@ import { ColumnsType } from 'antd/es/table';
 //   showModal: (value: any) => void;
 // }
 interface ListProps {
-  defaultColums: ColumnsType<TableAPI.DataType>;
+  loadList: (value?: any) => void;
+  changePage: (value?: any) => void;
+  defaultColumns: ColumnsType<TableAPI.DataType>;
+  tableData: any[];
+  total: number;
+  page: number;
+  limit: number;
 }
-const List: FC<ListProps> = ({ defaultColums }) => {
-  // const defaultColumns: ColumnsType<DataType> = [
-  //   {
-  //     title: '套餐名字',
-  //     key: '1',
-  //     dataIndex: 'name',
-  //     render: text => {
-  //       return (
-  //         <>
-  //           <span style={{ color: '#2997fe' }}>{text}</span>
-  //         </>
-  //       );
-  //     }
-  //   },
-  //   {
-  //     title: '套餐编号',
-  //     key: '2',
-  //     dataIndex: 'code'
-  //   },
-  //   {
-  //     title: '现价',
-  //     key: '3',
-  //     dataIndex: 'currentPrice',
-  //     render: text => {
-  //       return (
-  //         <>
-  //           <span>￥{text}</span>
-  //         </>
-  //       );
-  //     },
-  //     sorter: {
-  //       compare: (a, b) => Number(a.currentPrice) - Number(b.currentPrice)
-  //     }
-  //   },
-  //   {
-  //     key: '4',
-  //     title: '原价',
-  //     dataIndex: 'originalPrice',
-  //     render: text => {
-  //       return (
-  //         <>
-  //           <span>￥{text}</span>
-  //         </>
-  //       );
-  //     },
-  //     sorter: {
-  //       compare: (a, b) => Number(a.originalPrice) - Number(b.originalPrice)
-  //     }
-  //   },
-  //   {
-  //     key: '5',
-  //     title: '促销方案',
-  //     dataIndex: 'discount'
-  //   },
-  //   {
-  //     key: '6',
-  //     title: '销量',
-  //     dataIndex: 'salesVolume',
-  //     sorter: {
-  //       compare: (a, b) => a.salesVolume - b.salesVolume
-  //     }
-  //   },
-
-  //   {
-  //     key: '10',
-  //     title: '操作',
-  //     dataIndex: 'action',
-  //     render: (_, record) => (
-  //       <Space>
-  //         <Button onClick={() => updateData(record)} disabled={record.status === 2 ? false : true} type="link">
-  //           修改
-  //         </Button>
-  //         <Button onClick={() => deleteData(record)} type="link" danger>
-  //           删除
-  //         </Button>
-  //       </Space>
-  //     )
-  //   }
-  // ];
-
+const List: FC<ListProps> = ({ defaultColumns, tableData, total, page, limit, loadList, changePage }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   //列选项数组
-  // const [columns, setColumns] = useState(defaultColumns);
+  const [columns, setColumns] = useState(defaultColumns);
 
   // const size = useAppSelector(pageSize);
   // const page = useAppSelector(pageIndex);
@@ -129,46 +56,25 @@ const List: FC<ListProps> = ({ defaultColums }) => {
   //   loadRef.current?.showModal(value);
   // };
   // //表格与设置按钮交互
-  // useEffect(() => {
-  //   if (checkKeys.length === 0 && show) {
-  //     setColumns(defaultColumns);
-  //   } else if (checkKeys.length > 0 && !show) {
-  //     const newColumns = columns.filter(item => checkKeys.includes(item.key));
-  //     setColumns(newColumns);
-  //   } else if (checkKeys.length === 0 && !show) {
-  //     setColumns([]);
-  //   } else {
-  //     setColumns(defaultColumns);
-  //   }
-  // }, [checkKeys, show, columns]);
+  useEffect(() => {
+    // if (checkKeys.length === 0 && show) {
+    //   setColumns(defaultColumns);
+    // } else if (checkKeys.length > 0 && !show) {
+    //   const newColumns = columns.filter(item => checkKeys.includes(item.key));
+    //   setColumns(newColumns);
+    // } else if (checkKeys.length === 0 && !show) {
+    //   setColumns([]);
+    // } else {
+    setColumns(defaultColumns);
+    // }
+  }, [defaultColumns]);
   // //操作表格数据
-  // const preView = (record: any) => {
-  //   console.log('fff');
-  //   console.log(record);
-  // };
+
   // const updateData = (record: any) => {
   //   const { id } = record;
   //   addShow(id);
   // };
-  // //更改上架下架状态
-  // const switchHandle = async (value: boolean, record: any) => {
-  //   try {
-  //     const { id } = record;
-  //     const data = {
-  //       id,
-  //       status: value ? 1 : 2
-  //     };
-  //     await changeStatus(data);
-  //     const status = Number(localStorage.getItem('status'));
-  //     if (status !== 0) {
-  //       loadList({ page: 1, size, status: status });
-  //     } else {
-  //       loadList({ page, size });
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+
   // const deleteList = async (ids: string[]) => {
   //   try {
   //     const res = await deleteGoods({ ids });
@@ -204,12 +110,11 @@ const List: FC<ListProps> = ({ defaultColums }) => {
   };
   const hasSelected = selectedRowKeys.length > 0;
   //表格监听变化
-  // const onChange: TableProps<DataType>['onChange'] = pagination => {
-  //   const { current, pageSize } = pagination;
-  //   // dispatch(updatePage({ current, pageSize }));
-  //   loadList({ page: current, size: pageSize });
-  //   // console.log('params', pagination, filters, sorter, extra)
-  // };
+  const onChange: TableProps<TableAPI.DataType>['onChange'] = pagination => {
+    const { current, pageSize } = pagination;
+    changePage({ current, pageSize });
+    loadList({ page: current, size: pageSize });
+  };
   //取消选中
   const cancelHandle = () => {
     setSelectedRowKeys([]);
@@ -230,14 +135,14 @@ const List: FC<ListProps> = ({ defaultColums }) => {
 
       <Table
         rowSelection={rowSelection}
-        columns={defaultColums}
-        // dataSource={data}
-        // onChange={onChange}
+        columns={columns}
+        dataSource={tableData}
+        onChange={onChange}
         // size={sz}
         pagination={{
-          // pageSize: size,
-          // total: total,
-          // current: page,
+          pageSize: limit,
+          total: total,
+          current: page,
           pageSizeOptions: [10, 20, 30],
           showSizeChanger: true
         }}
