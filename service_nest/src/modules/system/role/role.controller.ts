@@ -4,7 +4,7 @@ import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PaginatedResponseDto } from 'src/common/class/res.class';
 import SysRole from 'src/entities/role.entity';
 
-import { RoleInfo } from './role.class';
+import { ListRole, RoleInfo } from './role.class';
 import {
   CreateRoleDto,
   DeleteRoleDto,
@@ -32,6 +32,14 @@ export class SysRoleController {
       total,
       list,
     };
+  }
+  @ApiOperation({ summary: '角色列表' })
+  @Get('list')
+  async getRoleList(): Promise<ListRole[]> {
+    const list = await this.roleService.roleInfoList();
+    return list.map((item) => {
+      return { id: item.id, name: item.name };
+    });
   }
 
   @ApiOperation({ summary: '删除角色' })

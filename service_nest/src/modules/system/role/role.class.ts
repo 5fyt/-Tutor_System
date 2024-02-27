@@ -11,3 +11,7 @@ export class RoleInfo {
 export class CreateRoleId {
   roleId: number;
 }
+export class ListRole {
+  id: number;
+  name: string;
+}

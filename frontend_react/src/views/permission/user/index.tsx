@@ -1,22 +1,22 @@
 import './index.less';
-import { FC, memo, useCallback, useEffect, useState } from 'react';
+import { FC, memo, useCallback, useEffect, useState, useRef } from 'react';
 import { options, defaultSettingData } from './constants/index';
 import type { ColumnsType } from 'antd/es/table';
 import { Avatar, Button, Space, Tag } from 'antd';
 // import { useAppDispatch, useAppSelector } from '@/stores';
 // import { results, searchUserAsync, totalCount } from '@/stores/module/admin';
-// import AddUser from './UserDialog/index';
+import AddUser from './UserDialog/index';
 import SearchForm from '@/components/SearchForm';
 import TableList from '@/components/TableList';
-import { searchUser } from '@/api/system/user';
+import { getRoleList, searchUser } from '@/api/system/user';
 // import { deleteUser, updateUser } from '@/api/system/user';
 
 // import { deleteUser } from '@/services/api/admin';
 // const { Search } = Input;
 
-// interface ModalProps {
-//   showModal: () => void;
-// }
+interface ModalProps {
+  showModal: () => void;
+}
 const User: FC = () => {
   const defaultColumns: ColumnsType<TableAPI.DataType> = [
     { title: '头像', dataIndex: 'headImg', key: '1', render: text => <Avatar src={text} /> },
@@ -32,7 +32,7 @@ const User: FC = () => {
         return (
           <div>
             <Tag color="green">{text.slice(0, 1)}</Tag>
-            <Tag color="green">{text.slice(1)}</Tag>
+            {text.length > 1 && <Tag color="green">{text.slice(1)}</Tag>}
           </div>
         );
       }
@@ -55,9 +55,11 @@ const User: FC = () => {
     }
   ];
   const [tableData, setTableData] = useState<any[]>([]);
+  const [roleOptions, setRoleOptions] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const innerRef = useRef<ModalProps>(null);
   const loadList = useCallback(
     async (info?: any) => {
       const { list, total } = await searchUser({ page, limit, ...info });
@@ -69,10 +71,17 @@ const User: FC = () => {
     },
     [limit, page]
   );
-
+  const getOptions = useCallback(async () => {
+    const list = await getRoleList();
+    const filterList = list.map((item: any) => {
+      return { value: item.id.toString(), label: item.name };
+    });
+    setRoleOptions(filterList);
+  }, []);
   useEffect(() => {
     loadList();
-  }, [loadList]);
+    getOptions();
+  }, [loadList, getOptions]);
   const searchInfo = (info?: any) => {
     loadList(info);
   };
@@ -81,7 +90,9 @@ const User: FC = () => {
     setPage(page);
     setLimit(limit);
   };
-  const addHandle = () => {};
+  const addHandle = () => {
+    innerRef.current?.showModal();
+  };
   const updateHandle = () => {};
   const deleteHandle = () => {};
   const tableHeader = {
@@ -105,6 +116,7 @@ const User: FC = () => {
         changePage={changePage}
         onAddHandle={addHandle}
       />
+      <AddUser innerRef={innerRef} roleOptions={roleOptions} onLoadList={loadList} />
     </div>
   );
 };

@@ -26,6 +26,9 @@ export class SysRoleService {
     return { roleInfo };
   }
 
+  async roleInfoList(): Promise<SysRole[]> {
+    return await this.roleRepository.find();
+  }
   /**
    * 根据角色Id数组删除
    */

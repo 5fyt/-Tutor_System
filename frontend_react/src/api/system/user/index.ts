@@ -3,7 +3,8 @@ enum UserURL {
   addUser = '/user/add',
   searchUser = '/user/search',
   updateUser = '/user/update',
-  deleteUser = '/user/delete'
+  deleteUser = '/user/delete',
+  getRoleList = '/role/list'
 }
 //添加用户
 export const addUser = (params: API.UserAddParams, options?: IOptions) => {
@@ -20,4 +21,8 @@ export const updateUser = (params: API.UserUpdateParams, options?: IOptions) => 
 //删除用户
 export const deleteUser = (params: API.UserDelParams, options?: IOptions) => {
   return httpService.post({ url: UserURL.deleteUser, data: params }, options);
+};
+//获取角色列表
+export const getRoleList = () => {
+  return httpService.get({ url: UserURL.getRoleList });
 };

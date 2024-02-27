@@ -1,7 +1,6 @@
-import React, { memo, Ref, useImperativeHandle, useState, useRef } from 'react';
-import { Form, Input, Modal, message } from 'antd';
-// import { updatePassword } from '@/services/api/login';
-// import { addUser } from '@/services/api/admin';
+import { FC, memo, Ref, useImperativeHandle, useState, useRef } from 'react';
+import { Form, Input, Modal, message, Select, SelectProps } from 'antd';
+import { addUser } from '@/api/system/user';
 
 type FieldType = {
   username: string;
@@ -13,36 +12,38 @@ type FieldType = {
 
 interface ModalProps {
   innerRef: Ref<{ showModal: () => void }>;
-  searchInfo: () => void;
+  onLoadList: (value?: any) => void;
+  roleOptions: SelectProps['options'];
 }
 
-const AddUser: React.FC<ModalProps> = (props: ModalProps) => {
+const AddUser: FC<ModalProps> = ({ innerRef, roleOptions, onLoadList }) => {
   const [visible, setVisible] = useState(false);
 
   const [messageApi, contextHolder] = message.useMessage();
   const formRef = useRef<any>();
   //将子组件上的方法暴露给父组件，类型于Vue中defineExpose({})
-  useImperativeHandle(props.innerRef, () => ({
+  useImperativeHandle(innerRef, () => ({
     showModal
   }));
 
-  const handleOk = () => {
-    formRef.current?.validateFields().then((value: FieldType) => {
-      console.log(value);
+  const handleChange = (value: string | string[]) => {
+    console.log(`Selected: ${value}`);
+  };
 
-      // addUser({ ...value }, type).then(res => {
-      //   if (res.code === 200) {
+  const handleOk = async () => {
+    try {
+      const submitInfo = await formRef.current?.validateFields();
+      const filterRoles = submitInfo.roles.map((item: string) => Number(item));
+      await addUser({ ...submitInfo, roles: filterRoles });
       messageApi.success('添加成功');
-      //     props.searchInfo();
-      //     formRef.current?.resetFields();
-      //   } else {
-      //     messageApi.error('添加失败');
-      //   }
-      // });
-    });
-    setTimeout(() => {
-      setVisible(false);
-    }, 1000);
+      onLoadList();
+      setTimeout(() => {
+        setVisible(false);
+      }, 1000);
+      formRef.current?.resetFields();
+    } catch (err: any) {
+      messageApi.error(err);
+    }
   };
   const showModal = () => {
     setVisible(true);
@@ -74,9 +75,8 @@ const AddUser: React.FC<ModalProps> = (props: ModalProps) => {
               }
             ]}
           >
-            <Input />
+            <Input placeholder="请输入六位用户名" />
           </Form.Item>
-
           <Form.Item<FieldType>
             label="姓名"
             name="name"
@@ -88,6 +88,37 @@ const AddUser: React.FC<ModalProps> = (props: ModalProps) => {
             ]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="电话号码"
+            name="phone"
+            rules={[
+              {
+                pattern: /^1[3456789]\d{9}$/,
+                message: '电话号码格式错误'
+              }
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="邮箱"
+            name="email"
+            rules={[{ pattern: /^\w+(-+.\w+)*@\w+(-.\w+)*.\w+(-.\w+)*$/, message: '邮箱格式错误' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="角色"
+            name="roles"
+            rules={[
+              {
+                required: true,
+                message: '请选择角色'
+              }
+            ]}
+          >
+            <Select mode="tags" placeholder="请选择" onChange={handleChange} options={roleOptions} />
           </Form.Item>
         </Form>
       </Modal>

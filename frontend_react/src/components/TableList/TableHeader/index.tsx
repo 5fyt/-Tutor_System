@@ -8,10 +8,11 @@ interface TableHeaderProps {
   searchName: string;
   element: ReactNode | (() => ReactNode);
   loadList: (value?: any) => void;
+  onAddHandle: (value?: any) => void;
   changeSize: (value?: SizeType) => void;
 }
 
-const TableHeader: FC<TableHeaderProps> = ({ searchName, element, loadList, changeSize }) => {
+const TableHeader: FC<TableHeaderProps> = ({ searchName, element, loadList, changeSize, onAddHandle }) => {
   const items: MenuProps['items'] = [
     {
       label: <div>默认</div>,
@@ -49,7 +50,7 @@ const TableHeader: FC<TableHeaderProps> = ({ searchName, element, loadList, chan
         <Space size={'middle'}>
           {/* <Radio.Group options={options} onChange={onChangeHandle} value={radioValue} optionType="button" /> */}
           <div className="add">
-            <Button type="primary" icon={<PlusOutlined />}>
+            <Button type="primary" icon={<PlusOutlined />} onClick={onAddHandle}>
               新建
             </Button>
           </div>
