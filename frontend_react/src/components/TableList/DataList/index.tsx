@@ -2,6 +2,8 @@ import { memo, useState, FC, useEffect } from 'react';
 import { Table, Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import type { TableProps } from 'antd/es/table';
+import { SizeType } from 'antd/es/config-provider/SizeContext';
+import { useAppSelector } from '@/store';
 // import Style from '../styles/list.module.scss';
 // import { useAppDispatch, useAppSelector } from '@/stores';
 // import { pageIndex, pageSize, updatePage } from '@/stores/module/goods';
@@ -39,35 +41,27 @@ interface ListProps {
   total: number;
   page: number;
   limit: number;
+  size: SizeType;
 }
-const List: FC<ListProps> = ({ defaultColumns, tableData, total, page, limit, loadList, changePage }) => {
+const List: FC<ListProps> = ({ defaultColumns, tableData, total, page, limit, size, loadList, changePage }) => {
+  const checkedKey = useAppSelector(state => state.user.checkedkeys);
+  const isCheckAll = useAppSelector(state => state.user.isAllChecked);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
   //列选项数组
   const [columns, setColumns] = useState(defaultColumns);
 
-  // const size = useAppSelector(pageSize);
-  // const page = useAppSelector(pageIndex);
-  // const total = useAppSelector(totalCount);
-  // const data = useAppSelector(results);
-  // const loadRef = useRef<ModalProps>(null);
-  // const dispatch = useAppDispatch();
-
-  // const showFn = (value: any) => {
-  //   loadRef.current?.showModal(value);
-  // };
   // //表格与设置按钮交互
   useEffect(() => {
-    // if (checkKeys.length === 0 && show) {
-    //   setColumns(defaultColumns);
-    // } else if (checkKeys.length > 0 && !show) {
-    //   const newColumns = columns.filter(item => checkKeys.includes(item.key));
-    //   setColumns(newColumns);
-    // } else if (checkKeys.length === 0 && !show) {
-    //   setColumns([]);
-    // } else {
-    setColumns(defaultColumns);
-    // }
-  }, [defaultColumns]);
+    if (checkedKey.length > 0 && !isCheckAll) {
+      const newColumns = defaultColumns.filter(item => checkedKey.includes(item?.key as string));
+      setColumns(newColumns);
+    } else if (checkedKey.length === 0 && !isCheckAll) {
+      setColumns([]);
+    } else {
+      setColumns(defaultColumns);
+    }
+  }, [defaultColumns, checkedKey, isCheckAll]);
   // //操作表格数据
 
   // const updateData = (record: any) => {
@@ -88,15 +82,7 @@ const List: FC<ListProps> = ({ defaultColumns, tableData, total, page, limit, lo
   //     console.log(error);
   //   }
   // };
-  //删除套餐
-  // const deleteData = (record: any) => {
-  //   const { id } = record;
-  //   deleteList([id]);
-  // };
-  // //批量删除套餐
-  // const deleteMore = () => {
-  //   deleteList(selectedRowKeys as string[]);
-  // };
+
   //监听表格选中项
   const onSelectChange = (newSelectedRowKeys: React.Key[], selectedRows: any) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
@@ -138,7 +124,7 @@ const List: FC<ListProps> = ({ defaultColumns, tableData, total, page, limit, lo
         columns={columns}
         dataSource={tableData}
         onChange={onChange}
-        // size={sz}
+        size={size}
         pagination={{
           pageSize: limit,
           total: total,

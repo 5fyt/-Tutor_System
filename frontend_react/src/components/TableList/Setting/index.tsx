@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Tree } from 'antd';
+import { Tree, Checkbox } from 'antd';
 
 import type { DataNode, TreeProps } from 'antd/es/tree';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { setCheckedKeys, setAllChecked } from '@/store/module/user';
 type Iprop = {
   // updateCheckKeys: (value: string[]) => void;
   // showCheck: (value: boolean) => void;
@@ -10,59 +12,50 @@ type Iprop = {
 };
 //判断是否是全选
 const Content: React.FC<Iprop> = ({ defaultData }) => {
-  //当悬停在某个子节点时，显示图标
+  const keys = defaultData.map(item => item.key);
 
-  // const getKeys = (newArr: any[] = []) => {
-  //   defaultData.forEach(item => {
-  //     newArr.push(item.key);
-  //   });
-  //   return newArr;
-  // };
-  // useEffect(() => {
-  //   keysRef.current = getKeys();
-  //   updateCheckKeys(keysRef.current);
-  // }, []);
+  //传值嵌套的组件太复杂，采用store传递数据
+  const checkedKey = useAppSelector(state => state.user.checkedkeys);
+  const isCheckedAll = useAppSelector(state => state.user.isAllChecked);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (isCheckedAll) {
+      dispatch(setCheckedKeys(keys));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   //判断是否是全选，全选和树组件的复选框双向绑定
-  // const onCheckAllChange = (value: any) => {
-  //   setCheckedAll(value.target.checked);
+  const onCheckTreeAll = (value: any) => {
+    console.log(value.target.checked);
+    const checked = value.target.checked;
+    dispatch(setAllChecked(checked));
+    if (checked) {
+      dispatch(setCheckedKeys(keys));
+    } else {
+      dispatch(setCheckedKeys([]));
+    }
+  };
 
-  //   if (value.target.checked) {
-  //     setCheckedKeys(keysRef.current);
-  //     updateCheckKeys(keysRef.current as string[]);
-  //     showCheck(value.target.checked);
-  //   } else {
-  //     //没有选中时，表格数据全部隐藏，其他复选框也为不选中
-  //     setCheckedKeys([]);
-  //     updateCheckKeys([]);
-  //     showCheck(value.target.checked);
-  //   }
-  // };
   // //勾选树组件，同步勾选状态和全选
-  // const onCheckHandle = (checkKeys: any) => {
-  //   console.log(checkKeys);
-  //   setCheckedKeys(checkKeys);
-  //   updateCheckKeys(checkKeys);
-  //   if (checkKeys.length === defaultData.length) {
-  //     setCheckedAll(true);
-  //     showCheck(true);
-  //   } else {
-  //     setCheckedAll(false);
-  //     showCheck(false);
-  //   }
-  // };
+  const onCheckHandle = (checkKeys: any) => {
+    dispatch(setCheckedKeys(checkKeys));
+
+    if (checkKeys.length === defaultData.length) {
+      dispatch(setAllChecked(true));
+    } else {
+      dispatch(setAllChecked(false));
+    }
+  };
   // //重置复选框
-  // const resetHandle = () => {
-  //   setGData(defaultData);
-  //   setCheckedAll(true);
-  //   setCheckedKeys(keysRef.current);
-  //   updateCheckKeys(keysRef.current as string[]);
-  //   showCheck(true);
-  // };
+  const resetHandle = () => {
+    setGData(defaultData);
+    dispatch(setAllChecked(true));
+    setCheckedKeys(keys);
+    // updateCheckKeys(keysRef.current as string[]);
+    // showCheck(true);
+  };
 
   const [gData, setGData] = useState(defaultData);
-  // const keysRef = useRef<any[]>();
-  // const [checkedKeys, setCheckedKeys] = useState<any>(getKeys());
-  // const [checkedAll, setCheckedAll] = useState(true);
 
   const onDrop: TreeProps['onDrop'] = info => {
     const dropKey = info.node.key;
@@ -130,12 +123,12 @@ const Content: React.FC<Iprop> = ({ defaultData }) => {
   return (
     <>
       <div className="setting_top">
-        {/* <Checkbox onChange={onCheckAllChange} style={{ borderRadius: '0' }} checked={checkedAll}>
+        <Checkbox onChange={onCheckTreeAll} style={{ borderRadius: '0' }} checked={isCheckedAll}>
           列展示
         </Checkbox>
         <span style={{ color: '#2697ff' }} onClick={resetHandle}>
           重置
-        </span> */}
+        </span>
       </div>
       <div className="setting_bottom">
         <Tree
@@ -143,8 +136,8 @@ const Content: React.FC<Iprop> = ({ defaultData }) => {
           draggable
           blockNode
           checkable
-          // checkedKeys={checkedKeys}
-          // onCheck={onCheckHandle}
+          checkedKeys={checkedKey}
+          onCheck={onCheckHandle}
           onDrop={onDrop}
           treeData={gData}
         />

@@ -7,4 +7,8 @@ declare namespace Store {
     collapsed: boolean;
     menuList: any[];
   };
+  type userState = {
+    checkedkeys: React.Key[];
+    isAllChecked: boolean;
+  };
 }

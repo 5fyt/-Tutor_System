@@ -1,45 +1,47 @@
 import { FC, ReactNode, memo } from 'react';
 import { Button, Dropdown, Space, Popover } from 'antd';
 import type { MenuProps } from 'antd';
-// import { SizeType } from 'antd/es/config-provider/SizeContext';
 import { PlusOutlined, ReloadOutlined, ColumnHeightOutlined, SettingOutlined } from '@ant-design/icons';
+import { SizeType } from 'antd/es/config-provider/SizeContext';
 
-// type optionType = { label: string; value: number }[];
 interface TableHeaderProps {
-  // options?: optionType;
   searchName: string;
   element: ReactNode | (() => ReactNode);
+  loadList: (value?: any) => void;
+  changeSize: (value?: SizeType) => void;
 }
-// interface ModalProps {
-//   showModal: (value?: any) => void;
-// }
 
-const TableHeader: FC<TableHeaderProps> = ({ searchName, element }) => {
+const TableHeader: FC<TableHeaderProps> = ({ searchName, element, loadList, changeSize }) => {
   const items: MenuProps['items'] = [
     {
       label: <div>默认</div>,
       key: '0',
-      onClick: () => {}
+      onClick: () => {
+        changeTableSize();
+      }
     },
     {
       label: <div>中等</div>,
       key: '1',
-      onClick: () => {}
+      onClick: () => {
+        changeTableSize('middle');
+      }
     },
     {
       label: <div>紧凑</div>,
       key: '3',
-      onClick: () => {}
+      onClick: () => {
+        changeTableSize('small');
+      }
     }
   ];
-  // const [sz, setSz] = useState<SizeType>('middle');
-  // const showRef = useRef<ModalProps>(null);
-  // const addShow = (value: any) => {
-  //   showRef.current?.showModal(value);
-  // };
-  // const refreshHandle = () => {
-  //   loadList(searchInfo);
-  // };
+  const changeTableSize = (value?: SizeType) => {
+    changeSize(value);
+  };
+
+  const refreshHandle = () => {
+    loadList();
+  };
   return (
     <div className="operation">
       <div className="left">{searchName}</div>
@@ -52,7 +54,7 @@ const TableHeader: FC<TableHeaderProps> = ({ searchName, element }) => {
             </Button>
           </div>
           <div className="refresh">
-            <ReloadOutlined style={{ fontSize: '16px' }} />
+            <ReloadOutlined style={{ fontSize: '16px' }} onClick={refreshHandle} />
           </div>
           <div className="updateWidth">
             <Dropdown menu={{ items, selectable: true, defaultSelectedKeys: ['1'] }} trigger={['click']}>

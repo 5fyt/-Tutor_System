@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC, memo, useState } from 'react';
 import './index.less';
 import TableHeader from './TableHeader';
 import List from './DataList';
@@ -12,7 +12,7 @@ import { ColumnsType } from 'antd/es/table';
 
 // import { useAppDispatch } from '@/store';
 // import { pageIndex, pageSize, searchGoodsAsync } from '@/stores/module/goods';
-// import { SizeType } from 'antd/es/config-provider/SizeContext';
+import { SizeType } from 'antd/es/config-provider/SizeContext';
 // import AddGoods from '../DialogForm/index';
 // import { useLocation } from 'react-router-dom';
 //点击复选框触发
@@ -39,85 +39,23 @@ interface TableProps {
   tableList: TableAPI.TableList<ColumnsType<TableAPI.DataType>>;
   loadList: (value?: any) => void;
   changePage: (value?: any) => void;
+  onAddHandle: (value?: any) => void;
 }
 
 const TableList: FC<TableProps> = ({ tableHeader, tableList, loadList, changePage }) => {
-  // const size = useAppSelector(pageSize);
-  // const page = useAppSelector(pageIndex);
-  // const dispatch = useAppDispatch();
-  // const { pathname } = useLocation();
-  // const showRef = useRef<ModalProps>(null);
-  // // const [radioValue, setRadioValue] = useState(0);
-  // const [sz, setSz] = useState<SizeType>('middle');
-  // //list 传过来的值
-  // const [checkKeys, setCheckKeys] = useState<string[]>([]);
-  // const [show, setShow] = useState(true);
-  // const getKeys = (value: string[]) => {
-  //   setCheckKeys(value);
-  // };
-  // const showChecked = (value: boolean) => {
-  //   setShow(value);
-  // };
-  //获取表格数据
-  // const loadList = async () => {
-  // const data = {
-  //   page,
-  //   size
-  // };
-  // await dispatch(searchGoodsAsync({ ...data, ...info }));
-  // };
-  // useEffect(() => {
-  //   loadList(searchInfo);
-  // }, [searchInfo, pathname]);
-  // const emitLoadList = (value: any) => {
-  //   console.log(value);
-  //   loadList(value);
-  // };
-  //切换radio查询数据
-  // const onChangeHandle = ({ target: { value } }: RadioChangeEvent) => {
-  //   setRadioValue(value);
-  //   localStorage.setItem('status', value);
-  //   // if (value !== 0) {
-  //   //   const data = {
-  //   //     status: value
-  //   //   };
-  //     // loadList({ ...data, ...searchInfo });
-  //   } else {
-  //     loadList(searchInfo);
-  //   }
-  // };
-  //刷新表格
-  // const refreshHandle = () => {
-  //   if (radioValue !== 0) {
-  //     const data = {
-  //       status: radioValue
-  //     };
-  //     loadList({ ...data, ...searchInfo });
-  //   } else {
-  //     loadList(searchInfo);
-  //   }
-  // };
-  // const addShow = (value: any) => {
-  //   showRef.current?.showModal(value);
-  // };
-  // return (
-  //   // <div className=''
-  //   // <div className={Style.table}>
-  //   //   <div className="list">
-  //   //     <List
-  //   //       checkKeys={checkKeys}
-  //   //       show={show}
-  //   //       addShow={value => addShow(value)}
-  //   //       loadList={value => emitLoadList(value)}
-  //   //       sz={sz}
-  //   //     ></List>
-  //   //   </div>
-  //   //   {/* <AddGoods innerRef={showRef} loadList={() => loadList()}></AddGoods> */}
-  //   // </div>
-  // );
+  const [size, setSize] = useState<SizeType>('middle');
+  const changeSize = (value: SizeType) => {
+    setSize(value);
+  };
+
   return (
     <div className="table">
-      <TableHeader searchName={tableHeader.title} element={<Content defaultData={tableHeader.defaultSettingData} />} />
+      <TableHeader
+        searchName={tableHeader.title}
+        element={<Content defaultData={tableHeader.defaultSettingData} />}
+        loadList={loadList}
+        changeSize={changeSize}
+      />
       <List
         defaultColumns={tableList.defaultColumns}
         loadList={loadList}
@@ -126,6 +64,7 @@ const TableList: FC<TableProps> = ({ tableHeader, tableList, loadList, changePag
         total={tableList.total}
         limit={tableList.limit}
         page={tableList.page}
+        size={size}
       />
     </div>
   );
