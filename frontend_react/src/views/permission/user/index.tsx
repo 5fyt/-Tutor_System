@@ -2,20 +2,21 @@ import './index.less';
 import { FC, memo, useCallback, useEffect, useState, useRef } from 'react';
 import { options, defaultSettingData } from './constants/index';
 import type { ColumnsType } from 'antd/es/table';
-import { Avatar, Button, Space, Tag } from 'antd';
+import { Avatar, Button, Space, Tag, message } from 'antd';
 // import { useAppDispatch, useAppSelector } from '@/stores';
 // import { results, searchUserAsync, totalCount } from '@/stores/module/admin';
 import AddUser from './UserDialog/index';
 import SearchForm from '@/components/SearchForm';
 import TableList from '@/components/TableList';
-import { getRoleList, searchUser } from '@/api/system/user';
+import { deleteUser, getRoleList, searchUser } from '@/api/system/user';
+import { isArray } from '@/utils/is';
 // import { deleteUser, updateUser } from '@/api/system/user';
 
 // import { deleteUser } from '@/services/api/admin';
 // const { Search } = Input;
 
 interface ModalProps {
-  showModal: () => void;
+  showModal: (value?: any) => void;
 }
 const User: FC = () => {
   const defaultColumns: ColumnsType<TableAPI.DataType> = [
@@ -42,12 +43,12 @@ const User: FC = () => {
       title: '操作',
       dataIndex: 'operation',
       key: '8',
-      render: () => (
+      render: (_, record) => (
         <Space>
-          <Button onClick={() => updateHandle()} type="link">
+          <Button onClick={() => updateHandle(record)} type="primary" ghost>
             修改
           </Button>
-          <Button onClick={() => deleteHandle()} type="link" danger>
+          <Button onClick={() => deleteHandle(record)} type="primary" ghost danger>
             删除
           </Button>
         </Space>
@@ -56,9 +57,11 @@ const User: FC = () => {
   ];
   const [tableData, setTableData] = useState<any[]>([]);
   const [roleOptions, setRoleOptions] = useState([]);
+  const [messageApi, contextHolder] = message.useMessage();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [show, setShow] = useState(false);
   const innerRef = useRef<ModalProps>(null);
   const loadList = useCallback(
     async (info?: any) => {
@@ -69,7 +72,8 @@ const User: FC = () => {
       setTableData(filter);
       setTotal(total);
     },
-    [limit, page]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
   const getOptions = useCallback(async () => {
     const list = await getRoleList();
@@ -93,8 +97,22 @@ const User: FC = () => {
   const addHandle = () => {
     innerRef.current?.showModal();
   };
-  const updateHandle = () => {};
-  const deleteHandle = () => {};
+  const updateHandle = (record: any) => {
+    innerRef.current?.showModal(record);
+  };
+  const deleteHandle = async (value: any) => {
+    let userIds = [];
+    isArray(value) ? (userIds = value) : userIds.push(value.id);
+    const { code } = await deleteUser({ userIds });
+    if (code === 200) {
+      setShow(true);
+      messageApi.success('删除成功');
+      loadList();
+    } else {
+      setShow(true);
+      messageApi.error('删除失败');
+    }
+  };
   const tableHeader = {
     title: '用户名',
     defaultSettingData
@@ -104,10 +122,12 @@ const User: FC = () => {
     tableData,
     limit,
     total,
-    page
+    page,
+    show
   };
   return (
     <div className="user">
+      {contextHolder}
       <SearchForm setSearchInfo={searchInfo} options={options} />
       <TableList
         tableHeader={tableHeader}
@@ -115,6 +135,7 @@ const User: FC = () => {
         loadList={searchInfo}
         changePage={changePage}
         onAddHandle={addHandle}
+        onDeleteHandle={deleteHandle}
       />
       <AddUser innerRef={innerRef} roleOptions={roleOptions} onLoadList={loadList} />
     </div>

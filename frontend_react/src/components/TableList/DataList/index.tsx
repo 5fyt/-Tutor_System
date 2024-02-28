@@ -36,18 +36,31 @@ import { useAppSelector } from '@/store';
 interface ListProps {
   loadList: (value?: any) => void;
   changePage: (value?: any) => void;
+  onDeleteHandle: (value?: any) => void;
   defaultColumns: ColumnsType<TableAPI.DataType>;
   tableData: any[];
   total: number;
   page: number;
   limit: number;
+  show: boolean;
   size: SizeType;
 }
-const List: FC<ListProps> = ({ defaultColumns, tableData, total, page, limit, size, loadList, changePage }) => {
+const List: FC<ListProps> = ({
+  defaultColumns,
+  tableData,
+  total,
+  page,
+  limit,
+  size,
+  show,
+  loadList,
+  changePage,
+  onDeleteHandle
+}) => {
   const checkedKey = useAppSelector(state => state.user.checkedkeys);
   const isCheckAll = useAppSelector(state => state.user.isAllChecked);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
+  const [hasSelected, setHasSelected] = useState(false);
   //列选项数组
   const [columns, setColumns] = useState(defaultColumns);
 
@@ -62,6 +75,10 @@ const List: FC<ListProps> = ({ defaultColumns, tableData, total, page, limit, si
       setColumns(defaultColumns);
     }
   }, [defaultColumns, checkedKey, isCheckAll]);
+  useEffect(() => {
+    const show = selectedRowKeys.length > 0;
+    setHasSelected(show);
+  }, [selectedRowKeys.length]);
   // //操作表格数据
 
   // const updateData = (record: any) => {
@@ -94,21 +111,25 @@ const List: FC<ListProps> = ({ defaultColumns, tableData, total, page, limit, si
     selectedRowKeys,
     onChange: onSelectChange
   };
-  const hasSelected = selectedRowKeys.length > 0;
+
   //表格监听变化
   const onChange: TableProps<TableAPI.DataType>['onChange'] = pagination => {
     const { current, pageSize } = pagination;
+    console.log(current, pageSize);
     changePage({ current, pageSize });
-    loadList({ page: current, size: pageSize });
+    loadList({ page: current, limit: pageSize });
   };
   //取消选中
   const cancelHandle = () => {
     setSelectedRowKeys([]);
   };
-
+  //批量删除
+  const deleteAllUser = () => {
+    onDeleteHandle(selectedRowKeys);
+  };
   return (
     <div className="content">
-      {hasSelected && (
+      {hasSelected && !show && (
         <div className="tips">
           <div className="title">
             <span>{hasSelected ? `已选择 ${selectedRowKeys.length} 项` : ''}</span>
@@ -133,7 +154,7 @@ const List: FC<ListProps> = ({ defaultColumns, tableData, total, page, limit, si
           showSizeChanger: true
         }}
       />
-      {hasSelected && (
+      {hasSelected && !show && (
         <div className="footer_bar">
           <div className="left">
             {hasSelected ? (
@@ -148,7 +169,7 @@ const List: FC<ListProps> = ({ defaultColumns, tableData, total, page, limit, si
             )}
           </div>
           <div className="right">
-            <Button type="primary" ghost>
+            <Button type="primary" ghost onClick={deleteAllUser}>
               批量删除
             </Button>
           </div>

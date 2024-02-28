@@ -11,9 +11,10 @@ interface TableProps {
   loadList: (value?: any) => void;
   changePage: (value?: any) => void;
   onAddHandle: (value?: any) => void;
+  onDeleteHandle: (value?: any) => void;
 }
 
-const TableList: FC<TableProps> = ({ tableHeader, tableList, loadList, changePage, onAddHandle }) => {
+const TableList: FC<TableProps> = ({ tableHeader, tableList, loadList, changePage, onAddHandle, onDeleteHandle }) => {
   const [size, setSize] = useState<SizeType>('middle');
   const changeSize = (value: SizeType) => {
     setSize(value);
@@ -30,13 +31,15 @@ const TableList: FC<TableProps> = ({ tableHeader, tableList, loadList, changePag
       />
       <List
         defaultColumns={tableList.defaultColumns}
-        loadList={loadList}
-        changePage={changePage}
         tableData={tableList.tableData}
         total={tableList.total}
         limit={tableList.limit}
         page={tableList.page}
+        show={tableList.show}
         size={size}
+        loadList={loadList}
+        changePage={changePage}
+        onDeleteHandle={onDeleteHandle}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import { FC, memo, Ref, useImperativeHandle, useState, useRef } from 'react';
-import { Form, Input, Modal, message, Select, SelectProps } from 'antd';
-import { addUser } from '@/api/system/user';
+import { Form, Input, Modal, Button, message, Select, SelectProps } from 'antd';
+import { addUser, updateUser } from '@/api/system/user';
 
 type FieldType = {
   username: string;
@@ -11,14 +11,15 @@ type FieldType = {
 };
 
 interface ModalProps {
-  innerRef: Ref<{ showModal: () => void }>;
+  innerRef: Ref<{ showModal: (value?: any) => void }>;
   onLoadList: (value?: any) => void;
   roleOptions: SelectProps['options'];
 }
 
 const AddUser: FC<ModalProps> = ({ innerRef, roleOptions, onLoadList }) => {
   const [visible, setVisible] = useState(false);
-
+  const [id, setId] = useState<number>();
+  const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const formRef = useRef<any>();
   //将子组件上的方法暴露给父组件，类型于Vue中defineExpose({})
@@ -30,35 +31,89 @@ const AddUser: FC<ModalProps> = ({ innerRef, roleOptions, onLoadList }) => {
     console.log(`Selected: ${value}`);
   };
 
-  const handleOk = async () => {
+  const handleOk = () => {
     try {
-      const submitInfo = await formRef.current?.validateFields();
-      const filterRoles = submitInfo.roles.map((item: string) => Number(item));
-      await addUser({ ...submitInfo, roles: filterRoles });
-      messageApi.success('添加成功');
-      onLoadList();
-      setTimeout(() => {
-        setVisible(false);
-      }, 1000);
-      formRef.current?.resetFields();
+      formRef.current?.validateFields().then(async (submitInfo: any) => {
+        const filterRoles = submitInfo.roles.map((item: string) => Number(item));
+        if (id) {
+          console.log({ id, ...submitInfo, roles: filterRoles });
+          const { code } = await updateUser({ id, ...submitInfo, roles: filterRoles });
+          if (code === 200) {
+            messageApi.success('更新成功');
+            setId(0);
+            onLoadList();
+            setTimeout(() => {
+              setVisible(false);
+              formRef.current?.resetFields();
+            }, 100);
+          } else {
+            messageApi.error('更新失败');
+          }
+        } else {
+          const { code } = await addUser({ ...submitInfo, roles: filterRoles });
+          if (code === 200) {
+            messageApi.success('添加成功');
+            onLoadList();
+            setTimeout(() => {
+              setVisible(false);
+              formRef.current?.resetFields();
+            }, 100);
+          } else {
+            messageApi.error('添加失败');
+          }
+        }
+      });
     } catch (err: any) {
       messageApi.error(err);
     }
   };
-  const showModal = () => {
+  const cancelHandle = () => {
+    setVisible(false);
+    formRef.current?.resetFields();
+  };
+  const showModal = (value?: any) => {
+    if (value) {
+      const { roleNames, id } = value;
+      setId(id);
+      const roles: number[] = [];
+      roleOptions?.forEach((item: any) => {
+        roleNames.forEach((role: string) => {
+          if (role === item.label) {
+            roles.push(item.value);
+          }
+        });
+      });
+      form.setFieldsValue({ ...value, roles });
+    }
+
     setVisible(true);
   };
 
   return (
     <>
       {contextHolder}
-      <Modal title="添加用户" centered open={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
+      <Modal
+        title={id ? '修改' : '新增'}
+        centered
+        open={visible}
+        onOk={handleOk}
+        onCancel={cancelHandle}
+        footer={[
+          <Button key="submit" type="primary" onClick={handleOk}>
+            确定
+          </Button>,
+          <Button key="link" type="primary" onClick={cancelHandle}>
+            取消
+          </Button>
+        ]}
+      >
         <Form
           name="basic"
           labelCol={{ span: 5 }}
           wrapperCol={{ span: 16 }}
           style={{ maxWidth: 600 }}
           ref={formRef}
+          form={form}
           autoComplete="off"
         >
           <Form.Item<FieldType>

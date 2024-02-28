@@ -15,7 +15,7 @@ declare namespace API {
     phone?: string;
   };
   type UserDelParams = {
-    id: number;
+    userIds: number[];
   };
   type PageItem = {
     id: number;

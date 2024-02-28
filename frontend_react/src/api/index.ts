@@ -20,7 +20,7 @@ const defaultConfig = {
   // 跨域时候允许携带凭证
   withCredentials: true,
   headers: {
-    'Content-type': ContentTypeEnum.FORM_URLENCODED
+    'Content-type': ContentTypeEnum.JSON
   }
 };
 export type IOptions = Partial<typeof defaultOptions> & {
@@ -83,6 +83,7 @@ class RequestHttp {
     this.service.interceptors.response.use(
       (response: any) => {
         const { config = {}, data = {} } = response;
+
         // this.axiosCanceler.removePending(config);
         if (config.onlyData) {
           return data;
@@ -90,6 +91,7 @@ class RequestHttp {
         return data;
       },
       (error: AxiosError) => {
+        console.log(error);
         // if (axios.isAxiosError(error)) {
         //   const { config } = error as any;
         //   // if (config.repeatRequest && config.repeatRequest === 'forbid') {
@@ -195,7 +197,7 @@ class RequestHttp {
         method: MethodEnum.POST,
         data: formData,
         headers: {
-          'Content-type': ContentTypeEnum.FORM_DATA
+          'Content-type': ContentTypeEnum.JSON
         }
       },
       options
@@ -275,9 +277,11 @@ class RequestHttp {
           return [null, responseData];
         }
         const { data, code } = responseData;
-        if (code === 200) {
+        if (code === 200 && data) {
           // this.successHandler(finalOptions);
           return data;
+        } else if (code === 200 && !data) {
+          return responseData;
         } else {
           return this.errorHandler(responseData, finalOptions);
         }
