@@ -11,15 +11,19 @@ import { LoggerService } from './shared/logger/logger.service';
 import { ApiExceptionFilter } from './filters/api-exception.filter';
 import { ApiTransformInterceptor } from './intercepts/transform.interceptor';
 import { Core } from './lib/Core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
   // app.enableCors();
   new Core(app);
   app.useLogger(app.get(LoggerService));
   //注册全局错误过滤器
   app.useGlobalFilters(new ApiExceptionFilter(app.get(LoggerService)));
-
+  app.useStaticAssets(join(__dirname, 'images'), {
+    prefix: '/api',
+  });
   // validate
   app.useGlobalPipes(
     new ValidationPipe({

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   ApiOkResponse,
   ApiOperation,
@@ -17,6 +25,7 @@ import {
 } from './user.dto';
 import { AccountInfo, PageSearchUserInfo, UserDetailInfo } from './user.class';
 import { SysUserService } from './user.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiSecurity(ADMIN_PREFIX)
 @ApiTags('管理员模块')
@@ -75,5 +84,15 @@ export class SysUserController {
   async update(@Body() dto: UpdateUserDto): Promise<void> {
     await this.userService.update(dto);
     // await this.menuService.refreshPerms(dto.id);
+  }
+
+  //上传头像
+  @ApiOperation({
+    summary: '上传头像',
+  })
+  @Post('uploadAvatar')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadAvatar(@UploadedFile() file) {
+    return file.filename;
   }
 }
