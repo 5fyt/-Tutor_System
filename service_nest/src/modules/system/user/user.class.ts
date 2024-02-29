@@ -3,7 +3,13 @@ import SysUser from 'src/entities/user.entity';
 
 export class AccountInfo {
   @ApiProperty()
+  id: number;
+
+  @ApiProperty()
   name: string;
+
+  @ApiProperty()
+  username: string;
 
   @ApiProperty()
   email: string;

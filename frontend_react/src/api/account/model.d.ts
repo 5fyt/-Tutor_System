@@ -12,4 +12,11 @@ declare namespace API {
     email: string;
     phone: string;
   };
+  type ProfileUpdateParams = {
+    id: number;
+    name?: string;
+    username?: string;
+    email?: string;
+    phone?: string;
+  };
 }

@@ -15,6 +15,7 @@ import {
   UpdatePasswordDto,
   UpdateUserDto,
   UpdateUserInfoDto,
+  UpdateAccountDto,
 } from './user.dto';
 
 @Injectable()
@@ -60,7 +61,9 @@ export class SysUserService {
       throw new ApiException(10017);
     }
     return {
+      id: user.id,
       name: user.name,
+      username: user.username,
       email: user.email,
       phone: user.phone,
       headImg: user.headImg,
@@ -134,7 +137,7 @@ export class SysUserService {
   }
 
   /**
-   * 更新用户信息
+   * 管理员更新用户信息
    */
   async update(param: UpdateUserDto): Promise<void> {
     await this.entityManager.transaction(async (manager) => {
@@ -156,7 +159,17 @@ export class SysUserService {
       await manager.insert(SysUserRole, insertRoles);
     });
   }
-
+  //用户更新个人信息
+  async userUpdate(param: UpdateAccountDto): Promise<void> {
+    await this.entityManager.transaction(async (manager) => {
+      await manager.update(SysUser, param.id, {
+        username: param.username,
+        name: param.name,
+        email: param.email,
+        phone: param.phone,
+      });
+    });
+  }
   /**
    * 查找用户信息
    * @param id 用户id

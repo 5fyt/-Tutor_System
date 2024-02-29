@@ -22,11 +22,11 @@ import {
   DeleteUserDto,
   PageSearchUserDto,
   UpdateUserDto,
+  UpdateAccountDto,
 } from './user.dto';
 import { AccountInfo, PageSearchUserInfo, UserDetailInfo } from './user.class';
 import { SysUserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ConfigService } from '@nestjs/config';
 
 @ApiSecurity(ADMIN_PREFIX)
 @ApiTags('管理员模块')
@@ -79,7 +79,7 @@ export class SysUserController {
   }
 
   @ApiOperation({
-    summary: '更新管理员信息',
+    summary: '管理员更新用户信息',
   })
   @Post('update')
   async update(@Body() dto: UpdateUserDto): Promise<void> {
@@ -87,6 +87,14 @@ export class SysUserController {
     // await this.menuService.refreshPerms(dto.id);
   }
 
+  @ApiOperation({
+    summary: '更新用户信息',
+  })
+  @Post('profile/update')
+  async updateUser(@Body() dto: UpdateAccountDto): Promise<void> {
+    await this.userService.userUpdate(dto);
+    // await this.menuService.refreshPerms(dto.id);
+  }
   //上传头像
   @ApiOperation({
     summary: '上传头像',

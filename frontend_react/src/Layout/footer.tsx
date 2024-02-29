@@ -18,7 +18,7 @@ const FooterBar: React.FC = () => {
       <Footer
         style={{
           textAlign: 'center',
-          backgroundColor: '#f0f2f5 ',
+          backgroundColor: '#F5F5F5 ',
           paddingBottom: show ? '' : '100px'
         }}
       >
