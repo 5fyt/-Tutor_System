@@ -201,7 +201,7 @@ export class SysUserService {
       )
       .innerJoinAndSelect('sys_role', 'role', 'role.id = user_role.role_id')
       .select(['user.id,GROUP_CONCAT(role.name) as roleNames', 'user.*'])
-      .where('user.id NOT IN (:...ids)', { ids: [uid] }) //除去登录账号那项
+      // .where('user.id NOT IN (:...ids)', { ids: [uid] }) //除去登录账号那项
       .andWhere('user.name LIKE :name', { name: `%${name}%` })
       .andWhere('user.username LIKE :username', { username: `%${username}%` })
       .andWhere('user.phone LIKE :phone', { phone: `%${phone}%` })
@@ -250,6 +250,12 @@ export class SysUserService {
       await this.redisService.getRedis().del(ts);
       await this.redisService.getRedis().del(ps);
     }
+  }
+  //上传头像
+  async uploadAvatar(file: Express.Multer.File, uid: number): Promise<string> {
+    const url = `http://localhost:8080/api/${file.filename}`;
+    await this.userRepository.update({ id: uid }, { headImg: url });
+    return url;
   }
 
   /**

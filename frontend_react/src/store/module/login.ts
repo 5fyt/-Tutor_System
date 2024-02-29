@@ -98,5 +98,6 @@ const loginReducer = createSlice({
 export const { toggleCollapsed } = loginReducer.actions;
 export const user_name = (state: RootState) => state.login.name;
 export const menuList = (state: RootState) => state.login.menuList;
+export const avatarUrl = (state: RootState) => state.login.avatarUrl;
 export const collapsed = (state: RootState) => state.login.collapsed;
 export default loginReducer.reducer;

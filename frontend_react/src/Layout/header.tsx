@@ -6,7 +6,7 @@ import { Layout, Avatar, Dropdown, message } from 'antd';
 import type { MenuProps } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { user_name, loginOut } from '@/store/module/login';
+import { user_name, loginOut, avatarUrl } from '@/store/module/login';
 // import { ReactComponent as EnUsSvg } from '@/assets/header/en_US.svg';
 // import { ReactComponent as LanguageSvg } from '@/assets/header/language.svg';
 // import { ReactComponent as ZhCnSvg } from '@/assets/header/zh_CN.svg';
@@ -30,6 +30,7 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
   const navigate = useNavigate();
   // const { formatMessage } = useLocale();
   const username = useAppSelector(user_name);
+  const headImg = useAppSelector(avatarUrl);
   const dispatch = useAppDispatch();
   // const selectLocale = ({ key }: { key: any }) => {
   //   userStore.setLocale(key);
@@ -109,9 +110,7 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
           </Dropdown> */}
           <div>
             <Dropdown menu={{ items }} trigger={['hover']}>
-              <span className="user-avatar">
-                <Avatar src={UserAvatar} />
-              </span>
+              <span className="user-avatar">{headImg ? <Avatar src={headImg} /> : <Avatar src={UserAvatar} />}</span>
             </Dropdown>
             <span className="user-name">{username}</span>
           </div>

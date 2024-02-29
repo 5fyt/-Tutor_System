@@ -20,7 +20,18 @@ interface ModalProps {
 }
 const User: FC = () => {
   const defaultColumns: ColumnsType<TableAPI.DataType> = [
-    { title: '头像', dataIndex: 'headImg', key: '1', render: text => <Avatar src={text} /> },
+    {
+      title: '头像',
+      dataIndex: 'headImg',
+      key: '1',
+      render: text => {
+        return text ? (
+          <Avatar src={text} />
+        ) : (
+          <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+        );
+      }
+    },
     { title: '用户名', dataIndex: 'username', key: '2' },
     { title: '姓名', dataIndex: 'name', key: '3' },
     { title: '电话号码', dataIndex: 'phone', key: '4' },

@@ -26,6 +26,7 @@ import {
 import { AccountInfo, PageSearchUserInfo, UserDetailInfo } from './user.class';
 import { SysUserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ConfigService } from '@nestjs/config';
 
 @ApiSecurity(ADMIN_PREFIX)
 @ApiTags('管理员模块')
@@ -92,7 +93,10 @@ export class SysUserController {
   })
   @Post('uploadAvatar')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadAvatar(@UploadedFile() file) {
-    return file.filename;
+  async uploadAvatar(
+    @UploadedFile() file,
+    @AdminUser() user: IAdminUser,
+  ): Promise<string> {
+    return await this.userService.uploadAvatar(file, user.uid);
   }
 }

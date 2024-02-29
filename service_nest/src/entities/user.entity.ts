@@ -29,7 +29,10 @@ export default class SysUser {
   @ApiProperty()
   psalt: string;
 
-  @Column({ name: 'head_img', nullable: true })
+  @Column({
+    name: 'head_img',
+    nullable: true,
+  })
   @ApiProperty()
   headImg: string;
 
