@@ -10,6 +10,7 @@ declare namespace API {
     id: number;
     name: string;
     username: string;
+    password?: string;
     roles: number[];
     email?: string;
     phone?: string;

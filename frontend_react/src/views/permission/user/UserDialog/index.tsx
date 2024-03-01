@@ -4,6 +4,7 @@ import { addUser, updateUser } from '@/api/system/user';
 
 type FieldType = {
   username: string;
+  password: string;
   phone: string;
   email: string;
   roles: number[];
@@ -40,10 +41,10 @@ const AddUser: FC<ModalProps> = ({ innerRef, roleOptions, onLoadList }) => {
           const { code } = await updateUser({ id, ...submitInfo, roles: filterRoles });
           if (code === 200) {
             messageApi.success('更新成功');
-            setId(0);
             onLoadList();
             setTimeout(() => {
               setVisible(false);
+              setId(0);
               formRef.current?.resetFields();
             }, 100);
           } else {
@@ -132,6 +133,15 @@ const AddUser: FC<ModalProps> = ({ innerRef, roleOptions, onLoadList }) => {
           >
             <Input placeholder="请输入六位用户名" />
           </Form.Item>
+          {id && (
+            <Form.Item<FieldType>
+              label="密码"
+              name="password"
+              rules={[{ pattern: /^(?=.*\d).{6,}$/, message: '密码格式错误' }]}
+            >
+              <Input.Password placeholder="请输入旧密码" />
+            </Form.Item>
+          )}
           <Form.Item<FieldType>
             label="姓名"
             name="name"

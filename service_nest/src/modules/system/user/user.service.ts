@@ -140,13 +140,28 @@ export class SysUserService {
    * 管理员更新用户信息
    */
   async update(param: UpdateUserDto): Promise<void> {
+    // const comparePassword = this.util.md5(`${param.password}${user.psalt}`);
+    // // 原密码不一致，不允许更改
+    // if (user.password !== comparePassword) {
+    //   throw new ApiException(10011);
+    // }
+    const user = await this.userRepository.findOne({
+      where: { id: param.id },
+    });
+    if (isEmpty(user)) {
+      throw new ApiException(10017);
+    }
     await this.entityManager.transaction(async (manager) => {
+      console.log('user', user);
+      const password = this.util.md5(`${param.password}${user.psalt}`);
       await manager.update(SysUser, param.id, {
         username: param.username,
         name: param.name,
         email: param.email,
         phone: param.phone,
+        password: password,
       });
+
       // 先删除原来的角色关系
       await manager.delete(SysUserRole, { userId: param.id });
       const insertRoles = param.roles.map((e) => {
@@ -228,7 +243,7 @@ export class SysUserService {
       const convertData = Object.entries<[string, any]>(n).map(
         ([key, value]) => [camelCase(key), value],
       );
-      const { password, ...data } = Object.fromEntries(convertData);
+      const { ...data } = Object.fromEntries(convertData);
       return {
         ...data,
         roleNames: n.roleNames.split(','),

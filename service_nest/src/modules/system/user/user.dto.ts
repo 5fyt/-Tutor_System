@@ -129,37 +129,45 @@ export class UpdateUserDto extends CreateUserDto {
   @IsInt()
   @Min(0)
   id: number;
-  @ApiProperty({
-    description: '用户姓名',
-  })
-  @IsString()
-  @MinLength(2)
-  name: string;
 
   @ApiProperty({
-    description: '登录账号',
+    description: '登录密码',
   })
   @IsString()
-  @Matches(/^[a-z0-9A-Z]+$/)
-  @MinLength(4)
-  @MaxLength(20)
-  username: string;
+  @Matches(/^(?=.*\d).{6,}$/)
+  @MinLength(6)
+  password: string;
+  // @ApiProperty({
+  //   description: '用户姓名',
+  // })
+  // @IsString()
+  // @MinLength(2)
+  // name: string;
 
-  @ApiProperty({
-    required: false,
-    description: '邮箱',
-  })
-  @IsEmail()
-  @ValidateIf((o) => !isEmpty(o.email))
-  email: string;
+  // @ApiProperty({
+  //   description: '登录账号',
+  // })
+  // @IsString()
+  // @Matches(/^[a-z0-9A-Z]+$/)
+  // @MinLength(4)
+  // @MaxLength(20)
+  // username: string;
 
-  @ApiProperty({
-    required: false,
-    description: '手机号',
-  })
-  @IsString()
-  @IsOptional()
-  phone: string;
+  // @ApiProperty({
+  //   required: false,
+  //   description: '邮箱',
+  // })
+  // @IsEmail()
+  // @ValidateIf((o) => !isEmpty(o.email))
+  // email: string;
+
+  // @ApiProperty({
+  //   required: false,
+  //   description: '手机号',
+  // })
+  // @IsString()
+  // @IsOptional()
+  // phone: string;
 }
 export class UpdateAccountDto {
   @ApiProperty({
