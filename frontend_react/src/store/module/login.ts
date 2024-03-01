@@ -82,6 +82,10 @@ const loginReducer = createSlice({
       state.avatarUrl = payload;
       const info = Storage.get(ACCESS_ADMIN_USERINFO, null);
       Storage.set(ACCESS_ADMIN_USERINFO, { ...info, headImg: payload });
+    },
+    updateUserProfile: (state: Store.loginState, { payload }) => {
+      state.name = payload.name;
+      Storage.set(ACCESS_ADMIN_USERINFO, payload);
     }
   },
   extraReducers: builder => {
@@ -100,7 +104,7 @@ const loginReducer = createSlice({
       });
   }
 });
-export const { toggleCollapsed, uploadUserAvatar } = loginReducer.actions;
+export const { toggleCollapsed, uploadUserAvatar, updateUserProfile } = loginReducer.actions;
 export const user_name = (state: RootState) => state.login.name;
 export const menuList = (state: RootState) => state.login.menuList;
 export const avatarUrl = (state: RootState) => state.login.avatarUrl;

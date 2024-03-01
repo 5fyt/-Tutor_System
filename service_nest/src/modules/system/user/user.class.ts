@@ -26,7 +26,9 @@ export class AccountInfo {
   @ApiProperty()
   loginIp: string;
 }
-
+export class ProfileInfoUrl {
+  url: string;
+}
 export class PageSearchUserInfo {
   @ApiProperty()
   createdAt: string;

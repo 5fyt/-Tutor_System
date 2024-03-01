@@ -5,7 +5,7 @@ import qs from 'qs';
 
 // import { objectPick, trimSpace } from '@/utils/util';
 // import { globalErrorHandler } from '@/utils/errorHandler';
-import { isObject, isBlod, isFormData, isFunction, isString } from '@/utils/is';
+import { isObject, isBlod, isFormData, isFunction } from '@/utils/is';
 import Storage from '@/utils/Storage';
 import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
 const defaultConfig = {
@@ -78,13 +78,17 @@ class RequestHttp {
      */
     this.service.interceptors.response.use(
       (response: any) => {
-        const { config = {}, data = {} } = response;
+        const { data = {} } = response;
 
         // this.axiosCanceler.removePending(config);
-        if (config.onlyData) {
-          return data;
+        // if (config.onlyData) {
+        //   return data;
+        // }
+        if (data.code === 11002) {
+          window.location.href = '/login';
+          Storage.set(ACCESS_TOKEN_KEY, '');
+          $message.info(data.message);
         }
-
         return data;
       },
       (error: AxiosError) => {
@@ -274,11 +278,11 @@ class RequestHttp {
           return [null, responseData];
         }
         const { data, code } = responseData;
-
-        if (code === 200 && !isString(data)) {
+        console.log(responseData);
+        if (code === 200 && data) {
           // this.successHandler(finalOptions);
           return data;
-        } else if (code === 200 && (!data || !isObject(data))) {
+        } else if (code === 200 && !data) {
           return responseData;
         } else {
           return this.errorHandler(responseData, finalOptions);

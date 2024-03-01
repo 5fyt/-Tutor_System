@@ -23,8 +23,14 @@ import {
   PageSearchUserDto,
   UpdateUserDto,
   UpdateAccountDto,
+  UpdatePasswordDto,
 } from './user.dto';
-import { AccountInfo, PageSearchUserInfo, UserDetailInfo } from './user.class';
+import {
+  AccountInfo,
+  PageSearchUserInfo,
+  ProfileInfoUrl,
+  UserDetailInfo,
+} from './user.class';
 import { SysUserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -104,7 +110,19 @@ export class SysUserController {
   async uploadAvatar(
     @UploadedFile() file,
     @AdminUser() user: IAdminUser,
-  ): Promise<string> {
-    return await this.userService.uploadAvatar(file, user.uid);
+  ): Promise<ProfileInfoUrl> {
+    const url = await this.userService.uploadAvatar(file, user.uid);
+    return { url };
+  }
+
+  @ApiOperation({
+    summary: '更新用户密码',
+  })
+  @Post('password')
+  async changeUserPassword(
+    @Body() dto: UpdatePasswordDto,
+    @AdminUser() user: IAdminUser,
+  ) {
+    await this.userService.updatePassword(user.uid, dto);
   }
 }

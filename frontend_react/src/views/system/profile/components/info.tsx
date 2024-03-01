@@ -4,7 +4,7 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { Form, Input, Upload, Tag, message, Button, Avatar } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { avatarUrl } from '@/store/module/login';
+import { avatarUrl, updateUserProfile } from '@/store/module/login';
 import { getAccount, updateAccount, uploadAvatar } from '@/api/account';
 import { uploadUserAvatar } from '@/store/module/login';
 
@@ -47,7 +47,11 @@ const Info: FC = () => {
     try {
       formRef.current?.validateFields().then(async (submitInfo: any) => {
         const { code } = await updateAccount({ id: accountInfo.id, ...submitInfo });
+
         code === 200 ? messageApi.success('更新成功') : messageApi.error('更新失败');
+        const res = await getAccount();
+        console.log(res);
+        dispatch(updateUserProfile(res));
       });
     } catch (err: any) {
       messageApi.error(err);
@@ -62,11 +66,11 @@ const Info: FC = () => {
     }
   };
   const uploadFile = async (file: any) => {
-    const { code, data } = await uploadAvatar(file);
-    if (code === 200) {
+    const { url } = await uploadAvatar(file);
+    if (url) {
       messageApi.success('上传成功');
-      setImageUrl(data);
-      dispatch(uploadUserAvatar(data));
+      setImageUrl(url);
+      dispatch(uploadUserAvatar(url));
     } else {
       messageApi.error('上传失败');
     }

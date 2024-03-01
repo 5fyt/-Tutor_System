@@ -22,4 +22,8 @@ declare namespace API {
   type UploadFileParams = {
     file: any;
   };
+  type UpdatePasswordParams = {
+    originPassword: string;
+    newPassword: string;
+  };
 }
