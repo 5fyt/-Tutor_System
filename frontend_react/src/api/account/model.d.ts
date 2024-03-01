@@ -19,4 +19,7 @@ declare namespace API {
     email?: string;
     phone?: string;
   };
+  type UploadFileParams = {
+    file: any;
+  };
 }

@@ -5,13 +5,9 @@ import qs from 'qs';
 
 // import { objectPick, trimSpace } from '@/utils/util';
 // import { globalErrorHandler } from '@/utils/errorHandler';
-import { isObject, isBlod, isFormData, isFunction } from '@/utils/is';
+import { isObject, isBlod, isFormData, isFunction, isString } from '@/utils/is';
 import Storage from '@/utils/Storage';
 import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
-// import { useUserStore } from '@/store/user';
-// import { useDownload } from '@/hooks/useDownload';
-// import { useMessage } from '@/hooks/useMessage';
-// import { AxiosCanceler } from './helper/cancelToken';
 const defaultConfig = {
   // 默认地址请求地址，可在 .env.** 文件中修改
   baseURL: import.meta.env.VITE_BASE_API,
@@ -88,6 +84,7 @@ class RequestHttp {
         if (config.onlyData) {
           return data;
         }
+
         return data;
       },
       (error: AxiosError) => {
@@ -197,7 +194,7 @@ class RequestHttp {
         method: MethodEnum.POST,
         data: formData,
         headers: {
-          'Content-type': ContentTypeEnum.JSON
+          'Content-type': ContentTypeEnum.FORM_DATA
         }
       },
       options
@@ -277,10 +274,11 @@ class RequestHttp {
           return [null, responseData];
         }
         const { data, code } = responseData;
-        if (code === 200 && data) {
+
+        if (code === 200 && !isString(data)) {
           // this.successHandler(finalOptions);
           return data;
-        } else if (code === 200 && !data) {
+        } else if (code === 200 && (!data || !isObject(data))) {
           return responseData;
         } else {
           return this.errorHandler(responseData, finalOptions);

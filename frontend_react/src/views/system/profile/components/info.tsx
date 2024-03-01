@@ -3,9 +3,10 @@ import { UploadOutlined } from '@ant-design/icons';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { Form, Input, Upload, Tag, message, Button, Avatar } from 'antd';
-import { useAppSelector } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { avatarUrl } from '@/store/module/login';
-import { getAccount, updateAccount } from '@/api/account';
+import { getAccount, updateAccount, uploadAvatar } from '@/api/account';
+import { uploadUserAvatar } from '@/store/module/login';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -14,8 +15,8 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 };
 const Info: FC = () => {
   const headImg = useAppSelector(avatarUrl);
+  const dispatch = useAppDispatch();
   const [imageUrl, setImageUrl] = useState<string>(headImg);
-  const imageRef = useRef<any>(imageUrl);
   const formRef = useRef<any>();
   const [accountInfo, setAccountInfo] = useState<any>();
   const [form] = Form.useForm();
@@ -56,31 +57,20 @@ const Info: FC = () => {
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
       getBase64(info.file.originFileObj as RcFile, url => {
-        imageRef.current = info.file.originFileObj;
         setImageUrl(url);
       });
     }
   };
   const uploadFile = async (file: any) => {
-    console.log(file);
-    // const dataObj = {
-    //   suffix
-    // };
-    // const type = localStorage.getItem('type') as string;
-    // const { code, data } = await loadPhoto(dataObj, type);
-    // const url = data?.url;
-    // console.log(imageRef);
-    // axios.put(url, imageRef.current);
-    // if (code === 200) {
-    //   setPath(data.path);
-    // }
+    const { code, data } = await uploadAvatar(file);
+    if (code === 200) {
+      messageApi.success('上传成功');
+      setImageUrl(data);
+      dispatch(uploadUserAvatar(data));
+    } else {
+      messageApi.error('上传失败');
+    }
   };
-  // const uploadButton = (
-  //   <div>
-  //     {loading ? <LoadingOutlined /> : <PlusOutlined />}
-  //     <div style={{ marginTop: 8 }}>Upload</div>
-  //   </div>
-  // );
   return (
     <div className="info_profile">
       {contextHolder}
@@ -94,16 +84,51 @@ const Info: FC = () => {
           form={form}
           ref={formRef}
         >
-          <Form.Item label="邮箱" name="email">
+          <Form.Item
+            label="邮箱"
+            name="email"
+            rules={[{ pattern: /^\w+(-+.\w+)*@\w+(-.\w+)*.\w+(-.\w+)*$/, message: '邮箱格式错误' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="昵称" name="username">
+          <Form.Item
+            label="昵称"
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: '请输入用户名'
+              },
+              {
+                pattern: /^[0-9a-zA-z]{6,15}$/,
+                message: '用户名格式错误'
+              }
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="姓名" name="name">
+          <Form.Item
+            label="姓名"
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: '请输入姓名'
+              }
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="电话号码" name="phone">
+          <Form.Item
+            label="电话号码"
+            name="phone"
+            rules={[
+              {
+                pattern: /^1[3456789]\d{9}$/,
+                message: '电话号码格式错误'
+              }
+            ]}
+          >
             <Input />
           </Form.Item>
 

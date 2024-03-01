@@ -2,7 +2,8 @@ import httpService, { IOptions } from '@/api/index';
 enum ACCOUNT_API {
   lOGON_OUT = '/logout',
   PROFILE = '/user/info',
-  UPDATE = '/user/profile/update'
+  UPDATE = '/user/profile/update',
+  UPDATE_AVATAR = '/user/uploadAvatar'
 }
 export const logout = (options?: IOptions) => {
   return httpService.post({ url: ACCOUNT_API.lOGON_OUT }, options);
@@ -12,4 +13,7 @@ export const getAccount = (options?: IOptions) => {
 };
 export const updateAccount = (params: API.ProfileUpdateParams, options?: IOptions) => {
   return httpService.post({ url: ACCOUNT_API.UPDATE, data: params }, options);
+};
+export const uploadAvatar = (params: API.UploadFileParams, options?: IOptions) => {
+  return httpService.uploadFile({ url: ACCOUNT_API.UPDATE_AVATAR, data: params }, options);
 };
