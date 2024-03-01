@@ -3,17 +3,11 @@ import { FC, memo, useCallback, useEffect, useState, useRef } from 'react';
 import { options, defaultSettingData } from './constants/index';
 import type { ColumnsType } from 'antd/es/table';
 import { Avatar, Button, Space, Tag, message } from 'antd';
-// import { useAppDispatch, useAppSelector } from '@/stores';
-// import { results, searchUserAsync, totalCount } from '@/stores/module/admin';
 import AddUser from './UserDialog/index';
 import SearchForm from '@/components/SearchForm';
 import TableList from '@/components/TableList';
 import { deleteUser, getRoleList, searchUser } from '@/api/system/user';
 import { isArray } from '@/utils/is';
-// import { deleteUser, updateUser } from '@/api/system/user';
-
-// import { deleteUser } from '@/services/api/admin';
-// const { Search } = Input;
 
 interface ModalProps {
   showModal: (value?: any) => void;

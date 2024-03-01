@@ -3,4 +3,16 @@ declare namespace API {
     name: string;
     remark: string;
   };
+  type RoleSearchParams = {
+    page: number;
+    limit: number;
+  };
+  type RoleDeleteParams = {
+    roleIds: number[];
+  };
+  type RoleUpdateParams = {
+    id: number;
+    name: string;
+    remark: string;
+  };
 }

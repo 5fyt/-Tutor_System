@@ -21,9 +21,9 @@ export class SysRoleController {
 
   @ApiOperation({ summary: '分页查询角色信息' })
   @ApiOkResponse({ type: [SysRole] })
-  @Get('search')
+  @Post('search')
   async page(
-    @Query() dto: PageSearchRoleDto,
+    @Body() dto: PageSearchRoleDto,
   ): Promise<PaginatedResponseDto<SysRole>> {
     const [list, total] = await this.roleService.page(dto);
     return {
@@ -38,7 +38,7 @@ export class SysRoleController {
   async getRoleList(): Promise<ListRole[]> {
     const list = await this.roleService.roleInfoList();
     return list.map((item) => {
-      return { id: item.id, name: item.name };
+      return { id: item.id, name: item.name, label: item.remark };
     });
   }
 

@@ -56,9 +56,9 @@ export class SysRoleService {
    * 更新角色信息
    */
   async update(param: UpdateRoleDto): Promise<SysRole> {
-    const { roleId, name, remark } = param;
+    const { id, name, remark } = param;
     const role = await this.roleRepository.save({
-      id: roleId,
+      id,
       name,
       remark,
     });

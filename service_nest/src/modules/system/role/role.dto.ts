@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PageOptionsDto } from 'src/common/dto/page.dto';
+
 import {
   ArrayNotEmpty,
   IsArray,
@@ -34,7 +34,7 @@ export class CreateRoleDto {
   @IsOptional()
   remark: string;
 }
-export class PageSearchRoleDto extends PageOptionsDto {
+export class PageSearchRoleDto {
   @ApiProperty({
     required: false,
     description: '角色名称',
@@ -45,19 +45,30 @@ export class PageSearchRoleDto extends PageOptionsDto {
 
   @ApiProperty({
     required: false,
-    description: '角色唯一标识',
-  })
-  @IsString()
-  @IsOptional()
-  label = '';
-
-  @ApiProperty({
-    required: false,
     description: '备注',
   })
   @IsString()
   @IsOptional()
   remark = '';
+  @ApiProperty({
+    description: '当前页包含数量',
+    required: false,
+    default: 3,
+  })
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  readonly limit: number = 3;
+
+  @ApiProperty({
+    description: '当前页包含数量',
+    required: false,
+    default: 1,
+  })
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  readonly page: number = 1;
 }
 export class UpdateRoleDto extends CreateRoleDto {
   @ApiProperty({
@@ -65,7 +76,7 @@ export class UpdateRoleDto extends CreateRoleDto {
   })
   @IsInt()
   @Min(0)
-  roleId: number;
+  id: number;
 }
 export class InfoRoleDto {
   @ApiProperty({

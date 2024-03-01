@@ -36,7 +36,7 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
   //   userStore.setLocale(key);
   // };
   const goToDetailPage = () => {
-    navigate({ pathname: '/profile' });
+    navigate({ pathname: '/system/profile' });
   };
   const logout = async () => {
     await dispatch(loginOut());
