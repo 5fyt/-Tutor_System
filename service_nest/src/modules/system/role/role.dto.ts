@@ -96,5 +96,5 @@ export class InfoRoleDto {
   @IsInt()
   @Min(0)
   @Type(() => Number)
-  roleId: number;
+  id: number;
 }

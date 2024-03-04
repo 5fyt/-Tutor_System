@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'sys_role_perm' })
-export default class SysUserRole {
+export default class SysRolePerm {
   @PrimaryGeneratedColumn()
   @ApiProperty()
   id: number;

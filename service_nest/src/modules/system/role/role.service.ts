@@ -5,19 +5,22 @@ import { isEmpty, map } from 'lodash';
 import SysRole from 'src/entities/role.entity';
 import SysUserRole from 'src/entities/user-role.entity';
 import SysRolePerm from 'src/entities/role-perm.entity';
+import SysPerm from 'src/entities/perm.entity';
 import { EntityManager, Like, Repository } from 'typeorm';
 
 import { CreateRoleDto, PageSearchRoleDto, UpdateRoleDto } from './role.dto';
-import { CreateRoleId, RoleInfo } from './role.class';
+import { RoleInfo } from './role.class';
 
 @Injectable()
 export class SysRoleService {
   constructor(
     @InjectRepository(SysRole) private roleRepository: Repository<SysRole>,
-    @InjectRepository(SysUserRole)
-    private userRoleRepository: Repository<SysUserRole>,
     @InjectRepository(SysRolePerm)
     private rolePermRepository: Repository<SysRolePerm>,
+    @InjectRepository(SysUserRole)
+    private userRoleRepository: Repository<SysUserRole>,
+
+    @InjectRepository(SysPerm) private permRepository: Repository<SysPerm>,
     @InjectEntityManager()
     private entityManager: EntityManager,
   ) {}
@@ -30,8 +33,38 @@ export class SysRoleService {
     return { roleInfo };
   }
 
+  /**
+   * 获取角色列表
+   */
   async roleInfoList(): Promise<SysRole[]> {
     return await this.roleRepository.find();
+  }
+
+  /**
+   * 获取带有权限的角色信息
+   */
+  async getPermRoleInfo(rid: number) {
+    const { name } = await this.roleRepository.findOne({
+      where: { id: rid },
+    });
+    const permRoleList = await this.rolePermRepository.find({
+      where: { roleId: rid },
+    });
+    if (permRoleList) {
+      const permissionIds = permRoleList.map((item) => item.permId);
+      return {
+        name,
+        permissionIds,
+      };
+    }
+    return { name, permissionIds: [] };
+  }
+
+  /**
+   * 获取权限列表
+   */
+  async permInfoList(): Promise<SysPerm[]> {
+    return await this.permRepository.find();
   }
   /**
    * 根据角色Id数组删除

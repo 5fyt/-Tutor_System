@@ -15,3 +15,8 @@ export class ListRole {
   id: number;
   name: string;
 }
+export class ListPerm {
+  id: number;
+  title: string;
+  description: string;
+}

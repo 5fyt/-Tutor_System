@@ -22,6 +22,6 @@ import { SysUserService } from './user/user.service';
   ],
   controllers: [SysUserController, SysRoleController],
   providers: [SysUserService, SysRoleService],
-  exports: [TypeOrmModule, SysUserService],
+  exports: [TypeOrmModule, SysUserService, SysRoleService],
 })
 export class SystemModule {}

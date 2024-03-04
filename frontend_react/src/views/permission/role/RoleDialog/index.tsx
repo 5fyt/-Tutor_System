@@ -1,17 +1,27 @@
 import { FC, memo, Ref, useImperativeHandle, useState, useRef } from 'react';
-import { Form, Input, Modal, Button, message } from 'antd';
+import { Form, Input, Modal, Button, message, Transfer } from 'antd';
 
 import { addRole, updateRole } from '@/api/system/role';
-
+import type { TransferProps } from 'antd';
 type FieldType = {
   name: string;
   remark: string;
 };
-
+interface RecordType {
+  key: string;
+  title: string;
+  description: string;
+}
 interface ModalProps {
   innerRef: Ref<{ showModal: (value?: any) => void }>;
   onLoadList: (value?: any) => void;
 }
+const mockData: RecordType[] = Array.from({ length: 20 }).map((_, i) => ({
+  key: i.toString(),
+  title: `content${i + 1}`,
+  description: `description of content${i + 1}`
+}));
+// const initialTargetKeys = mockData.filter(item => Number(item.key) > 10).map(item => item.key);
 
 const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
   const [visible, setVisible] = useState(false);
@@ -23,11 +33,20 @@ const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
   useImperativeHandle(innerRef, () => ({
     showModal
   }));
+  const [targetKeys, setTargetKeys] = useState<any[]>();
+
+  const onChange: TransferProps['onChange'] = (nextTargetKeys, direction, moveKeys) => {
+    console.log('targetKeys:', nextTargetKeys);
+    console.log('direction:', direction);
+    console.log('moveKeys:', moveKeys);
+    setTargetKeys(nextTargetKeys);
+  };
 
   const handleOk = () => {
     try {
       formRef.current?.validateFields().then(async (submitInfo: any) => {
         if (id) {
+          console.log(submitInfo);
           const { code } = await updateRole({ id, ...submitInfo });
           if (code === 200) {
             messageApi.success('更新成功');
@@ -108,7 +127,7 @@ const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
                 message: '请输入用户名'
               },
               {
-                pattern: /^[0-9a-zA-z]{6,15}$/,
+                pattern: /^[0-9a-zA-z]{5,15}$/,
                 message: '用户名格式错误'
               }
             ]}
@@ -127,6 +146,15 @@ const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
             ]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item label="权限" name="permisssionIds">
+            <Transfer
+              dataSource={mockData}
+              titles={['所有权限', '赋予权限']}
+              targetKeys={targetKeys}
+              onChange={onChange}
+              render={item => item.title}
+            />
           </Form.Item>
         </Form>
       </Modal>

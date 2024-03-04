@@ -4,7 +4,7 @@ import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PaginatedResponseDto } from 'src/common/class/res.class';
 import SysRole from 'src/entities/role.entity';
 
-import { ListRole, RoleInfo } from './role.class';
+import { ListPerm, ListRole, RoleInfo } from './role.class';
 import {
   CreateRoleDto,
   DeleteRoleDto,
@@ -44,6 +44,19 @@ export class SysRoleController {
     });
   }
 
+  @ApiOperation({ summary: '权限列表' })
+  @Get('permission')
+  async getPermList(): Promise<ListPerm[]> {
+    const list = await this.roleService.permInfoList();
+    return list.map((item) => {
+      return {
+        id: item.id,
+        title: item.permname,
+        description: item.description,
+      };
+    });
+  }
+
   @ApiOperation({ summary: '删除角色' })
   @Post('delete')
   async delete(@Body() dto: DeleteRoleDto): Promise<void> {
@@ -64,8 +77,8 @@ export class SysRoleController {
 
   @ApiOperation({ summary: '获取角色信息' })
   @ApiOkResponse({ type: RoleInfo })
-  @Get('info')
-  async info(@Query() dto: InfoRoleDto): Promise<RoleInfo> {
-    return await this.roleService.info(dto.roleId);
+  @Post('info')
+  async info(@Body() dto: InfoRoleDto) {
+    return await this.roleService.getPermRoleInfo(dto.id);
   }
 }
