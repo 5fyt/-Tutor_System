@@ -48,8 +48,9 @@ export class SysUserService {
     const user: SysUser = await this.userRepository.findOne({
       where: { id: uid },
     });
-    console.log(user);
+
     const roles: number[] = await this.roleService.getRoleIdByUser(uid);
+
     const roleNamePromises: Promise<string>[] = roles.map(async (role) => {
       const { roleInfo } = await this.roleService.info(role);
       return roleInfo.name;

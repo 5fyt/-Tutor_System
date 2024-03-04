@@ -39,7 +39,7 @@ const filterMenu = (state: Store.loginState, menuList: MenuList, filterMenuList:
   filterMenuList = menuList
     .map(item => {
       if (item.children?.length) {
-        const childrenMenu = item.children.filter(child => state?.role?.every(role => child.meta.role?.includes(role)));
+        const childrenMenu = item.children.filter(child => state?.role?.some(role => child.meta.role?.includes(role)));
         if (childrenMenu.length) {
           return { ...item, children: childrenMenu };
         }
@@ -47,7 +47,7 @@ const filterMenu = (state: Store.loginState, menuList: MenuList, filterMenuList:
         return item;
       }
     })
-    .filter(menu => state?.role?.every(role => menu?.meta?.role?.includes(role))) as MenuList;
+    .filter(menu => state?.role?.some(role => menu?.meta?.role?.includes(role))) as MenuList;
   Storage.set(ACCESS_ADMIN_MENULIST, filterMenuList);
   return filterMenuList;
 };

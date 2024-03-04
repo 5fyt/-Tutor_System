@@ -7,19 +7,17 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'sys_user_role' })
-export default class SysUserRole {
+@Entity({ name: 'sys_perm' })
+export default class SysRole {
   @PrimaryGeneratedColumn()
   @ApiProperty()
   id: number;
 
-  @Column({ name: 'user_id', default: 1 })
-  @ApiProperty()
-  userId: number;
+  @Column({ unique: true })
+  permname: string;
 
-  @Column({ name: 'role_id' })
-  @ApiProperty()
-  roleId: number;
+  @Column({ nullable: true, default: '' })
+  description: string;
 
   @CreateDateColumn({ name: 'created_at' })
   @ApiProperty()

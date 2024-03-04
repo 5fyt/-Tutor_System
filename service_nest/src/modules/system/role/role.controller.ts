@@ -13,6 +13,8 @@ import {
   InfoRoleDto,
 } from './role.dto';
 import { SysRoleService } from './role.service';
+// import { AdminUser } from 'src/decorators/admin-user.decorator';
+// import { IAdminUser } from 'src/modules/admin.interface';
 
 @ApiTags('角色模块')
 @Controller('role')

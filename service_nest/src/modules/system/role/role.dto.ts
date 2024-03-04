@@ -8,6 +8,8 @@ import {
   MinLength,
   IsInt,
   Min,
+  ArrayMinSize,
+  ArrayMaxSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -33,6 +35,15 @@ export class CreateRoleDto {
   @IsString()
   @IsOptional()
   remark: string;
+
+  @ApiProperty({
+    description: '拥有权限',
+    type: [Number],
+  })
+  @ArrayNotEmpty()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(3)
+  permissionIds: number[];
 }
 export class PageSearchRoleDto {
   @ApiProperty({

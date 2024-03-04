@@ -7,15 +7,15 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'sys_user_role' })
+@Entity({ name: 'sys_role_perm' })
 export default class SysUserRole {
   @PrimaryGeneratedColumn()
   @ApiProperty()
   id: number;
 
-  @Column({ name: 'user_id', default: 1 })
+  @Column({ name: 'perm_id', default: 1 })
   @ApiProperty()
-  userId: number;
+  permId: number;
 
   @Column({ name: 'role_id' })
   @ApiProperty()
