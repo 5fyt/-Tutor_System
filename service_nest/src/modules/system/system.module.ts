@@ -9,6 +9,9 @@ import { SysRoleController } from './role/role.controller';
 import { SysRoleService } from './role/role.service';
 import { SysUserController } from './user/user.controller';
 import { SysUserService } from './user/user.service';
+import SysCourse from 'src/entities/course.entity';
+import { SysCourseService } from './course/course.service';
+import { SysCourseController } from './course/course.controller';
 
 @Module({
   imports: [
@@ -18,10 +21,11 @@ import { SysUserService } from './user/user.service';
       SysPerm,
       SysRole,
       SysUserRole,
+      SysCourse,
     ]),
   ],
-  controllers: [SysUserController, SysRoleController],
-  providers: [SysUserService, SysRoleService],
+  controllers: [SysUserController, SysRoleController, SysCourseController],
+  providers: [SysUserService, SysRoleService, SysCourseService],
   exports: [TypeOrmModule, SysUserService, SysRoleService],
 })
 export class SystemModule {}

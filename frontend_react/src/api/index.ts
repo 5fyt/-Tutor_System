@@ -85,9 +85,9 @@ class RequestHttp {
         //   return data;
         // }
         if (data.code === 11002) {
+          $message.info(data.message, 4);
           window.location.href = '/login';
           Storage.set(ACCESS_TOKEN_KEY, '');
-          $message.info(data.message);
         }
         return data;
       },

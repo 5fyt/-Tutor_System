@@ -7,7 +7,7 @@ const NoticeList = lazy(() => import('@/views/notice'));
 const Profile = lazy(() => import('@/views/system/profile'));
 const Order = lazy(() => import('@/views/system/order'));
 const Comment = lazy(() => import('@/views/system/comment'));
-const PermissionList = lazy(() => import('@/views/permission/permissionList'));
+const CourseList = lazy(() => import('@/views/permission/course'));
 const Role = lazy(() => import('@/views/permission/role'));
 const User = lazy(() => import('@/views/permission/user'));
 
@@ -29,8 +29,8 @@ export const dynamicRouteList: RouteObject[] = [
     element: <WrapperRouteElement element={<Comment />} />
   },
   {
-    path: '/permission/perList',
-    element: <WrapperRouteElement element={<PermissionList />} />
+    path: '/permission/courseList',
+    element: <WrapperRouteElement element={<CourseList />} />
   },
   {
     path: '/permission/role',
@@ -80,9 +80,9 @@ export const dynamicMenuRoute: MenuList = [
         }
       },
       {
-        path: '/permission/perList',
-        key: '/permission/perList',
-        name: '权限列表',
+        path: '/permission/courseList',
+        key: '/permission/courseList',
+        name: '课程列表',
         meta: {
           icon: 'DeleteColumnOutlined',
           role: [ROLE_ADMIN]

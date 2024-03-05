@@ -46,7 +46,7 @@ const LayoutPage: FC = () => {
           collapsible
           collapsed={collapsed}
           breakpoint="md"
-          width={230}
+          width={250}
         >
           <MenuComponent menuList={menuList} />
         </Sider>
@@ -54,7 +54,7 @@ const LayoutPage: FC = () => {
           <Content
             className="layout-page-content"
             style={{
-              marginLeft: 230,
+              marginLeft: `${collapsed ? 120 : 250}px`,
               overflow: 'initial',
               minHeight: `${heightView - 112}px`
             }}
