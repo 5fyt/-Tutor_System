@@ -37,13 +37,23 @@ const User: FC = () => {
       render: text => {
         return (
           <div>
-            <Tag color="green">{text.slice(0, 1)}</Tag>
-            {text.length > 1 && <Tag color="green">{text.slice(1)}</Tag>}
+            <Space>
+              <Tag color="green">{text.slice(0, 1)}</Tag>
+              {text.length > 1 && <Tag color="green">{text.slice(1)}</Tag>}
+            </Space>
           </div>
         );
       }
     },
-    { title: '标识', dataIndex: 'psalt', key: '7' },
+    {
+      title: '标识',
+      dataIndex: 'psalt',
+      key: '7',
+      responsive: ['md'],
+      render: text => {
+        return <div style={{ width: '120px' }}>{text}</div>;
+      }
+    },
     {
       title: '操作',
       dataIndex: 'operation',
@@ -131,7 +141,7 @@ const User: FC = () => {
     show
   };
   return (
-    <div className="user">
+    <>
       {contextHolder}
       <SearchForm setSearchInfo={searchInfo} options={options} />
       <TableList
@@ -143,7 +153,7 @@ const User: FC = () => {
         onDeleteHandle={deleteHandle}
       />
       <AddUser innerRef={innerRef} roleOptions={roleOptions} onLoadList={loadList} />
-    </div>
+    </>
   );
 };
 export default memo(User);

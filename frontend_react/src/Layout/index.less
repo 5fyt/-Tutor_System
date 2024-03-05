@@ -1,6 +1,8 @@
 .layout-page {
   height: 100%;
   &-header {
+    position: fixed;
+    width: 100%;
     padding: 0;
     display: flex;
     justify-content: space-between;
@@ -39,6 +41,7 @@
     }
   }
   &-sider {
+    margin-top: 56px;
     background-color: #fff !important;
     box-sizing: border-box;
     border-right: 1px solid #f0f0f0;
@@ -47,26 +50,26 @@
   &-content {
     display: flex;
     flex-direction: column;
+    margin-top: 64px;
     flex: 1;
-    > :nth-child(1) .ant-tabs-bar {
-      padding: 6px 0 0;
-      background: #fff;
-    }
+    // > :nth-child(1) .ant-tabs-bar {
+    //   padding: 6px 0 0;
+    //   background: #fff;
+    // }
 
-    > :nth-child(2) {
-      flex: auto;
-      overflow: hidden;
-      padding: 6px;
-      box-sizing: border-box;
-      .innerText {
-        background-color: #fff;
-        padding: 24px;
-        border-radius: 2px;
-        display: block;
-        line-height: 32px;
-        font-size: 16px;
-      }
-    }
+    // > :nth-child(2) {
+    //   flex: auto;
+    //   padding: 6px;
+    //   box-sizing: border-box;
+    //   .innerText {
+    //     background-color: #fff;
+    //     padding: 24px;
+    //     border-radius: 2px;
+    //     display: block;
+    //     line-height: 32px;
+    //     font-size: 16px;
+    //   }
+    // }
   }
   &-footer {
     background-color: #ffffff !important;

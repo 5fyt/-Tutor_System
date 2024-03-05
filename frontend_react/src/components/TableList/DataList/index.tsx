@@ -146,6 +146,7 @@ const List: FC<ListProps> = ({
         dataSource={tableData}
         onChange={onChange}
         size={size}
+        style={{ width: '100%', marginRight: '20px' }}
         pagination={{
           pageSize: limit,
           total: total,

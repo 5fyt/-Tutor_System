@@ -21,7 +21,7 @@ const TableList: FC<TableProps> = ({ tableHeader, tableList, loadList, changePag
   };
 
   return (
-    <div className="table">
+    <div className="list_table">
       <TableHeader
         searchName={tableHeader.title}
         element={<Content defaultData={tableHeader.defaultSettingData} />}

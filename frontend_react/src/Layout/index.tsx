@@ -38,29 +38,33 @@ const LayoutPage: FC = () => {
   return (
     <Layout className="layout-page">
       <HeaderComponent collapsed={collapsed} toggle={() => dispatch(toggleCollapsed())} />
-      <Layout>
+      <Layout hasSider>
         <Sider
+          style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0 }}
           className="layout-page-sider"
           trigger={null}
           collapsible
           collapsed={collapsed}
           breakpoint="md"
-          width={250}
+          width={230}
         >
           <MenuComponent menuList={menuList} />
         </Sider>
-        <Content
-          className="layout-page-content"
-          style={{
-            overflow: 'initial',
-            minHeight: `${heightView - 112}px`
-          }}
-        >
-          {/* <TagsView /> */}
-          <BreadcrumbView />
-          <RouteView />
-          <FooterBar />
-        </Content>
+        <Layout style={{ minHeight: `900px` }}>
+          <Content
+            className="layout-page-content"
+            style={{
+              marginLeft: 230,
+              overflow: 'initial',
+              minHeight: `${heightView - 112}px`
+            }}
+          >
+            {/* <TagsView /> */}
+            <BreadcrumbView />
+            <RouteView />
+            <FooterBar />
+          </Content>
+        </Layout>
       </Layout>
     </Layout>
   );

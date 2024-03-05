@@ -36,13 +36,13 @@ const SearchForm: FC<searchType> = ({ setSearchInfo, options }) => {
   };
 
   return (
-    <div className="searchContainer">
+    <div style={{ marginRight: '5px' }}>
       <Form
         ref={formRef}
         style={{ minWidth: '800px' }}
         layout={'horizontal'}
-        wrapperCol={{ span: 20 }}
-        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        labelCol={{ span: 6 }}
       >
         {/* 当展开时，遍历所有的input,当收缩时遍历前面两项input */}
         <div className="search">
