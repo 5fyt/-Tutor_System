@@ -1,7 +1,7 @@
-import { FC, memo, Ref, useImperativeHandle, useState, useRef } from 'react';
+import { FC, memo, Ref, useImperativeHandle, useState, useRef, useCallback, useEffect } from 'react';
 import { Form, Input, Modal, Button, message, Transfer } from 'antd';
 
-import { addRole, updateRole } from '@/api/system/role';
+import { addRole, getPermList, roleInfo, updateRole } from '@/api/system/role';
 import type { TransferProps } from 'antd';
 type FieldType = {
   name: string;
@@ -16,16 +16,11 @@ interface ModalProps {
   innerRef: Ref<{ showModal: (value?: any) => void }>;
   onLoadList: (value?: any) => void;
 }
-const mockData: RecordType[] = Array.from({ length: 20 }).map((_, i) => ({
-  key: i.toString(),
-  title: `content${i + 1}`,
-  description: `description of content${i + 1}`
-}));
-// const initialTargetKeys = mockData.filter(item => Number(item.key) > 10).map(item => item.key);
 
 const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
   const [visible, setVisible] = useState(false);
   const [id, setId] = useState<number>();
+  const [source, setSource] = useState<RecordType[]>([]);
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const formRef = useRef<any>();
@@ -33,15 +28,26 @@ const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
   useImperativeHandle(innerRef, () => ({
     showModal
   }));
-  const [targetKeys, setTargetKeys] = useState<any[]>();
+  const getPermissionList = useCallback(async () => {
+    const res = await getPermList();
+    const list = res.map((item: any) => {
+      return { ...item, key: item.id };
+    });
 
-  const onChange: TransferProps['onChange'] = (nextTargetKeys, direction, moveKeys) => {
-    console.log('targetKeys:', nextTargetKeys);
-    console.log('direction:', direction);
-    console.log('moveKeys:', moveKeys);
+    setSource(list);
+  }, []);
+  useEffect(() => {
+    getPermissionList();
+  }, [getPermissionList]);
+  const [targetKeys, setTargetKeys] = useState<any[]>();
+  const [selectedKeys, setSelectedKeys] = useState<string[]>();
+
+  const onChange: TransferProps['onChange'] = nextTargetKeys => {
     setTargetKeys(nextTargetKeys);
   };
-
+  const onSelectChange = (sourceSelectedKeys: string[], targetSelectedKeys: string[]) => {
+    setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
+  };
   const handleOk = () => {
     try {
       formRef.current?.validateFields().then(async (submitInfo: any) => {
@@ -81,10 +87,12 @@ const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
     setVisible(false);
     formRef.current?.resetFields();
   };
-  const showModal = (value: any) => {
+  const showModal = async (value: any) => {
     if (value) {
-      console.log(value);
       const { title, description, id } = value;
+      const { permissionIds } = await roleInfo({ id });
+      setSelectedKeys(permissionIds);
+      setTargetKeys(permissionIds);
       setId(id);
       form.setFieldsValue({ name: title, remark: description });
     }
@@ -147,13 +155,15 @@ const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
           >
             <Input />
           </Form.Item>
-          <Form.Item label="权限" name="permisssionIds">
+          <Form.Item label="权限" name="permissionIds">
             <Transfer
-              dataSource={mockData}
-              titles={['所有权限', '赋予权限']}
+              dataSource={source}
               targetKeys={targetKeys}
+              selectedKeys={selectedKeys}
+              locale={{ itemsUnit: '项', itemUnit: '项' }}
               onChange={onChange}
-              render={item => item.title}
+              onSelectChange={onSelectChange}
+              render={item => item.description}
             />
           </Form.Item>
         </Form>

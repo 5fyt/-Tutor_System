@@ -15,4 +15,7 @@ declare namespace API {
     name: string;
     remark: string;
   };
+  type RoleInfoParams = {
+    id: number;
+  };
 }
