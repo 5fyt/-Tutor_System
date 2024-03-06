@@ -13,11 +13,14 @@ export default class SysCourse {
   @ApiProperty()
   id: number;
 
-  @Column({ unique: true })
+  @Column({ nullable: false })
   name: string;
 
-  @Column({ unique: true, default: '' })
+  @Column({ nullable: false })
   grade: string;
+
+  @Column({ nullable: true })
+  description: string;
 
   @CreateDateColumn({ name: 'created_at' })
   @ApiProperty()

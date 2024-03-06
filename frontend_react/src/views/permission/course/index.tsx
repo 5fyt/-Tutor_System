@@ -4,6 +4,7 @@ import { deleteCourse, getCourseList } from '@/api/system/course';
 import SearchForm from '@/components/SearchForm';
 import { FC, memo, useCallback, useEffect, useState, useRef } from 'react';
 // import AddRole from './RoleDialog';
+import AddCourse from './CourseDialog';
 interface ModalProps {
   showModal: (value?: any) => void;
 }
@@ -13,7 +14,7 @@ const options = [
 ];
 const Course: FC = () => {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(5);
   const [total, setTotal] = useState(0);
   const innerRef = useRef<ModalProps>(null);
   const [roleList, setRoleList] = useState([]);
@@ -26,7 +27,13 @@ const Course: FC = () => {
       console.log(list);
 
       const filterList = list.map((item: any) => {
-        return { id: item.id, title: item.name, description: item.grade, time: item.createdAt };
+        return {
+          id: item.id,
+          title: item.name,
+          description: item.grade,
+          time: item.createdAt,
+          remark: item.description
+        };
       });
       setTotal(total);
       setRoleList(filterList);
@@ -100,11 +107,12 @@ const Course: FC = () => {
               />
               <div className="content">
                 <span>{item.time}</span>
+                <span>{item.remark}</span>
               </div>
             </List.Item>
           )}
         />
-        {/* <AddRole innerRef={innerRef} onLoadList={loadList}></AddRole> */}
+        <AddCourse innerRef={innerRef} onLoadList={loadList}></AddCourse>
       </div>
     </>
   );

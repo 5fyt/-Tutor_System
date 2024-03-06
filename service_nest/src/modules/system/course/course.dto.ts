@@ -27,12 +27,20 @@ export class CreateCourseDto {
   @IsString()
   @MinLength(2)
   name: string;
+
   @ApiProperty({
     description: '年级',
   })
   @IsString()
   @IsOptional()
   grade: string;
+
+  @ApiProperty({
+    description: '课程描述',
+  })
+  @IsString()
+  @IsOptional()
+  description: string;
 }
 export class PageSearchCourseDto {
   @ApiProperty({
@@ -79,12 +87,3 @@ export class UpdateCourseDto extends CreateCourseDto {
   @Min(0)
   id: number;
 }
-// export class InfoRoleDto {
-//   @ApiProperty({
-//     description: '需要查找的角色ID',
-//   })
-//   @IsInt()
-//   @Min(0)
-//   @Type(() => Number)
-//   id: number;
-// }

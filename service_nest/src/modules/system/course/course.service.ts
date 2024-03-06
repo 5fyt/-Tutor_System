@@ -37,10 +37,11 @@ export class SysCourseService {
    * 增加课程
    */
   async add(param: CreateCourseDto): Promise<void> {
-    const { name, grade } = param;
+    const { name, grade, description } = param;
     await this.courseRepository.insert({
       name,
       grade,
+      description,
     });
   }
 
@@ -52,6 +53,7 @@ export class SysCourseService {
       await manager.update(SysCourse, param.id, {
         name: param.name,
         grade: param.grade,
+        description: param.description,
       });
     });
   }
