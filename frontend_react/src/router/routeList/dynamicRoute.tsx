@@ -10,7 +10,10 @@ const Comment = lazy(() => import('@/views/system/comment'));
 const CourseList = lazy(() => import('@/views/permission/course'));
 const Role = lazy(() => import('@/views/permission/role'));
 const User = lazy(() => import('@/views/permission/user'));
-
+const PerfAnalysis = lazy(() => import('@/views/student/PerfAnalysis'));
+const PerfOrder = lazy(() => import('@/views/student/PerfOrder'));
+const TutorInfo = lazy(() => import('@/views/student/TutorInfo'));
+const Curriculum = lazy(() => import('@/views/student/curriculum'));
 export const dynamicRouteList: RouteObject[] = [
   {
     path: '/notice',
@@ -39,6 +42,22 @@ export const dynamicRouteList: RouteObject[] = [
   {
     path: '/permission/user',
     element: <WrapperRouteElement element={<User />} />
+  },
+  {
+    path: '/student/perfAnalysis',
+    element: <WrapperRouteElement element={<PerfAnalysis />} />
+  },
+  {
+    path: '/student/perfOrder',
+    element: <WrapperRouteElement element={<PerfOrder />} />
+  },
+  {
+    path: '/student/tutorInfo',
+    element: <WrapperRouteElement element={<TutorInfo />} />
+  },
+  {
+    path: '/student/curriculum',
+    element: <WrapperRouteElement element={<Curriculum />} />
   }
 ];
 export const dynamicMenuRoute: MenuList = [
@@ -86,6 +105,53 @@ export const dynamicMenuRoute: MenuList = [
         meta: {
           icon: 'DeleteColumnOutlined',
           role: [ROLE_ADMIN]
+        }
+      }
+    ]
+  },
+  {
+    path: 'student',
+    name: '学生管理',
+    key: 'student',
+    meta: {
+      icon: 'UserSwitchOutlined',
+      role: [ROLE_ADMIN, ROLE_STUDENT]
+    },
+    children: [
+      {
+        path: '/student/perfAnalysis',
+        name: '成绩分析',
+        key: '/student/perfAnalysis',
+        meta: {
+          icon: 'PieChartOutlined',
+          role: [ROLE_ADMIN, ROLE_STUDENT]
+        }
+      },
+      {
+        path: '/student/perfOrder',
+        key: '/student/perfOrder',
+        name: '成绩单',
+        meta: {
+          icon: 'SnippetsOutlined ',
+          role: [ROLE_ADMIN, ROLE_STUDENT]
+        }
+      },
+      {
+        path: '/student/curriculum',
+        key: '/student/curriculum',
+        name: '课程表',
+        meta: {
+          icon: 'CalendarOutlined',
+          role: [ROLE_ADMIN, ROLE_STUDENT]
+        }
+      },
+      {
+        path: '/student/tutorInfo',
+        key: '/student/tutorInfo',
+        name: '家教信息',
+        meta: {
+          icon: 'ProjectOutlined',
+          role: [ROLE_ADMIN, ROLE_STUDENT]
         }
       }
     ]
