@@ -5,13 +5,16 @@ import SysUserRole from 'src/entities/user-role.entity';
 import SysUser from 'src/entities/user.entity';
 import SysPerm from 'src/entities/perm.entity';
 import SysRolePerm from 'src/entities/role-perm.entity';
-import { SysRoleController } from './role/role.controller';
-import { SysRoleService } from './role/role.service';
-import { SysUserController } from './user/user.controller';
-import { SysUserService } from './user/user.service';
+import SysTutor from 'src/entities/tutor-info.entity';
 import SysCourse from 'src/entities/course.entity';
+import { SysUserService } from './user/user.service';
+import { SysRoleService } from './role/role.service';
 import { SysCourseService } from './course/course.service';
+import { SysTutorService } from './tutor/tutor.service';
 import { SysCourseController } from './course/course.controller';
+import { SysTutorController } from './tutor/tutor.controller';
+import { SysRoleController } from './role/role.controller';
+import { SysUserController } from './user/user.controller';
 
 @Module({
   imports: [
@@ -22,10 +25,21 @@ import { SysCourseController } from './course/course.controller';
       SysRole,
       SysUserRole,
       SysCourse,
+      SysTutor,
     ]),
   ],
-  controllers: [SysUserController, SysRoleController, SysCourseController],
-  providers: [SysUserService, SysRoleService, SysCourseService],
+  controllers: [
+    SysUserController,
+    SysRoleController,
+    SysCourseController,
+    SysTutorController,
+  ],
+  providers: [
+    SysUserService,
+    SysRoleService,
+    SysCourseService,
+    SysTutorService,
+  ],
   exports: [TypeOrmModule, SysUserService, SysRoleService],
 })
 export class SystemModule {}

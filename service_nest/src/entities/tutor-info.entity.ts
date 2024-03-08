@@ -13,40 +13,29 @@ export default class SysTutor {
   @ApiProperty()
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
   @ApiProperty()
-  name: string;
+  address: string;
 
-  @Column({ unique: true })
+  @Column({ nullable: false })
   @ApiProperty()
-  username: string;
+  grade: string;
 
-  @Column()
+  @Column({ nullable: false })
   @ApiProperty()
-  password: string;
+  course: string;
 
-  @Column({ length: 32 })
+  @Column({ nullable: true })
   @ApiProperty()
-  psalt: string;
+  description: string;
 
-  @Column({
-    name: 'head_img',
-    nullable: true,
-  })
+  @Column({ type: 'tinyint', nullable: true, default: 1 })
   @ApiProperty()
-  headImg: string;
-
-  @Column({ nullable: true, default: '' })
-  @ApiProperty()
-  email: string;
-
-  @Column({ nullable: true, default: '' })
-  @ApiProperty()
-  phone: string;
+  status: number;
 
   @CreateDateColumn({ name: 'created_at' })
   @ApiProperty()
-  createdAt: Date;
+  publishTime: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   @ApiProperty()

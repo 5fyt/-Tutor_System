@@ -120,10 +120,10 @@ export const dynamicMenuRoute: MenuList = [
     children: [
       {
         path: '/student/perfAnalysis',
-        name: '成绩分析',
         key: '/student/perfAnalysis',
+        name: '成绩分析',
         meta: {
-          icon: 'PieChartOutlined',
+          icon: 'FileSearchOutlined',
           role: [ROLE_ADMIN, ROLE_STUDENT]
         }
       },
@@ -132,7 +132,7 @@ export const dynamicMenuRoute: MenuList = [
         key: '/student/perfOrder',
         name: '成绩单',
         meta: {
-          icon: 'SnippetsOutlined ',
+          icon: 'FileTextOutlined',
           role: [ROLE_ADMIN, ROLE_STUDENT]
         }
       },
@@ -150,7 +150,7 @@ export const dynamicMenuRoute: MenuList = [
         key: '/student/tutorInfo',
         name: '家教信息',
         meta: {
-          icon: 'ProjectOutlined',
+          icon: 'MessageOutlined',
           role: [ROLE_ADMIN, ROLE_STUDENT]
         }
       }

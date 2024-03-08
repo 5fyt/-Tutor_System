@@ -28,8 +28,8 @@ interface MenuCProps {
   menuList: MenuList;
 }
 const customIcons: { [key: string]: any } = Icons;
-const addIcon = (name: string) => {
-  return React.createElement(customIcons[name]);
+const addIcon = (name?: string) => {
+  return React.createElement(name ? customIcons[name] : '');
 };
 // 处理后台返回菜单 key 值为 antd 菜单需要的 key 值
 
