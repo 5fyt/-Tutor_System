@@ -22,6 +22,13 @@ export class DeleteTutorDto {
 }
 export class CreateTutorDto {
   @ApiProperty({
+    description: '所属用户编号',
+  })
+  @IsInt()
+  @Min(0)
+  userId: number;
+
+  @ApiProperty({
     description: '地址',
   })
   @IsString()
@@ -48,7 +55,21 @@ export class CreateTutorDto {
   @IsOptional()
   description: string;
 }
+export class UpdateTutorStatusDto {
+  @ApiProperty({
+    description: '状态值',
+  })
+  @IsInt()
+  @Min(0)
+  status: number;
 
+  @ApiProperty({
+    description: '关联家教信息编号',
+  })
+  @IsInt()
+  @Min(0)
+  id: number;
+}
 export class PageSearchTutorDto {
   @ApiProperty({
     required: false,

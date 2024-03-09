@@ -282,7 +282,7 @@ class RequestHttp {
         if (code === 200 && data) {
           // this.successHandler(finalOptions);
           return data;
-        } else if (code === 200 && !data) {
+        } else if ((code === 200 && !data) || code !== 200) {
           return responseData;
         } else {
           return this.errorHandler(responseData, finalOptions);

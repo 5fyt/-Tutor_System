@@ -17,6 +17,12 @@ declare namespace TableAPI {
     roleNames: string[];
     psalt: string;
     headImg: string;
+    status: number;
+    address: string;
+    grade: string;
+    course: string;
+    publish: Date;
+    description: string;
   };
   type TableList<T> = {
     defaultColumns: T;

@@ -47,6 +47,19 @@ export class SysUserController {
   async add(@Body() dto: CreateUserDto): Promise<void> {
     await this.userService.add(dto);
   }
+  @ApiOperation({
+    summary: '用户列表',
+  })
+  @Get('list')
+  async getUserList() {
+    const list = await this.userService.findUserList();
+    return list.map((item) => {
+      return {
+        value: item.id,
+        label: item.name,
+      };
+    });
+  }
 
   // @ApiOperation({
   //   summary: '查询管理员信息',

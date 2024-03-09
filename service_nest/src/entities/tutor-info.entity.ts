@@ -13,6 +13,9 @@ export default class SysTutor {
   @ApiProperty()
   id: number;
 
+  @Column({ name: 'user_id' })
+  userId: number;
+
   @Column({ nullable: false })
   @ApiProperty()
   address: string;

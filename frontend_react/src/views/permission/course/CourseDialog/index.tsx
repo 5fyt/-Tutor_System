@@ -29,7 +29,7 @@ const AddCourse: FC<ModalProps> = ({ innerRef, onLoadList }) => {
       formRef.current?.validateFields().then(async (submitInfo: any) => {
         if (id) {
           console.log(submitInfo);
-          const { code } = await updateCourse({ id, ...submitInfo });
+          const { code, message } = await updateCourse({ id, ...submitInfo });
           if (code === 200) {
             messageApi.success('更新成功');
             onLoadList();
@@ -39,11 +39,11 @@ const AddCourse: FC<ModalProps> = ({ innerRef, onLoadList }) => {
               formRef.current?.resetFields();
             }, 100);
           } else {
-            messageApi.error('更新失败');
+            code === 10004 ? messageApi.error(message) : messageApi.error('更新失败');
           }
         } else {
           console.log(submitInfo);
-          const { code } = await addCourse(submitInfo);
+          const { code, message } = await addCourse(submitInfo);
           if (code === 200) {
             messageApi.success('添加成功');
             onLoadList();
@@ -52,7 +52,7 @@ const AddCourse: FC<ModalProps> = ({ innerRef, onLoadList }) => {
               formRef.current?.resetFields();
             }, 100);
           } else {
-            messageApi.error('添加失败');
+            code === 10004 ? messageApi.error(message) : messageApi.error('添加失败');
           }
         }
       });

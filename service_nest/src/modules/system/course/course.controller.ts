@@ -4,14 +4,13 @@ import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PaginatedResponseDto } from 'src/common/class/res.class';
 import SysCourse from 'src/entities/course.entity';
 
-import { ListCourse } from './course.class';
 import {
   CreateCourseDto,
   UpdateCourseDto,
   PageSearchCourseDto,
   DeleteCourseDto,
 } from './course.dto';
-
+import { CourseList } from './course.class';
 import { SysCourseService } from './course.service';
 // import { AdminUser } from 'src/decorators/admin-user.decorator';
 // import { IAdminUser } from 'src/modules/admin.interface';
@@ -37,11 +36,8 @@ export class SysCourseController {
   }
   @ApiOperation({ summary: '课程列表' })
   @Get('list')
-  async getRoleList(): Promise<ListCourse[]> {
-    const list = await this.courseService.courseInfoList();
-    return list.map((item) => {
-      return { value: item.id, label: item.name };
-    });
+  async getRoleList(): Promise<CourseList> {
+    return await this.courseService.courseInfoList();
   }
 
   @ApiOperation({ summary: '删除课程' })

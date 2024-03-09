@@ -38,7 +38,12 @@ export class SysUserService {
       where: { username: username },
     });
   }
-
+  /**
+   * 查找用户列表
+   */
+  async findUserList(): Promise<SysUser[]> {
+    return await this.userRepository.find();
+  }
   /**
    * 获取用户信息
    * @param uid user id
@@ -195,16 +200,7 @@ export class SysUserService {
     if (isEmpty(user)) {
       throw new ApiException(10017);
     }
-    delete user.password;
     return user;
-  }
-
-  /**
-   * 查找列表里的信息
-   */
-  async infoList(ids: number[]): Promise<SysUser[]> {
-    const users = await this.userRepository.findBy({ id: In(ids) });
-    return users;
   }
 
   /**

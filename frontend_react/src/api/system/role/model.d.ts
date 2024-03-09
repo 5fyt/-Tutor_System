@@ -6,6 +6,8 @@ declare namespace API {
   type RoleSearchParams = {
     page: number;
     limit: number;
+    name?: string;
+    remark?: string;
   };
   type RoleDeleteParams = {
     roleIds: number[];

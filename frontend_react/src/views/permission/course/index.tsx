@@ -1,6 +1,6 @@
 import './index.less';
 import { List, Avatar, Button, message } from 'antd';
-import { deleteCourse, getCourseList } from '@/api/system/course';
+import { deleteCourse, searchCourseList } from '@/api/system/course';
 import SearchForm from '@/components/SearchForm';
 import { FC, memo, useCallback, useEffect, useState, useRef } from 'react';
 // import AddRole from './RoleDialog';
@@ -23,7 +23,7 @@ const Course: FC = () => {
   //搜索列表
   const loadList = useCallback(
     async (info?: any) => {
-      const { total, list } = await getCourseList({ limit, page, ...info });
+      const { total, list } = await searchCourseList({ limit, page, ...info });
       console.log(list);
 
       const filterList = list.map((item: any) => {
@@ -45,11 +45,11 @@ const Course: FC = () => {
   }, [loadList]);
 
   //删除列表
-  const deleteRoles = async (item: any) => {
+  const deleteCourses = async (item: any) => {
     const courseIds = [item.id];
     const { code } = await deleteCourse({ courseIds });
     code === 200 ? messageApi.success('删除成功') : messageApi.error('删除失败');
-    loadList({ page: 0, limit: 3 });
+    loadList({ page: 1, limit: 5 });
   };
 
   const changeHandle = (page: number, pageSize: number) => {
@@ -61,7 +61,7 @@ const Course: FC = () => {
     console.log(info);
     loadList(info);
   };
-  const updateRoles = (item: any) => {
+  const updateCourses = (item: any) => {
     innerRef.current?.showModal(item);
   };
   const addHandle = () => {
@@ -92,10 +92,10 @@ const Course: FC = () => {
           renderItem={(item: any) => (
             <List.Item
               actions={[
-                <a key="list-loadmore-edit" className="del" onClick={() => deleteRoles(item)}>
+                <a key="list-loadmore-edit" className="del" onClick={() => deleteCourses(item)}>
                   删除
                 </a>,
-                <a key="list-loadmore-edit" className="del" onClick={() => updateRoles(item)}>
+                <a key="list-loadmore-edit" className="del" onClick={() => updateCourses(item)}>
                   编辑
                 </a>
               ]}

@@ -4,7 +4,7 @@ import { UpOutlined, DownOutlined } from '@ant-design/icons';
 import './index.less';
 type searchType = {
   setSearchInfo: (value: any) => void;
-  options: {
+  options?: {
     name: string;
     tooltips?: string;
     label: string;
@@ -47,7 +47,7 @@ const SearchForm: FC<searchType> = ({ setSearchInfo, options }) => {
         {/* 当展开时，遍历所有的input,当收缩时遍历前面两项input */}
         <div className="search">
           {show
-            ? options.map((item: any) => {
+            ? options?.map((item: any) => {
                 return (
                   <div className="input" key={item.id}>
                     <Form.Item label={item.label} name={item.name} tooltip={item.tooltip}>
@@ -56,7 +56,7 @@ const SearchForm: FC<searchType> = ({ setSearchInfo, options }) => {
                   </div>
                 );
               })
-            : options.slice(0, 2).map((item: any) => {
+            : options?.slice(0, 2).map((item: any) => {
                 return (
                   <div className="input" key={item.id}>
                     <Form.Item label={item.label} name={item.name} tooltip={item.tooltip}>
