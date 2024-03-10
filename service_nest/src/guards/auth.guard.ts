@@ -35,8 +35,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
     const request = context.switchToHttp().getRequest<FastifyRequest>();
-    const url = request.url;
-    const path = url.split('?')[0];
+
     const token = request.headers['authorization'] as string;
 
     if (isEmpty(token)) {

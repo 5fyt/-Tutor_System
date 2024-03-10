@@ -58,6 +58,10 @@ export const dynamicRouteList: RouteObject[] = [
   {
     path: '/student/curriculum',
     element: <WrapperRouteElement element={<Curriculum />} />
+  },
+  {
+    path: '/teacher/tutorInfo',
+    element: <WrapperRouteElement element={<TutorInfo />} />
   }
 ];
 export const dynamicMenuRoute: MenuList = [
@@ -148,6 +152,26 @@ export const dynamicMenuRoute: MenuList = [
       {
         path: '/student/tutorInfo',
         key: '/student/tutorInfo',
+        name: '家教信息',
+        meta: {
+          icon: 'MessageOutlined',
+          role: [ROLE_ADMIN, ROLE_STUDENT]
+        }
+      }
+    ]
+  },
+  {
+    path: 'teacher',
+    name: '教师管理',
+    key: 'teacher',
+    meta: {
+      icon: 'UserSwitchOutlined',
+      role: [ROLE_ADMIN, ROLE_STUDENT]
+    },
+    children: [
+      {
+        path: '/teacher/tutorInfo',
+        key: '/teacher/tutorInfo',
         name: '家教信息',
         meta: {
           icon: 'MessageOutlined',

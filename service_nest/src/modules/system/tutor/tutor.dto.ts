@@ -70,22 +70,7 @@ export class UpdateTutorStatusDto {
   @Min(0)
   id: number;
 }
-export class PageSearchTutorDto {
-  @ApiProperty({
-    required: false,
-    description: '课程',
-  })
-  @IsString()
-  @IsOptional()
-  course = '';
-
-  @ApiProperty({
-    required: false,
-    description: '年级',
-  })
-  @IsString()
-  @IsOptional()
-  grade = '';
+export class PageBaiscSeachDto {
   @ApiProperty({
     description: '当前页包含数量',
     required: false,
@@ -105,6 +90,23 @@ export class PageSearchTutorDto {
   @IsInt()
   @Min(1)
   readonly page: number = 1;
+}
+export class PageSearchTutorDto extends PageBaiscSeachDto {
+  @ApiProperty({
+    required: false,
+    description: '课程',
+  })
+  @IsString()
+  @IsOptional()
+  course = '';
+
+  @ApiProperty({
+    required: false,
+    description: '年级',
+  })
+  @IsString()
+  @IsOptional()
+  grade = '';
 }
 export class UpdateTutorDto extends CreateTutorDto {
   @ApiProperty({

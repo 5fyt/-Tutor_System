@@ -9,4 +9,4 @@ export const AdminUser = createParamDecorator(
 
     return data ? user?.[data] : user;
   },
-);
+) as any;

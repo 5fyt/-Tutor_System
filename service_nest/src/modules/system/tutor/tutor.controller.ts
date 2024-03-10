@@ -1,5 +1,10 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Post } from '@nestjs/common';
+import {
+  ApiOperation,
+  ApiOkResponse,
+  ApiTags,
+  ApiSecurity,
+} from '@nestjs/swagger';
 import { PaginatedResponseDto } from 'src/common/class/res.class';
 
 import {
@@ -8,10 +13,15 @@ import {
   PageSearchTutorDto,
   DeleteTutorDto,
   UpdateTutorStatusDto,
+  PageBaiscSeachDto,
 } from './tutor.dto';
 import { SysTutorService } from './tutor.service';
 import { PageSearchTutorInfo } from './tutor.class';
+import { IAdminUser } from '../../admin.interface';
+import { AdminUser } from '../../../decorators/admin-user.decorator';
+import { ADMIN_PREFIX } from 'src/guards/constants/admin.contants';
 
+@ApiSecurity(ADMIN_PREFIX)
 @ApiTags('课程模块')
 @Controller('tutor')
 export class SysTutorController {
@@ -21,9 +31,10 @@ export class SysTutorController {
   @ApiOkResponse({ type: [PageSearchTutorInfo] })
   @Post('search')
   async page(
+    @AdminUser user: IAdminUser,
     @Body() dto: PageSearchTutorDto,
   ): Promise<PaginatedResponseDto<PageSearchTutorInfo>> {
-    const [list, total] = await this.tutorService.page(dto);
+    const [list, total] = await this.tutorService.page(dto, user.uid);
     return {
       size: dto.limit,
       page: dto.page,
@@ -32,6 +43,21 @@ export class SysTutorController {
     };
   }
   //
+  @ApiOperation({ summary: '分页查询家教信息' })
+  @ApiOkResponse({ type: [PageSearchTutorInfo] })
+  @Post('search')
+  async pageByRole(
+    @AdminUser user: IAdminUser,
+    @Body() dto: PageBaiscSeachDto,
+  ): Promise<PaginatedResponseDto<PageSearchTutorInfo>> {
+    const [list, total] = await this.tutorService.pageByrole(dto, user.uid);
+    return {
+      size: dto.limit,
+      page: dto.page,
+      total,
+      list,
+    };
+  }
 
   @ApiOperation({ summary: '删除家教信息' })
   @Post('delete')
