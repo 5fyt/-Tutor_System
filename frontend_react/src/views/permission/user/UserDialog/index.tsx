@@ -183,7 +183,7 @@ const AddUser: FC<ModalProps> = ({ innerRef, roleOptions, onLoadList }) => {
               }
             ]}
           >
-            <Select mode="tags" placeholder="请选择" onChange={handleChange} options={roleOptions} />
+            <Select placeholder="请选择" onChange={handleChange} options={roleOptions} />
           </Form.Item>
         </Form>
       </Modal>

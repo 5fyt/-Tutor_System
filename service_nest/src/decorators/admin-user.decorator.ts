@@ -6,7 +6,7 @@ export const AdminUser = createParamDecorator(
     const request = ctx.switchToHttp().getRequest();
     // auth guard will mount this
     const user = request[ADMIN_USER];
-
+    console.log('user', user);
     return data ? user?.[data] : user;
   },
 ) as any;

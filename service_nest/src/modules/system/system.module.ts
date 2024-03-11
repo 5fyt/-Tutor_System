@@ -40,6 +40,6 @@ import { SysUserController } from './user/user.controller';
     SysCourseService,
     SysTutorService,
   ],
-  exports: [TypeOrmModule, SysUserService, SysRoleService],
+  exports: [TypeOrmModule, SysUserService, SysRoleService, SysTutorService],
 })
 export class SystemModule {}

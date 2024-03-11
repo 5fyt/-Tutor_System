@@ -31,7 +31,7 @@ export class SysTutorController {
   @ApiOkResponse({ type: [PageSearchTutorInfo] })
   @Post('search')
   async page(
-    @AdminUser user: IAdminUser,
+    @AdminUser() user: IAdminUser,
     @Body() dto: PageSearchTutorDto,
   ): Promise<PaginatedResponseDto<PageSearchTutorInfo>> {
     const [list, total] = await this.tutorService.page(dto, user.uid);
@@ -43,14 +43,14 @@ export class SysTutorController {
     };
   }
   //
-  @ApiOperation({ summary: '分页查询家教信息' })
+  @ApiOperation({ summary: '分页查询家教信息根据角色' })
   @ApiOkResponse({ type: [PageSearchTutorInfo] })
-  @Post('search')
+  @Post('search-list')
   async pageByRole(
-    @AdminUser user: IAdminUser,
+    @AdminUser() user: IAdminUser,
     @Body() dto: PageBaiscSeachDto,
   ): Promise<PaginatedResponseDto<PageSearchTutorInfo>> {
-    const [list, total] = await this.tutorService.pageByrole(dto, user.uid);
+    const [list, total] = await this.tutorService.pageByrole(dto, user?.uid);
     return {
       size: dto.limit,
       page: dto.page,

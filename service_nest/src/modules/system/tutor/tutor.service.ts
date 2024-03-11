@@ -40,44 +40,41 @@ export class SysTutorService {
     const roles: number[] = await this.roleService.getRoleIdByUser(uid);
     const roleNamePromises: Promise<string>[] = roles.map(async (role) => {
       const { roleInfo } = await this.roleService.info(role);
-      return roleInfo.name;
+      return roleInfo?.name;
     });
     const roleName: string[] = await Promise.all(roleNamePromises);
-    if (roleName.includes('admin')) {
-      const { limit, page } = param;
-      const qb = await this.tutorRepository
-        .createQueryBuilder('tutor')
-        .innerJoinAndSelect('sys_user', 'user', 'user.id=tutor.userId')
-        .select([
-          'user.phone',
-          'user.email',
-          'user.headImg',
-          'user.name',
-          'tutor.*',
-        ])
-        .where('user.id NOT IN (:...ids)', { ids: [uid] })
-        .orderBy('user.updated_at', 'DESC')
-        .groupBy('user.id')
-        .offset((page - 1) * limit)
-        .limit(limit);
-      const [_, total] = await qb.getManyAndCount();
-      const list = await qb.getRawMany();
-      // const [list, total] = await this.tutorRepository.findAndCount({
-      //   order: {
-      //     id: 'ASC',
-      //   },
-      //   take: limit,
-      //   skip: (page - 1) * limit,
-      // });
-      // const filterList = await Promise.all(
-      //   list.map(async (item) => {
-      //     const { name } = await this.userService.info(item.userId);
-      //     const { userId, updatedAt, ...other } = item;
-      //     return { ...other, name };
-      //   }),
-      // );
-      return [list, total];
-    }
+
+    const { limit, page } = param;
+
+    const qb = await this.tutorRepository
+      .createQueryBuilder('tutor')
+      .innerJoinAndSelect('sys_user', 'user', 'user.id=tutor.userId')
+      .innerJoinAndSelect(
+        'sys_user_role',
+        'user_role',
+        'user_role.user_id = user.id',
+      )
+      .innerJoinAndSelect('sys_role', 'role', 'role.id = user_role.role_id')
+      .select([
+        'role.name as roleNames',
+        'user.phone',
+        'user.email',
+        'user.headImg',
+        'user.name',
+        'tutor.*',
+      ])
+      .where('user.id NOT IN (:...ids)', { ids: [uid] })
+      .andWhere('role.name IN (:...role)', {
+        role: [roleName.slice(0, 1)[0]],
+      })
+      .orderBy('user.updated_at', 'DESC')
+      .offset((page - 1) * limit)
+      .limit(limit);
+
+    const [_, total] = await qb.getManyAndCount();
+    const list = await qb.getRawMany();
+
+    return [list, total];
   }
   /**
    * 增加课程
