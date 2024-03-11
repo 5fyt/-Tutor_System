@@ -50,7 +50,7 @@ export class SysTutorController {
     @AdminUser() user: IAdminUser,
     @Body() dto: PageBaiscSeachDto,
   ): Promise<PaginatedResponseDto<PageSearchTutorInfo>> {
-    const [list, total] = await this.tutorService.pageByrole(dto, user?.uid);
+    const [list, total] = await this.tutorService.pageByrole(dto, user.uid);
     return {
       size: dto.limit,
       page: dto.page,

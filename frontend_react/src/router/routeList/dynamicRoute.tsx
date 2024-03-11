@@ -14,6 +14,7 @@ const PerfAnalysis = lazy(() => import('@/views/student/PerfAnalysis'));
 const PerfOrder = lazy(() => import('@/views/student/PerfOrder'));
 const TutorInfo = lazy(() => import('@/views/student/TutorInfo'));
 const Curriculum = lazy(() => import('@/views/student/curriculum'));
+const ReserveTutor = lazy(() => import('@/views/reserve/TutorList'));
 export const dynamicRouteList: RouteObject[] = [
   {
     path: '/notice',
@@ -62,6 +63,10 @@ export const dynamicRouteList: RouteObject[] = [
   {
     path: '/teacher/tutorInfo',
     element: <WrapperRouteElement element={<TutorInfo />} />
+  },
+  {
+    path: '/reserve/tutorInfo',
+    element: <WrapperRouteElement element={<ReserveTutor />} />
   }
 ];
 export const dynamicMenuRoute: MenuList = [
@@ -176,6 +181,35 @@ export const dynamicMenuRoute: MenuList = [
         meta: {
           icon: 'MessageOutlined',
           role: [ROLE_ADMIN, ROLE_STUDENT]
+        }
+      }
+    ]
+  },
+  {
+    path: 'reserve',
+    name: '预约管理',
+    key: 'reserve',
+    meta: {
+      icon: 'CalendarOutlined',
+      role: [ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER]
+    },
+    children: [
+      {
+        path: '/reserve/tutorInfo',
+        name: '家教信息',
+        key: '/reserve/tutorInfo',
+        meta: {
+          icon: 'GoldOutlined',
+          role: [ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER]
+        }
+      },
+      {
+        path: '/reserve/manage',
+        key: '/reserve/manage',
+        name: '预约管理',
+        meta: {
+          icon: 'FunnelPlotOutlined',
+          role: [ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER]
         }
       }
     ]

@@ -4,7 +4,8 @@ enum TUTOR_URL {
   tutor_list = '/tutor/search',
   update_tutor = '/tutor/update',
   delete_tutor = '/tutor/delete',
-  update_status = 'tutor/changeStatus'
+  update_status = 'tutor/changeStatus',
+  search_list = 'tutor/search-list'
   // role_info = '/role/info',
   // perm_list = '/role/permission'
 }
@@ -27,4 +28,7 @@ export const updateTutor = (params: API.UserUpdateParams, options?: IOptions) =>
 //上下架家教信息
 export const updateTutorStatus = (params: API.TutorStatusParams, options?: IOptions) => {
   return httpService.post({ url: TUTOR_URL.update_status, data: params }, options);
+};
+export const getTutorListByRole = (params: API.TutorSearchParams, options?: IOptions) => {
+  return httpService.post({ url: TUTOR_URL.search_list, data: params }, options);
 };

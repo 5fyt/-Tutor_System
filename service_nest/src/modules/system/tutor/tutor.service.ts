@@ -64,7 +64,7 @@ export class SysTutorService {
         'tutor.*',
       ])
       .where('user.id NOT IN (:...ids)', { ids: [uid] })
-      .andWhere('role.name IN (:...role)', {
+      .andWhere('role.name NOT IN (:...role)', {
         role: [roleName.slice(0, 1)[0]],
       })
       .orderBy('user.updated_at', 'DESC')

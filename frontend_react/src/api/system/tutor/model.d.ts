@@ -9,9 +9,9 @@ declare namespace API {
   type TutorSearchParams = {
     page: number;
     limit: number;
-    grade: string;
-    course: string;
-    status: number;
+    grade?: string;
+    course?: string;
+    status?: number;
   };
   type TutorDelParams = {
     tutorIds: number[];
