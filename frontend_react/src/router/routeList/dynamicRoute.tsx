@@ -13,8 +13,8 @@ const User = lazy(() => import('@/views/permission/user'));
 const PerfAnalysis = lazy(() => import('@/views/student/PerfAnalysis'));
 const PerfOrder = lazy(() => import('@/views/student/PerfOrder'));
 const TutorInfo = lazy(() => import('@/views/student/TutorInfo'));
-const Curriculum = lazy(() => import('@/views/student/curriculum'));
 const ReserveTutor = lazy(() => import('@/views/reserve/TutorList'));
+const ReserveManage = lazy(() => import('@/views/reserve/ReserveMange'));
 export const dynamicRouteList: RouteObject[] = [
   {
     path: '/notice',
@@ -56,10 +56,7 @@ export const dynamicRouteList: RouteObject[] = [
     path: '/student/tutorInfo',
     element: <WrapperRouteElement element={<TutorInfo />} />
   },
-  {
-    path: '/student/curriculum',
-    element: <WrapperRouteElement element={<Curriculum />} />
-  },
+
   {
     path: '/teacher/tutorInfo',
     element: <WrapperRouteElement element={<TutorInfo />} />
@@ -67,6 +64,10 @@ export const dynamicRouteList: RouteObject[] = [
   {
     path: '/reserve/tutorInfo',
     element: <WrapperRouteElement element={<ReserveTutor />} />
+  },
+  {
+    path: 'reserve/manage',
+    element: <WrapperRouteElement element={<ReserveManage />} />
   }
 ];
 export const dynamicMenuRoute: MenuList = [
@@ -145,15 +146,7 @@ export const dynamicMenuRoute: MenuList = [
           role: [ROLE_ADMIN, ROLE_STUDENT]
         }
       },
-      {
-        path: '/student/curriculum',
-        key: '/student/curriculum',
-        name: '课程表',
-        meta: {
-          icon: 'CalendarOutlined',
-          role: [ROLE_ADMIN, ROLE_STUDENT]
-        }
-      },
+
       {
         path: '/student/tutorInfo',
         key: '/student/tutorInfo',

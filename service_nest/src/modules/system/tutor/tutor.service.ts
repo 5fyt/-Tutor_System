@@ -67,6 +67,7 @@ export class SysTutorService {
       .andWhere('role.name NOT IN (:...role)', {
         role: [roleName.slice(0, 1)[0]],
       })
+      // .andWhere('tutor.status=:status',{status:1})
       .orderBy('user.updated_at', 'DESC')
       .offset((page - 1) * limit)
       .limit(limit);
@@ -80,13 +81,14 @@ export class SysTutorService {
    * 增加课程
    */
   async add(param: CreateTutorDto): Promise<void> {
-    const { course, grade, description, address, userId } = param;
+    const { course, grade, description, address, userId, money } = param;
     await this.tutorRepository.insert({
       userId,
       course,
       grade,
       address,
       description,
+      money,
     });
   }
 
@@ -101,6 +103,7 @@ export class SysTutorService {
         grade: param.grade,
         course: param.course,
         description: param.description,
+        money: param.money,
       });
     });
   }

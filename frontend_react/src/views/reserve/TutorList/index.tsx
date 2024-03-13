@@ -1,16 +1,21 @@
-import { FC, memo, useCallback, useEffect, useState } from 'react';
+import { FC, memo, useCallback, useEffect, useState, useRef } from 'react';
 import { CheckSquareOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Card } from 'antd';
 import { getTutorListByRole } from '@/api/system/tutor';
 import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
 import './index.less';
+import AddReserve from '../ReserveMange/AddReserve';
 const { Meta } = Card;
+interface ModalProps {
+  showModal: (value?: any) => void;
+}
 const TutorList: FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [total, setTotal] = useState(0);
   const [tutorData, setTutorData] = useState([]);
+  const innerRef = useRef<ModalProps>(null);
   const onChange: PaginationProps['onChange'] = (current, pageSize) => {
     console.log(current, pageSize);
     setPage(current);
@@ -25,6 +30,9 @@ const TutorList: FC = () => {
     },
     [limit, page]
   );
+  const reserveHandle = (item: any) => {
+    innerRef.current?.showModal(item);
+  };
   useEffect(() => {
     getTutorData();
   }, [getTutorData]);
@@ -33,9 +41,8 @@ const TutorList: FC = () => {
       <div className="tutor_card_list">
         {tutorData.map((item: any, key: any) => {
           return (
-            <div className="card_list">
+            <div className="card_list" key={key}>
               <Card
-                key={key}
                 style={{ width: 300 }}
                 cover={
                   <img
@@ -45,9 +52,12 @@ const TutorList: FC = () => {
                   />
                 }
                 actions={[
-                  <div>
-                    <span style={{ color: 'red', marginRight: '3px' }}>预约课程</span>
-                    <CheckSquareOutlined />
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <span style={{ color: '#45956A', marginRight: '5px' }}>确定预约</span>
+                    <div onClick={() => reserveHandle(item)}>
+                      <span style={{ color: '#040404', marginRight: '3px' }}>预约课程</span>
+                      <CheckSquareOutlined />
+                    </div>
                   </div>
                 ]}
               >
@@ -63,10 +73,11 @@ const TutorList: FC = () => {
                   }
                   description={
                     <div className="description">
-                      <p>{item.user_name}</p>
-                      <p>{item.address}</p>
-                      <p>{item.user_phone}</p>
-                      <p>{item.description}</p>
+                      <p>姓名：{item.user_name}</p>
+                      <p>地址：{item.address}</p>
+                      <p>联系电话：{item.user_phone || '待完善'}</p>
+                      <p>要求：{item.description}</p>
+                      <p>金额：{item.money}每小时</p>
                     </div>
                   }
                 />
@@ -76,6 +87,7 @@ const TutorList: FC = () => {
         })}
       </div>
       <Pagination showSizeChanger onChange={onChange} total={total} />
+      <AddReserve innerRef={innerRef} />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import {
   MinLength,
   IsInt,
   Min,
+  IsNumber,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -40,6 +41,12 @@ export class CreateTutorDto {
   })
   @IsString()
   grade: string;
+
+  @ApiProperty({
+    description: '年级',
+  })
+  @IsNumber()
+  money: number;
 
   @ApiProperty({
     description: '课程',

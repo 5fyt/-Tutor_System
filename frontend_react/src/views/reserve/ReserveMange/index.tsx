@@ -1,56 +1,45 @@
-// import './index.less';
 import { FC, memo, useCallback, useEffect, useState, useRef } from 'react';
-import { defaultSettingData, options } from './constants/index';
+import { options, defaultSettingData } from './constants/index';
 import type { ColumnsType } from 'antd/es/table';
-import { Button, Space, message, Switch } from 'antd';
-import moment from 'moment';
+import { Button, Space, message } from 'antd';
+
 import SearchForm from '@/components/SearchForm';
 import TableList from '@/components/TableList';
 import { isArray } from '@/utils/is';
-import { getTutorList, deleteTutor, updateTutorStatus } from '@/api/system/tutor';
-import PublishInfo from './PublishInfo';
+import { deleteReserve, getReserveList } from '@/api/system/reserve';
+import AddReserve from './AddReserve';
 
 interface ModalProps {
   showModal: (value?: any) => void;
 }
-const TutorInfo: FC = () => {
+const User: FC = () => {
   const defaultColumns: ColumnsType<TableAPI.DataType> = [
-    { title: '姓名', dataIndex: 'name', key: '0' },
     {
-      title: '地址',
-      dataIndex: 'address',
+      title: '预约起始日期',
+      dataIndex: 'startDate',
       key: '1'
     },
-    { title: '课程', dataIndex: 'course', key: '2' },
-    { title: '年级', dataIndex: 'grade', key: '3' },
-    { title: '信息描述', dataIndex: 'description', key: '4' },
     {
-      title: '发布时间',
-      dataIndex: 'publishTime',
-      key: '5',
-      render: text => <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>
+      title: '预约结束日期',
+      dataIndex: 'endDate',
+      key: '2'
     },
-    { title: '家教费用', dataIndex: 'money', key: '6', render: text => <span>{text}元</span> },
     {
-      title: '状态',
-      dataIndex: 'status',
-      key: '7',
-      render: (_, record) => {
-        return (
-          <Switch
-            onClick={value => switchHandle(value, record)}
-            checkedChildren="下架"
-            checked={record.status === 1 ? true : false}
-            unCheckedChildren="上架"
-            defaultChecked
-          />
-        );
-      }
+      title: '预约开始时间',
+      dataIndex: 'startTime',
+      key: '3'
     },
+    {
+      title: '预约结束时间',
+      dataIndex: 'endTime',
+      key: '4'
+    },
+    { title: '详细地址', dataIndex: 'detailAddress', key: '5' },
+
     {
       title: '操作',
       dataIndex: 'operation',
-      key: '8',
+      key: '6',
       render: (_, record) => (
         <Space>
           <Button onClick={() => updateHandle(record)} type="primary" ghost>
@@ -64,7 +53,6 @@ const TutorInfo: FC = () => {
     }
   ];
   const [tableData, setTableData] = useState<any[]>([]);
-  // const [roleOptions, setRoleOptions] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -73,7 +61,7 @@ const TutorInfo: FC = () => {
   const innerRef = useRef<ModalProps>(null);
   const loadList = useCallback(
     async (info?: any) => {
-      const { list, total } = await getTutorList({ page, limit, ...info });
+      const { list, total } = await getReserveList({ page, limit, ...info });
       const filter = list.map((item: any) => {
         return { ...item, key: item.id };
       });
@@ -83,9 +71,9 @@ const TutorInfo: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+
   useEffect(() => {
     loadList();
-    // getOptions();
   }, [loadList]);
   const searchInfo = (info?: any) => {
     loadList(info);
@@ -102,9 +90,9 @@ const TutorInfo: FC = () => {
     innerRef.current?.showModal(record);
   };
   const deleteHandle = async (value: any) => {
-    let tutorIds = [];
-    isArray(value) ? (tutorIds = value) : tutorIds.push(value.id);
-    const { code } = await deleteTutor({ tutorIds });
+    let reserveIds = [];
+    isArray(value) ? (reserveIds = value) : reserveIds.push(value.id);
+    const { code } = await deleteReserve({ reserveIds });
     if (code === 200) {
       setShow(true);
       messageApi.success('删除成功');
@@ -114,13 +102,8 @@ const TutorInfo: FC = () => {
       messageApi.error('删除失败');
     }
   };
-  const switchHandle = async (value: boolean, record: any) => {
-    console.log(value, record);
-    await updateTutorStatus({ id: record.id, status: value ? 1 : 2 });
-    loadList();
-  };
   const tableHeader = {
-    title: '家教信息',
+    title: '预约',
     defaultSettingData
   };
   const tableList = {
@@ -143,9 +126,8 @@ const TutorInfo: FC = () => {
         onAddHandle={addHandle}
         onDeleteHandle={deleteHandle}
       />
-      <PublishInfo innerRef={innerRef} onLoadList={loadList} />
-      {/* <AddUser innerRef={innerRef} roleOptions={roleOptions} onLoadList={loadList} /> */}
+      <AddReserve innerRef={innerRef} onLoadList={loadList} />
     </>
   );
 };
-export default memo(TutorInfo);
+export default memo(User);

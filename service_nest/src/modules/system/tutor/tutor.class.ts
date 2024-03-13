@@ -8,6 +8,9 @@ export class PageSearchTutorInfo {
   grade: string;
 
   @ApiProperty()
+  money: number;
+
+  @ApiProperty()
   address: string;
 
   @ApiProperty()

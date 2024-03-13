@@ -15,6 +15,9 @@ import { SysCourseController } from './course/course.controller';
 import { SysTutorController } from './tutor/tutor.controller';
 import { SysRoleController } from './role/role.controller';
 import { SysUserController } from './user/user.controller';
+import SysReserve from 'src/entities/reserve.entity';
+import { SysReserveController } from './reserve/reserve.controller';
+import { SysReserveService } from './reserve/reserve.service';
 
 @Module({
   imports: [
@@ -26,6 +29,7 @@ import { SysUserController } from './user/user.controller';
       SysUserRole,
       SysCourse,
       SysTutor,
+      SysReserve,
     ]),
   ],
   controllers: [
@@ -33,12 +37,14 @@ import { SysUserController } from './user/user.controller';
     SysRoleController,
     SysCourseController,
     SysTutorController,
+    SysReserveController,
   ],
   providers: [
     SysUserService,
     SysRoleService,
     SysCourseService,
     SysTutorService,
+    SysReserveService,
   ],
   exports: [TypeOrmModule, SysUserService, SysRoleService, SysTutorService],
 })

@@ -20,6 +20,9 @@ export default class SysTutor {
   @ApiProperty()
   address: string;
 
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  money: number;
+
   @Column({ nullable: false })
   @ApiProperty()
   grade: string;

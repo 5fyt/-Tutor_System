@@ -11,6 +11,7 @@ type FieldType = {
   grade: string;
   course: string;
   description: string;
+  money: string;
 };
 interface Option {
   value: number;
@@ -50,7 +51,8 @@ const PublishInfo: FC<ModalProps> = ({ innerRef, onLoadList }) => {
     try {
       formRef.current?.validateFields().then(async (submitInfo: any) => {
         if (id) {
-          const { code } = await updateTutor({ id, ...submitInfo });
+          console.log(parseFloat(submitInfo.money));
+          const { code } = await updateTutor({ id, ...submitInfo, money: parseFloat(submitInfo.money) });
           if (code === 200) {
             messageApi.success('更新成功');
             onLoadList();
@@ -63,10 +65,15 @@ const PublishInfo: FC<ModalProps> = ({ innerRef, onLoadList }) => {
             messageApi.error('更新失败');
           }
         } else {
-          const { grade, course, ...data } = submitInfo;
+          const { grade, course, money, ...data } = submitInfo;
           const filterGrade = gradeOption.filter(item => item.value === grade)[0]?.label;
           const filterCourse = courseOption.filter(item => item.value === course)[0]?.label;
-          const { code } = await addTutor({ ...data, grade: filterGrade, course: filterCourse });
+          const { code } = await addTutor({
+            ...data,
+            grade: filterGrade,
+            course: filterCourse,
+            money: parseFloat(money)
+          });
           if (code === 200) {
             messageApi.success('添加成功');
             onLoadList();
@@ -175,6 +182,22 @@ const PublishInfo: FC<ModalProps> = ({ innerRef, onLoadList }) => {
             ]}
           >
             <Select options={courseOption} />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="地址"
+            name="money"
+            rules={[
+              {
+                required: true,
+                message: '请输入金额'
+              },
+              {
+                pattern: /(^[1-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/,
+                message: '金额格式错误'
+              }
+            ]}
+          >
+            <Input prefix="￥" suffix="RMB" placeholder="最小精确到小数点后两位" />
           </Form.Item>
         </Form>
       </Modal>
