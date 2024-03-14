@@ -92,6 +92,7 @@ export class SysTutorService {
       description,
       money,
     });
+    await this.noticeService.add('新的课程更新，请查看');
   }
 
   /**

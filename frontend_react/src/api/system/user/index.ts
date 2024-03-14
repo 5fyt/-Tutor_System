@@ -5,7 +5,9 @@ enum USER_URL {
   updateUser = '/user/update',
   deleteUser = '/user/delete',
   getRoleList = '/role/list',
-  getList = '/user/list'
+  getList = '/user/list',
+  getNotice = '/notice/list',
+  deleteNotice = '/notice/delete'
 }
 //添加用户
 export const addUser = (params: API.UserAddParams, options?: IOptions) => {
@@ -23,10 +25,16 @@ export const updateUser = (params: API.UserUpdateParams, options?: IOptions) => 
 export const deleteUser = (params: API.UserDelParams, options?: IOptions) => {
   return httpService.post({ url: USER_URL.deleteUser, data: params }, options);
 };
+export const deleteMessage = (params: API.MessageDelParams, options?: IOptions) => {
+  return httpService.post({ url: USER_URL.deleteNotice, data: params }, options);
+};
 //获取角色列表
 export const getRoleList = () => {
   return httpService.get({ url: USER_URL.getRoleList });
 };
 export const getUserList = () => {
   return httpService.get({ url: USER_URL.getList });
+};
+export const getNoticeList = () => {
+  return httpService.get({ url: USER_URL.getNotice });
 };

@@ -5,7 +5,6 @@ import { RouteObject } from 'react-router-dom';
 import { ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER } from '../../enums/menuEnum';
 const NoticeList = lazy(() => import('@/views/notice'));
 const Profile = lazy(() => import('@/views/system/profile'));
-const Order = lazy(() => import('@/views/system/order'));
 const Comment = lazy(() => import('@/views/system/comment'));
 const CourseList = lazy(() => import('@/views/permission/course'));
 const Role = lazy(() => import('@/views/permission/role'));
@@ -24,7 +23,6 @@ export const dynamicRouteList: RouteObject[] = [
     path: '/system/profile',
     element: <WrapperRouteElement element={<Profile />} />
   },
-
   {
     path: '/system/comment',
     element: <WrapperRouteElement element={<Comment />} />

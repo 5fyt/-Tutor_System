@@ -18,6 +18,9 @@ declare namespace API {
   type UserDelParams = {
     userIds: number[];
   };
+  type MessageDelParams = {
+    messageIds: number[];
+  };
   type PageItem = {
     id: number;
     roleNames: string[];

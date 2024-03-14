@@ -7,8 +7,9 @@ import {
   PageSearchReserveDto,
   UpdateReserveStatusDto,
 } from './reserve.dto';
-import SysReserve from 'src/entities/reserve.entity';
+import SysReserve, { ReserveStatus } from 'src/entities/reserve.entity';
 import { SysNoticeService } from '../notice/notice.service';
+import { ApiException } from 'src/common/exceptions/api.exception';
 // import { CourseList } from './course.class';
 @Injectable()
 export class SysReserveService {
@@ -19,16 +20,28 @@ export class SysReserveService {
     private entityManager: EntityManager,
     private noticeService: SysNoticeService,
   ) {}
-
+  async getReserveInfo(reId: number): Promise<SysReserve> {
+    return await this.reserveRepository.findOne({
+      where: { tutorId: reId },
+    });
+  }
   /**
    * 确定预约
    */
   async confirmReserve(param: UpdateReserveStatusDto): Promise<void> {
-    await this.noticeService.add('你确定了预约');
+    const info = await this.getReserveInfo(param.id);
+    if (info.status === ReserveStatus.reserved) {
+      throw new ApiException(10005);
+    }
     return await this.entityManager.transaction(async (manager) => {
-      await manager.update(SysReserve, param.id, {
-        status: 1,
-      });
+      await manager.update(
+        SysReserve,
+        { tutorId: param.id },
+        {
+          status: ReserveStatus.reserved,
+        },
+      );
+      await this.noticeService.add('你确定了预约');
     });
   }
   /**

@@ -1,12 +1,13 @@
-import { FC, memo } from 'react';
+import { FC, memo, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '@/assets/header/logo.png';
 import UserAvatar from '@/assets/header/avatar.jpg';
-import { Layout, Avatar, Dropdown, message } from 'antd';
+import { Layout, Avatar, Dropdown, message, Badge } from 'antd';
 import type { MenuProps } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { user_name, loginOut, avatarUrl } from '@/store/module/login';
+import { getNoticeList } from '@/api/system/user';
 // import { ReactComponent as EnUsSvg } from '@/assets/header/en_US.svg';
 // import { ReactComponent as LanguageSvg } from '@/assets/header/language.svg';
 // import { ReactComponent as ZhCnSvg } from '@/assets/header/zh_CN.svg';
@@ -27,6 +28,14 @@ interface HeaderProps {
 const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
   // const { name, locale } = userStore;
   const [messageApi, contextHolder] = message.useMessage();
+  const [count, setCount] = useState<any>([]);
+  const getMessages = useCallback(async () => {
+    const message = await getNoticeList();
+    setCount(message.length);
+  }, []);
+  useEffect(() => {
+    getMessages();
+  }, [getMessages]);
   const navigate = useNavigate();
   // const { formatMessage } = useLocale();
   const username = useAppSelector(user_name);
@@ -88,7 +97,9 @@ const HeaderComponent: FC<HeaderProps> = ({ collapsed, toggle }) => {
         <div className="actions">
           {/* <HeaderNoticeComponent /> */}
           <div className="">
-            <BellOutlined />
+            <Badge count={count} size="small">
+              <BellOutlined />
+            </Badge>
           </div>
 
           {/* <Dropdown
