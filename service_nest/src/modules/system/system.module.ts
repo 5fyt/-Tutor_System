@@ -11,13 +11,16 @@ import { SysUserService } from './user/user.service';
 import { SysRoleService } from './role/role.service';
 import { SysCourseService } from './course/course.service';
 import { SysTutorService } from './tutor/tutor.service';
+import { SysReserveService } from './reserve/reserve.service';
 import { SysCourseController } from './course/course.controller';
 import { SysTutorController } from './tutor/tutor.controller';
 import { SysRoleController } from './role/role.controller';
 import { SysUserController } from './user/user.controller';
-import SysReserve from 'src/entities/reserve.entity';
 import { SysReserveController } from './reserve/reserve.controller';
-import { SysReserveService } from './reserve/reserve.service';
+import SysReserve from 'src/entities/reserve.entity';
+import SysNotice from 'src/entities/notice.entity';
+import { SysNoticeController } from './notice/notice.controller';
+import { SysNoticeService } from './notice/notice.service';
 
 @Module({
   imports: [
@@ -30,6 +33,7 @@ import { SysReserveService } from './reserve/reserve.service';
       SysCourse,
       SysTutor,
       SysReserve,
+      SysNotice,
     ]),
   ],
   controllers: [
@@ -38,6 +42,7 @@ import { SysReserveService } from './reserve/reserve.service';
     SysCourseController,
     SysTutorController,
     SysReserveController,
+    SysNoticeController,
   ],
   providers: [
     SysUserService,
@@ -45,7 +50,14 @@ import { SysReserveService } from './reserve/reserve.service';
     SysCourseService,
     SysTutorService,
     SysReserveService,
+    SysNoticeService,
   ],
-  exports: [TypeOrmModule, SysUserService, SysRoleService, SysTutorService],
+  exports: [
+    TypeOrmModule,
+    SysUserService,
+    SysRoleService,
+    SysTutorService,
+    SysNoticeService,
+  ],
 })
 export class SystemModule {}

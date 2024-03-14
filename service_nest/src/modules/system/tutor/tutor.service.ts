@@ -4,6 +4,7 @@ import { Repository, EntityManager, Like } from 'typeorm';
 import SysTutor from 'src/entities/tutor-info.entity';
 import { SysUserService } from '../user/user.service';
 import { SysRoleService } from '../role/role.service';
+import { SysNoticeService } from '../notice/notice.service';
 import {
   CreateTutorDto,
   PageBaiscSeachDto,
@@ -20,6 +21,7 @@ export class SysTutorService {
     private entityManager: EntityManager,
     private userService: SysUserService,
     private roleService: SysRoleService,
+    private noticeService: SysNoticeService,
   ) {}
   /**
    * 根据课程Id数组删除
@@ -117,6 +119,7 @@ export class SysTutorService {
         status: param.status,
       });
     });
+    await this.noticeService.add('上架了课程');
   }
   /**
    * 分页加载课程信息

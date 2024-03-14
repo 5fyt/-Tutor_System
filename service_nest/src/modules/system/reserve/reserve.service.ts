@@ -8,6 +8,7 @@ import {
   UpdateReserveStatusDto,
 } from './reserve.dto';
 import SysReserve from 'src/entities/reserve.entity';
+import { SysNoticeService } from '../notice/notice.service';
 // import { CourseList } from './course.class';
 @Injectable()
 export class SysReserveService {
@@ -16,12 +17,14 @@ export class SysReserveService {
     private reserveRepository: Repository<SysReserve>,
     @InjectEntityManager()
     private entityManager: EntityManager,
+    private noticeService: SysNoticeService,
   ) {}
 
   /**
    * 确定预约
    */
   async confirmReserve(param: UpdateReserveStatusDto): Promise<void> {
+    await this.noticeService.add('你确定了预约');
     return await this.entityManager.transaction(async (manager) => {
       await manager.update(SysReserve, param.id, {
         status: 1,
@@ -43,7 +46,7 @@ export class SysReserveService {
   async add(param: CreateReserveDto, uid: number): Promise<void> {
     const { startDate, startTime, endDate, endTime, detailAddress, tutorId } =
       param;
-    console.log('re', uid);
+
     await this.reserveRepository.insert({
       userId: uid,
       tutorId,

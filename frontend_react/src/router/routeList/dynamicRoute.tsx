@@ -24,10 +24,7 @@ export const dynamicRouteList: RouteObject[] = [
     path: '/system/profile',
     element: <WrapperRouteElement element={<Profile />} />
   },
-  {
-    path: '/system/order',
-    element: <WrapperRouteElement element={<Order />} />
-  },
+
   {
     path: '/system/comment',
     element: <WrapperRouteElement element={<Comment />} />
@@ -222,15 +219,6 @@ export const dynamicMenuRoute: MenuList = [
         key: '/system/profile',
         meta: {
           icon: 'GoldOutlined',
-          role: [ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER]
-        }
-      },
-      {
-        path: '/system/order',
-        key: '/system/order',
-        name: '订单管理',
-        meta: {
-          icon: 'FunnelPlotOutlined',
           role: [ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER]
         }
       },
