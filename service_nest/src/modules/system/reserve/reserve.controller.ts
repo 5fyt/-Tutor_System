@@ -9,6 +9,7 @@ import {
   PageSearchReserveDto,
   UpdateReserveDto,
   UpdateReserveStatusDto,
+  UpdateCommentDto,
 } from './reserve.dto';
 import { AdminUser } from 'src/decorators/admin-user.decorator';
 import { IAdminUser } from 'src/modules/admin.interface';
@@ -27,6 +28,21 @@ export class SysReserveController {
     @Body() dto: PageSearchReserveDto,
   ): Promise<PaginatedResponseDto<SysReserve>> {
     const [list, total] = await this.reserveService.page(dto);
+    return {
+      size: dto.limit,
+      page: dto.page,
+      total,
+      list,
+    };
+  }
+
+  @ApiOperation({ summary: '分页查询待评价信息' })
+  @ApiOkResponse({ type: [SysReserve] })
+  @Post('search-comment')
+  async pageByReserveStatus(
+    @Body() dto: PageSearchReserveDto,
+  ): Promise<PaginatedResponseDto<SysReserve>> {
+    const [list, total] = await this.reserveService.pageByStatus(dto);
     return {
       size: dto.limit,
       page: dto.page,
@@ -62,6 +78,24 @@ export class SysReserveController {
     @AdminUser() user: IAdminUser,
   ): Promise<void> {
     await this.reserveService.update(dto, user.uid);
+  }
+
+  @ApiOperation({ summary: '删除评论' })
+  @Post('delete-comment')
+  async deleteComments(@Body() dto: DeleteReserveDto): Promise<void> {
+    await this.reserveService.deleteComment(dto.reserveIds);
+  }
+
+  @ApiOperation({ summary: '新增评论' })
+  @Post('add-comment')
+  async addComments(@Body() dto: UpdateCommentDto): Promise<void> {
+    await this.reserveService.addComment(dto);
+  }
+
+  @ApiOperation({ summary: '更新评论' })
+  @Post('update-comment')
+  async updateComments(@Body() dto: UpdateCommentDto): Promise<void> {
+    await this.reserveService.updateComment(dto);
   }
 
   @ApiOperation({ summary: '确定预约' })

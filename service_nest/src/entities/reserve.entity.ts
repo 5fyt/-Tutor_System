@@ -46,9 +46,9 @@ export default class SysReserve {
   @ApiProperty()
   comment: string;
 
-  @Column({ default: 0 })
+  @Column({ default: '' })
   @ApiProperty()
-  score: number;
+  score: string;
 
   @Column({
     type: 'enum',

@@ -62,6 +62,20 @@ export class CreateReserveDto {
   @MinLength(5)
   detailAddress: string;
 }
+export class CreateCommentDto {
+  @ApiProperty({
+    description: '评价',
+  })
+  @IsString()
+  comment: string;
+
+  @ApiProperty({
+    description: '分数',
+  })
+  @IsString()
+  score: string;
+}
+
 export class PageSearchReserveDto {
   @ApiProperty({
     description: '起始日期',
@@ -111,6 +125,14 @@ export class UpdateReserveDto extends CreateReserveDto {
   @IsInt()
   @Min(0)
   tutorId: number;
+}
+export class UpdateCommentDto extends CreateCommentDto {
+  @ApiProperty({
+    description: '关联预约编号',
+  })
+  @IsInt()
+  @Min(0)
+  id: number;
 }
 export class UpdateReserveStatusDto {
   @ApiProperty({

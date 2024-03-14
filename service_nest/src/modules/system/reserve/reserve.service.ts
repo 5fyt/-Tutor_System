@@ -6,6 +6,8 @@ import {
   UpdateReserveDto,
   PageSearchReserveDto,
   UpdateReserveStatusDto,
+  CreateCommentDto,
+  UpdateCommentDto,
 } from './reserve.dto';
 import SysReserve, { ReserveStatus } from 'src/entities/reserve.entity';
 import { SysNoticeService } from '../notice/notice.service';
@@ -128,5 +130,71 @@ export class SysReserveService {
     const [_, total] = await qb.getManyAndCount();
     const list = await qb.getRawMany();
     return [list, total];
+  }
+
+  /**
+   * 分页查询待评论的预约单
+   */
+  async pageByStatus(
+    param: PageSearchReserveDto,
+  ): Promise<[SysReserve[], number]> {
+    const { limit, page } = param;
+    const qb = await this.reserveRepository
+      .createQueryBuilder('reserve')
+      .innerJoinAndSelect('sys_tutor', 'tutor', 'reserve.tutorId=tutor.id')
+      .innerJoinAndSelect('sys_user', 'user', 'tutor.userId=user.id')
+      .select(['reserve.*', 'tutor.grade,tutor.course', 'user.name'])
+      .where('reserve.status = :status', { status: '1' })
+      .orderBy('reserve.updated_at', 'DESC')
+      .offset((page - 1) * limit)
+      .limit(limit);
+
+    const [_, total] = await qb.getManyAndCount();
+    const list = await qb.getRawMany();
+    return [list, total];
+  }
+
+  /**
+   * 根据课程Id数组删除
+   */
+  async deleteComment(reserveIds: number[]): Promise<void> {
+    await this.entityManager.transaction(async (manager) => {
+      await reserveIds.forEach(async (id) => {
+        await manager.update(SysReserve, id, {
+          comment: '',
+          score: '',
+        });
+      });
+    });
+  }
+
+  /**
+   * 增加评论记录
+   */
+  async addComment(param: UpdateCommentDto): Promise<void> {
+    const { comment, score, id } = param;
+
+    await this.reserveRepository.update(
+      {
+        id: id,
+      },
+      {
+        comment,
+        score,
+      },
+    );
+  }
+
+  /**
+   * 更新课程信息
+   */
+  async updateComment(param: UpdateCommentDto): Promise<void> {
+    const { comment, score } = param;
+    await this.entityManager.transaction(async (manager) => {
+      await manager.update(SysReserve, param.id, {
+        comment,
+        score,
+      });
+    });
   }
 }

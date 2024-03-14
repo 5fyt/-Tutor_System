@@ -12,7 +12,7 @@ import AddReserve from './AddReserve';
 interface ModalProps {
   showModal: (value?: any) => void;
 }
-const User: FC = () => {
+const ReserveManage: FC = () => {
   const defaultColumns: ColumnsType<TableAPI.DataType> = [
     { title: '课程名称', dataIndex: 'tutor_course', key: '1' },
     { title: '课程年级', dataIndex: 'tutor_grade', key: '2' },
@@ -139,4 +139,4 @@ const User: FC = () => {
     </>
   );
 };
-export default memo(User);
+export default memo(ReserveManage);

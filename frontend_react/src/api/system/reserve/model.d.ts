@@ -10,8 +10,8 @@ declare namespace API {
   type ReserveSearchParams = {
     page: number;
     limit: number;
-    startDate: string;
-    endDate: string;
+    startDate?: string;
+    endDate?: string;
   };
   type ReserveDelParams = {
     reserveIds: number[];
@@ -26,6 +26,11 @@ declare namespace API {
     detailAddress: string;
   };
   type ReserveStatusParams = {
+    id: number;
+  };
+  type CommentParams = {
+    comment: string;
+    score: number;
     id: number;
   };
 }
