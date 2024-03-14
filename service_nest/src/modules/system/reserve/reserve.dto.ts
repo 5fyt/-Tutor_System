@@ -112,3 +112,11 @@ export class UpdateReserveDto extends CreateReserveDto {
   @Min(0)
   tutorId: number;
 }
+export class UpdateReserveStatusDto {
+  @ApiProperty({
+    description: '关联家教信息编号',
+  })
+  @IsInt()
+  @Min(0)
+  id: number;
+}

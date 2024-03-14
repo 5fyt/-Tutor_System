@@ -2,7 +2,7 @@ import { FC, memo, useCallback, useEffect, useState, useRef } from 'react';
 import { options, defaultSettingData } from './constants/index';
 import type { ColumnsType } from 'antd/es/table';
 import { Button, Space, message } from 'antd';
-
+import dayjs from 'dayjs';
 import SearchForm from '@/components/SearchForm';
 import TableList from '@/components/TableList';
 import { isArray } from '@/utils/is';
@@ -14,32 +14,40 @@ interface ModalProps {
 }
 const User: FC = () => {
   const defaultColumns: ColumnsType<TableAPI.DataType> = [
+    { title: '课程名称', dataIndex: 'tutor_course', key: '1' },
+    { title: '课程年级', dataIndex: 'tutor_grade', key: '2' },
     {
       title: '预约起始日期',
       dataIndex: 'startDate',
-      key: '1'
+      key: '3',
+      render: text => {
+        return <span>{dayjs(text).format('YYYY-MM-DD')}</span>;
+      }
     },
     {
       title: '预约结束日期',
       dataIndex: 'endDate',
-      key: '2'
+      key: '4',
+      render: text => {
+        return <span>{dayjs(text).format('YYYY-MM-DD')}</span>;
+      }
     },
     {
       title: '预约开始时间',
       dataIndex: 'startTime',
-      key: '3'
+      key: '5'
     },
     {
       title: '预约结束时间',
       dataIndex: 'endTime',
-      key: '4'
+      key: '6'
     },
-    { title: '详细地址', dataIndex: 'detailAddress', key: '5' },
+    { title: '详细地址', dataIndex: 'detailAddress', key: '7' },
 
     {
       title: '操作',
       dataIndex: 'operation',
-      key: '6',
+      key: '8',
       render: (_, record) => (
         <Space>
           <Button onClick={() => updateHandle(record)} type="primary" ghost>
@@ -104,7 +112,8 @@ const User: FC = () => {
   };
   const tableHeader = {
     title: '预约',
-    defaultSettingData
+    defaultSettingData,
+    isShow: false
   };
   const tableList = {
     defaultColumns,

@@ -130,7 +130,8 @@ const User: FC = () => {
   };
   const tableHeader = {
     title: '用户名',
-    defaultSettingData
+    defaultSettingData,
+    isShow: true
   };
   const tableList = {
     defaultColumns,

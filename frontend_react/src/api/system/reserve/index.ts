@@ -4,7 +4,7 @@ enum RESERVE_URL {
   reserve_list = '/reserve/search',
   update_reserve = '/reserve/update',
   delete_reserve = '/reserve/delete',
-  update_status = 'reserve/changeStatus',
+  update_status = 'reserve/update-status',
   search_list = 'reserve/search-list'
   // role_info = '/role/info',
   // perm_list = '/role/permission'
@@ -25,7 +25,7 @@ export const addReserve = (params: API.ReserveAddParams, options?: IOptions) => 
 export const updateReserve = (params: API.ReserveUpdateParams, options?: IOptions) => {
   return httpService.post({ url: RESERVE_URL.update_reserve, data: params }, options);
 };
-//上下架预约信息
+//确定预约信息
 export const updateReserveStatus = (params: API.ReserveStatusParams, options?: IOptions) => {
   return httpService.post({ url: RESERVE_URL.update_status, data: params }, options);
 };

@@ -8,6 +8,7 @@ import {
   DeleteReserveDto,
   PageSearchReserveDto,
   UpdateReserveDto,
+  UpdateReserveStatusDto,
 } from './reserve.dto';
 import { AdminUser } from 'src/decorators/admin-user.decorator';
 import { IAdminUser } from 'src/modules/admin.interface';
@@ -54,12 +55,18 @@ export class SysReserveController {
     await this.reserveService.add(dto, user.uid);
   }
 
-  @ApiOperation({ summary: '更新课程' })
+  @ApiOperation({ summary: '更新预约' })
   @Post('update')
   async update(
     @Body() dto: UpdateReserveDto,
     @AdminUser() user: IAdminUser,
   ): Promise<void> {
     await this.reserveService.update(dto, user.uid);
+  }
+
+  @ApiOperation({ summary: '确定预约' })
+  @Post('update-status')
+  async updateStatus(@Body() dto: UpdateReserveStatusDto): Promise<void> {
+    await this.reserveService.confirmReserve(dto);
   }
 }

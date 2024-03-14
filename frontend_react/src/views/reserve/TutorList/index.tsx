@@ -1,11 +1,12 @@
 import { FC, memo, useCallback, useEffect, useState, useRef } from 'react';
 import { CheckSquareOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Card } from 'antd';
+import { Avatar, Card, message } from 'antd';
 import { getTutorListByRole } from '@/api/system/tutor';
 import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
 import './index.less';
 import AddReserve from '../ReserveMange/AddReserve';
+import { updateReserveStatus } from '@/api/system/reserve';
 const { Meta } = Card;
 interface ModalProps {
   showModal: (value?: any) => void;
@@ -33,6 +34,10 @@ const TutorList: FC = () => {
   const reserveHandle = (item: any) => {
     innerRef.current?.showModal(item);
   };
+  const confirmServe = async (item: any) => {
+    const { code } = await updateReserveStatus({ id: item.id });
+    code === 200 ? message.info('完成预约订单') : message.error('结算失败');
+  };
   useEffect(() => {
     getTutorData();
   }, [getTutorData]);
@@ -53,7 +58,9 @@ const TutorList: FC = () => {
                 }
                 actions={[
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <span style={{ color: '#45956A', marginRight: '5px' }}>确定预约</span>
+                    <span style={{ color: '#45956A', marginRight: '5px' }} onClick={() => confirmServe(item)}>
+                      确定预约
+                    </span>
                     <div onClick={() => reserveHandle(item)}>
                       <span style={{ color: '#040404', marginRight: '3px' }}>预约课程</span>
                       <CheckSquareOutlined />

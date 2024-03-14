@@ -81,8 +81,8 @@ const AddReserve: FC<ModalProps> = ({ innerRef, onLoadList }) => {
   const showModal = (value?: any) => {
     if (value) {
       setId(value.id);
-
-      form.setFieldsValue({ ...value });
+      console.log(value);
+      form.setFieldsValue({ detailAddress: value.detailAddress });
     }
 
     setVisible(true);

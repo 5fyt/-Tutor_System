@@ -7,6 +7,7 @@ declare namespace TableAPI {
   };
   type TableHeader = {
     title: string;
+    isShow: boolean;
     defaultSettingData: SettingType[];
   };
   type DataType = {

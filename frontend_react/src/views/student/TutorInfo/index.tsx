@@ -121,7 +121,8 @@ const TutorInfo: FC = () => {
   };
   const tableHeader = {
     title: '家教信息',
-    defaultSettingData
+    defaultSettingData,
+    isShow: true
   };
   const tableList = {
     defaultColumns,

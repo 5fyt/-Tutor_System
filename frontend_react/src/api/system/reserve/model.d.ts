@@ -27,6 +27,5 @@ declare namespace API {
   };
   type ReserveStatusParams = {
     id: number;
-    status: number;
   };
 }

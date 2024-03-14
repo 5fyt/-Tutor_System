@@ -66,7 +66,7 @@ export const dynamicRouteList: RouteObject[] = [
     element: <WrapperRouteElement element={<ReserveTutor />} />
   },
   {
-    path: 'reserve/manage',
+    path: '/reserve/manage',
     element: <WrapperRouteElement element={<ReserveManage />} />
   }
 ];

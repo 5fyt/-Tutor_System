@@ -10,9 +10,10 @@ interface TableHeaderProps {
   loadList: (value?: any) => void;
   onAddHandle: (value?: any) => void;
   changeSize: (value?: SizeType) => void;
+  isShow?: Boolean;
 }
 
-const TableHeader: FC<TableHeaderProps> = ({ searchName, element, loadList, changeSize, onAddHandle }) => {
+const TableHeader: FC<TableHeaderProps> = ({ searchName, element, isShow, loadList, changeSize, onAddHandle }) => {
   const items: MenuProps['items'] = [
     {
       label: <div>默认</div>,
@@ -49,11 +50,13 @@ const TableHeader: FC<TableHeaderProps> = ({ searchName, element, loadList, chan
       <div className="right">
         <Space size={'middle'}>
           {/* <Radio.Group options={options} onChange={onChangeHandle} value={radioValue} optionType="button" /> */}
-          <div className="add">
-            <Button type="primary" icon={<PlusOutlined />} onClick={onAddHandle}>
-              新建
-            </Button>
-          </div>
+          {isShow && (
+            <div className="add">
+              <Button type="primary" icon={<PlusOutlined />} onClick={onAddHandle}>
+                新建
+              </Button>
+            </div>
+          )}
           <div className="refresh">
             <ReloadOutlined style={{ fontSize: '16px' }} onClick={refreshHandle} />
           </div>

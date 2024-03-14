@@ -25,6 +25,7 @@ const TableList: FC<TableProps> = ({ tableHeader, tableList, loadList, changePag
       <TableHeader
         searchName={tableHeader.title}
         element={<Content defaultData={tableHeader.defaultSettingData} />}
+        isShow={tableHeader.isShow}
         loadList={loadList}
         onAddHandle={onAddHandle}
         changeSize={changeSize}
