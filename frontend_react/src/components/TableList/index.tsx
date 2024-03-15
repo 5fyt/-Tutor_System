@@ -11,7 +11,7 @@ interface TableProps {
   loadList: (value?: any) => void;
   changePage: (value?: any) => void;
   onAddHandle: (value?: any) => void;
-  onDeleteHandle: (value?: any) => void;
+  onDeleteHandle?: (value?: any) => void;
 }
 
 const TableList: FC<TableProps> = ({ tableHeader, tableList, loadList, changePage, onAddHandle, onDeleteHandle }) => {
@@ -36,7 +36,7 @@ const TableList: FC<TableProps> = ({ tableHeader, tableList, loadList, changePag
         total={tableList.total}
         limit={tableList.limit}
         page={tableList.page}
-        show={tableList.show}
+        show={tableList?.show}
         size={size}
         loadList={loadList}
         changePage={changePage}

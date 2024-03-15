@@ -43,6 +43,7 @@ export class SysReserveController {
     @Body() dto: PageSearchReserveDto,
   ): Promise<PaginatedResponseDto<SysReserve>> {
     const [list, total] = await this.reserveService.pageByStatus(dto);
+    // const [list, total] = await this.reserveService.pageByRole(dto);
     return {
       size: dto.limit,
       page: dto.page,
@@ -50,11 +51,21 @@ export class SysReserveController {
       list,
     };
   }
-  // @ApiOperation({ summary: '课程列表' })
-  // @Get('list')
-  // async getRoleList(): Promise<ReserveList> {
-  //   return await this.reserveService.ReserveInfoList();
-  // }
+
+  @ApiOperation({ summary: '分页查询待评价信息' })
+  @ApiOkResponse({ type: [SysReserve] })
+  @Post('search-grade')
+  async pageByRoleGrade(
+    @Body() dto: PageSearchReserveDto,
+  ): Promise<PaginatedResponseDto<SysReserve>> {
+    const [list, total] = await this.reserveService.pageByRole(dto);
+    return {
+      size: dto.limit,
+      page: dto.page,
+      total,
+      list,
+    };
+  }
 
   @ApiOperation({ summary: '删除课程' })
   @Post('delete')

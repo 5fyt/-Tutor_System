@@ -21,6 +21,7 @@ import SysReserve from 'src/entities/reserve.entity';
 import SysNotice from 'src/entities/notice.entity';
 import { SysNoticeController } from './notice/notice.controller';
 import { SysNoticeService } from './notice/notice.service';
+import SysAchievement from 'src/entities/achievement.entity';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { SysNoticeService } from './notice/notice.service';
       SysTutor,
       SysReserve,
       SysNotice,
+      SysAchievement,
     ]),
   ],
   controllers: [

@@ -7,11 +7,10 @@ enum RESERVE_URL {
   update_status = 'reserve/update-status',
   search_list = 'reserve/search-list',
   search_comment = 'reserve/search-comment',
-  // role_info = '/role/info',
-  // perm_list = '/role/permission'
   add_comment = '/reserve/add-comment',
   update_comment = '/reserve/update-comment',
-  delete_comment = '/reserve/delete-comment'
+  delete_comment = '/reserve/delete-comment',
+  search_preScoring = '/reserve/search-grade'
 }
 //查询预约信息
 export const getReserveList = (params: API.ReserveSearchParams, options?: IOptions) => {
@@ -19,6 +18,9 @@ export const getReserveList = (params: API.ReserveSearchParams, options?: IOptio
 };
 export const getReserveListByStatus = (params: API.ReserveSearchParams, options?: IOptions) => {
   return httpService.post({ url: RESERVE_URL.search_comment, data: params }, options);
+};
+export const getPreScoringListByRole = (params: API.ReserveSearchParams, options?: IOptions) => {
+  return httpService.post({ url: RESERVE_URL.search_preScoring, data: params }, options);
 };
 //删除预约信息
 export const deleteReserve = (params: API.ReserveDelParams, options?: IOptions) => {

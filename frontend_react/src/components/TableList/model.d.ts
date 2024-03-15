@@ -30,6 +30,6 @@ declare namespace TableAPI {
     total: number;
     page: number;
     limit: number;
-    show: boolean;
+    show?: boolean;
   } & { tableData: API.PageItem[] };
 }

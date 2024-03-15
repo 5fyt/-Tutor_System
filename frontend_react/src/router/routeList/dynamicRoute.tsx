@@ -14,6 +14,8 @@ const PerfOrder = lazy(() => import('@/views/student/PerfOrder'));
 const TutorInfo = lazy(() => import('@/views/student/TutorInfo'));
 const ReserveTutor = lazy(() => import('@/views/reserve/TutorList'));
 const ReserveManage = lazy(() => import('@/views/reserve/ReserveMange'));
+const EnterScore = lazy(() => import('@/views/teacher/EnterScore'));
+const ScoreSheet = lazy(() => import('@/views/teacher/ScoreSheet'));
 export const dynamicRouteList: RouteObject[] = [
   {
     path: '/notice',
@@ -55,6 +57,14 @@ export const dynamicRouteList: RouteObject[] = [
   {
     path: '/teacher/tutorInfo',
     element: <WrapperRouteElement element={<TutorInfo />} />
+  },
+  {
+    path: '/teacher/enterscore',
+    element: <WrapperRouteElement element={<EnterScore />} />
+  },
+  {
+    path: '/teacher/scoresheet',
+    element: <WrapperRouteElement element={<ScoreSheet />} />
   },
   {
     path: '/reserve/tutorInfo',
@@ -159,7 +169,7 @@ export const dynamicMenuRoute: MenuList = [
     key: 'teacher',
     meta: {
       icon: 'UserSwitchOutlined',
-      role: [ROLE_ADMIN, ROLE_STUDENT]
+      role: [ROLE_ADMIN, ROLE_TEACHER]
     },
     children: [
       {
@@ -168,7 +178,25 @@ export const dynamicMenuRoute: MenuList = [
         name: '家教信息',
         meta: {
           icon: 'MessageOutlined',
-          role: [ROLE_ADMIN, ROLE_STUDENT]
+          role: [ROLE_ADMIN, ROLE_TEACHER]
+        }
+      },
+      {
+        path: '/teacher/enterscore',
+        key: '/teacher/enterscore',
+        name: '录入分数',
+        meta: {
+          icon: 'MessageOutlined',
+          role: [ROLE_ADMIN, ROLE_TEACHER]
+        }
+      },
+      {
+        path: '/teacher/scoresheet',
+        key: '/teacher/scoresheet',
+        name: '成绩表',
+        meta: {
+          icon: 'FileTextOutlined',
+          role: [ROLE_ADMIN, ROLE_TEACHER]
         }
       }
     ]

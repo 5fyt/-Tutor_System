@@ -36,13 +36,13 @@ import { useAppSelector } from '@/store';
 interface ListProps {
   loadList: (value?: any) => void;
   changePage: (value?: any) => void;
-  onDeleteHandle: (value?: any) => void;
+  onDeleteHandle?: (value?: any) => void;
   defaultColumns: ColumnsType<TableAPI.DataType>;
   tableData: any[];
   total: number;
   page: number;
   limit: number;
-  show: boolean;
+  show?: boolean;
   size: SizeType;
 }
 const List: FC<ListProps> = ({
@@ -125,7 +125,7 @@ const List: FC<ListProps> = ({
   };
   //批量删除
   const deleteAllUser = () => {
-    onDeleteHandle(selectedRowKeys);
+    onDeleteHandle?.(selectedRowKeys);
   };
   return (
     <div className="content">
