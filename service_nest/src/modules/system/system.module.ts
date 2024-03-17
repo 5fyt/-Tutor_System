@@ -22,6 +22,8 @@ import SysNotice from 'src/entities/notice.entity';
 import { SysNoticeController } from './notice/notice.controller';
 import { SysNoticeService } from './notice/notice.service';
 import SysAchievement from 'src/entities/achievement.entity';
+import { SysScoreController } from './achievement/achievement.controller';
+import { SysScoreService } from './achievement/achievement.service';
 
 @Module({
   imports: [
@@ -45,6 +47,7 @@ import SysAchievement from 'src/entities/achievement.entity';
     SysTutorController,
     SysReserveController,
     SysNoticeController,
+    SysScoreController,
   ],
   providers: [
     SysUserService,
@@ -53,6 +56,7 @@ import SysAchievement from 'src/entities/achievement.entity';
     SysTutorService,
     SysReserveService,
     SysNoticeService,
+    SysScoreService,
   ],
   exports: [
     TypeOrmModule,

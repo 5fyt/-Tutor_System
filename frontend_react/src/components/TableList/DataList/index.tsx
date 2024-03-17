@@ -4,35 +4,7 @@ import { ColumnsType } from 'antd/es/table';
 import type { TableProps } from 'antd/es/table';
 import { SizeType } from 'antd/es/config-provider/SizeContext';
 import { useAppSelector } from '@/store';
-// import Style from '../styles/list.module.scss';
-// import { useAppDispatch, useAppSelector } from '@/stores';
-// import { pageIndex, pageSize, updatePage } from '@/stores/module/goods';
-// import { results, totalCount } from '@/stores/module/goods';
-// import { SizeType } from 'antd/es/config-provider/SizeContext';
-// import { changeStatus, deleteGoods } from '@/services/api/goods';
-// import UploadExcel from '../../../UploadExcel';
-// interface DataType {
-//   key: React.Key;
-//   name: string;
-//   code: string;
-//   currentPrice: string;
-//   originalPrice: string;
-//   discount: string;
-//   salesVolume: number;
-//   type: string;
-//   status: number;
-//   hasExcel: boolean;
-// }
-// type Iprop = {
-//   checkKeys: any[];
-//   show: boolean;
-//   sz: SizeType;
-//   addShow: (value?: any) => void;
-//   loadList: (value?: any) => void;
-// };
-// interface ModalProps {
-//   showModal: (value: any) => void;
-// }
+
 interface ListProps {
   loadList: (value?: any) => void;
   changePage: (value?: any) => void;

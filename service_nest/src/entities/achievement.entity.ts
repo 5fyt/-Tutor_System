@@ -13,6 +13,9 @@ export default class SysAchievement {
   @ApiProperty()
   id: number;
 
+  @Column({ default: 0 })
+  userId: number;
+
   @Column({ unique: true })
   usualGrades: string;
 
@@ -24,6 +27,9 @@ export default class SysAchievement {
 
   @Column({ nullable: true, default: '' })
   allScore: string;
+
+  @Column({ nullable: true, default: false })
+  isShow: boolean;
 
   @CreateDateColumn({ name: 'created_at' })
   @ApiProperty()

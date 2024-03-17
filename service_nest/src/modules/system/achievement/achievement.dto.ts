@@ -22,6 +22,12 @@ export class DeleteScoreDto {
 }
 export class CreateScoreDto {
   @ApiProperty({
+    description: 'userId',
+  })
+  @IsInt()
+  userId: number;
+
+  @ApiProperty({
     description: '平时成绩',
   })
   @IsString()

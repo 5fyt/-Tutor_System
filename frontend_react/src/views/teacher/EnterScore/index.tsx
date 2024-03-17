@@ -3,11 +3,11 @@ import { defaultSettingData } from './constants/index';
 import type { ColumnsType } from 'antd/es/table';
 import { Button, Space, Avatar } from 'antd';
 import dayjs from 'dayjs';
-
+import { getUserList } from '@/api/system/user';
 import TableList from '@/components/TableList';
 
 import { getPreScoringListByRole } from '@/api/system/reserve';
-// import AddReserve from './AddReserve';
+import AddScore from './AddScore';
 
 interface ModalProps {
   showModal: (value?: any) => void;
@@ -61,9 +61,9 @@ const EnterScore: FC = () => {
       title: '操作',
       dataIndex: 'operation',
       key: '9',
-      render: _ => (
+      render: (_, record: any) => (
         <Space>
-          <Button onClick={() => addHandle()} type="primary" ghost>
+          <Button onClick={() => addHandle()} type="primary" ghost disabled={record.isShow}>
             录入分数
           </Button>
         </Space>
@@ -76,6 +76,7 @@ const EnterScore: FC = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
 
+  const [userOption, setUserOption] = useState<any[]>([]);
   const innerRef = useRef<ModalProps>(null);
   const loadList = useCallback(
     async (info?: any) => {
@@ -89,10 +90,15 @@ const EnterScore: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+  const getOptions = useCallback(async () => {
+    const list = await getUserList();
 
+    setUserOption(list);
+  }, []);
   useEffect(() => {
     loadList();
-  }, [loadList]);
+    getOptions();
+  }, [loadList, getOptions]);
   const searchInfo = (info?: any) => {
     loadList(info);
   };
@@ -126,6 +132,7 @@ const EnterScore: FC = () => {
         changePage={changePage}
         onAddHandle={addHandle}
       />
+      <AddScore innerRef={innerRef} onLoadList={loadList} options={userOption} />
       {/* <AddReserve innerRef={innerRef} onLoadList={loadList} /> */}
     </>
   );

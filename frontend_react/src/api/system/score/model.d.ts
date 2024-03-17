@@ -1,5 +1,6 @@
 declare namespace API {
   type ScoreAddParams = {
+    userId: number;
     usualGrades: string;
     comments: string;
     classResult: string;

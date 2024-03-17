@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get } from '@nestjs/common';
 import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { PaginatedResponseDto } from 'src/common/class/res.class';
@@ -12,11 +12,18 @@ import {
 
 import { SysScoreService } from './achievement.service';
 import SysAchievement from 'src/entities/achievement.entity';
+import { AdminUser } from 'src/decorators/admin-user.decorator';
+import { IAdminUser } from 'src/modules/admin.interface';
+import { ScoreInfo } from './achievement.class';
 
 @ApiTags('课程模块')
-@Controller('Score')
+@Controller('score')
 export class SysScoreController {
   constructor(private scoreService: SysScoreService) {}
+  @Get('list')
+  async getList(): Promise<ScoreInfo[]> {
+    return this.scoreService.scoreList();
+  }
 
   @ApiOperation({ summary: '分页查询课程信息' })
   @ApiOkResponse({ type: [SysAchievement] })
@@ -33,6 +40,21 @@ export class SysScoreController {
     };
   }
 
+  @ApiOperation({ summary: '分页查询课程信息' })
+  @ApiOkResponse({ type: [SysAchievement] })
+  @Post('search-student-score')
+  async pageStudent(
+    @Body() dto: PageSearchScoreDto,
+    @AdminUser() user: IAdminUser,
+  ): Promise<PaginatedResponseDto<SysAchievement>> {
+    const [list, total] = await this.scoreService.pageStudent(dto, user.uid);
+    return {
+      size: dto.limit,
+      page: dto.page,
+      total,
+      list,
+    };
+  }
   @ApiOperation({ summary: '删除课程' })
   @Post('delete')
   async delete(@Body() dto: DeleteScoreDto): Promise<void> {

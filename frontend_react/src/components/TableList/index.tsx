@@ -10,7 +10,7 @@ interface TableProps {
   tableList: TableAPI.TableList<ColumnsType<TableAPI.DataType>>;
   loadList: (value?: any) => void;
   changePage: (value?: any) => void;
-  onAddHandle: (value?: any) => void;
+  onAddHandle?: (value?: any) => void;
   onDeleteHandle?: (value?: any) => void;
 }
 

@@ -8,7 +8,7 @@ interface TableHeaderProps {
   searchName: string;
   element: ReactNode | (() => ReactNode);
   loadList: (value?: any) => void;
-  onAddHandle: (value?: any) => void;
+  onAddHandle?: (value?: any) => void;
   changeSize: (value?: SizeType) => void;
   isShow?: Boolean;
 }
