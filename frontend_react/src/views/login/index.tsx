@@ -116,7 +116,7 @@ const LoginForm: FC = () => {
               { pattern: /^[a-zA-Z0-9_-]{4,16}$/, message: '用户名格式错误！' }
             ]}
           >
-            <Input autoComplete="off" placeholder="用户名" prefix={<UserOutlined />} size="large" />
+            <Input autoComplete="off" placeholder="用户名" prefix={<UserOutlined />} size="middle" />
           </Form.Item>
           <Form.Item
             name="password"
@@ -126,7 +126,7 @@ const LoginForm: FC = () => {
               { pattern: /^[a-zA-Z0-9_-]{6,18}$/, message: '密码格式错误！' }
             ]}
           >
-            <Input.Password autoComplete="off" placeholder="密码" prefix={<LockOutlined />} size="large" />
+            <Input.Password autoComplete="off" placeholder="密码" prefix={<LockOutlined />} size="middle" />
           </Form.Item>
           <Form.Item
             name="verifyCode"
@@ -136,7 +136,7 @@ const LoginForm: FC = () => {
             <Input
               placeholder="验证码"
               prefix={<SafetyOutlined />}
-              size="large"
+              size="middle"
               autoComplete="off"
               maxLength={4}
               suffix={

@@ -19,7 +19,7 @@ interface ModalProps {
 
 const AddUser: FC<ModalProps> = ({ innerRef, roleOptions, onLoadList }) => {
   const [visible, setVisible] = useState(false);
-  const [id, setId] = useState<number>();
+  const [id, setId] = useState<number>(0);
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const formRef = useRef<any>();
@@ -73,6 +73,7 @@ const AddUser: FC<ModalProps> = ({ innerRef, roleOptions, onLoadList }) => {
     formRef.current?.resetFields();
   };
   const showModal = (value?: any) => {
+    setId(0);
     if (value) {
       const { roleNames, id } = value;
       setId(id);
@@ -133,7 +134,7 @@ const AddUser: FC<ModalProps> = ({ innerRef, roleOptions, onLoadList }) => {
           >
             <Input placeholder="请输入六位用户名" />
           </Form.Item>
-          {id && (
+          {id ? (
             <Form.Item<FieldType>
               label="密码"
               name="password"
@@ -141,6 +142,8 @@ const AddUser: FC<ModalProps> = ({ innerRef, roleOptions, onLoadList }) => {
             >
               <Input.Password placeholder="请输入旧密码" />
             </Form.Item>
+          ) : (
+            <></>
           )}
           <Form.Item<FieldType>
             label="姓名"

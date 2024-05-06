@@ -5,7 +5,7 @@ enum Score_URL {
   score_search = '/score/search',
   update_score = '/score/update',
   delete_score = '/score/delete',
-  search_studentScore = '/score/search-studen-score'
+  search_studentScore = '/score/search-student-score'
 }
 //添加成绩列表
 export const addScore = (params: API.ScoreAddParams, options?: IOptions) => {

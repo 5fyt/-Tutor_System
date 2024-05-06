@@ -6,6 +6,7 @@ import SysRole from 'src/entities/role.entity';
 import SysUserRole from 'src/entities/user-role.entity';
 import SysRolePerm from 'src/entities/role-perm.entity';
 import SysPerm from 'src/entities/perm.entity';
+import { ApiException } from 'src/common/exceptions/api.exception';
 import { EntityManager, Like, Repository } from 'typeorm';
 
 import { CreateRoleDto, PageSearchRoleDto, UpdateRoleDto } from './role.dto';
@@ -80,6 +81,12 @@ export class SysRoleService {
    */
   async add(param: CreateRoleDto): Promise<void> {
     const { name, remark, permissionIds } = param;
+    const existname = await this.roleRepository.findOne({
+      where: { name },
+    });
+    if (existname) {
+      throw new ApiException(10006);
+    }
     const role = await this.roleRepository.insert({
       name,
       remark,
@@ -117,6 +124,7 @@ export class SysRoleService {
           roleId: param.id,
         };
       });
+
       // 重新分配权限
       await manager.insert(SysRolePerm, insertRoles);
     });

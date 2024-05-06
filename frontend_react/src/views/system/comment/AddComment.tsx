@@ -66,9 +66,9 @@ const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
   };
   const showModal = async (value: any) => {
     if (value) {
-      const { comment, score, id } = value;
+      const { comment, score, reserve_id } = value;
 
-      setId(id);
+      setId(reserve_id);
       setScore(score);
       form.setFieldsValue({ comment, score });
     }

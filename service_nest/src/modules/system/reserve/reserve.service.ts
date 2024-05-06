@@ -139,18 +139,36 @@ export class SysReserveService {
     param: PageSearchReserveDto,
   ): Promise<[SysReserve[], number]> {
     const { limit, page } = param;
+
     const qb = await this.reserveRepository
       .createQueryBuilder('reserve')
       .innerJoinAndSelect('sys_tutor', 'tutor', 'reserve.tutorId=tutor.id')
+      // .innerJoinAndSelect('sys_user', 'user')
       .innerJoinAndSelect('sys_user', 'user', 'tutor.userId=user.id')
-      .select(['reserve.*', 'tutor.grade,tutor.course', 'user.name'])
+      .innerJoinAndSelect(
+        'sys_user_role',
+        'user_role',
+        'user_role.user_id = user.id',
+      )
+      .innerJoinAndSelect('sys_role', 'role', 'role.id = user_role.role_id')
+      .select([
+        'reserve.*',
+        'reserve.id',
+        'tutor.course,tutor.grade',
+        'role',
+        'user.*',
+      ])
       .where('reserve.status = :status', { status: '1' })
+      .andWhere('role.name NOT IN (:...role)', {
+        role: ['student'],
+      })
       .orderBy('reserve.updated_at', 'DESC')
       .offset((page - 1) * limit)
       .limit(limit);
 
     const [_, total] = await qb.getManyAndCount();
     const list = await qb.getRawMany();
+    console.log(list);
     return [list, total];
   }
 
@@ -162,18 +180,18 @@ export class SysReserveService {
     const qb = await this.reserveRepository
       .createQueryBuilder('reserve')
       .innerJoinAndSelect('sys_tutor', 'tutor', 'reserve.tutorId=tutor.id')
-      .innerJoinAndSelect('sys_user', 'user', 'reserve.userId=user.id')
-      .innerJoinAndSelect('sys_user', 'users', 'tutor.userId=users.id')
+      // .innerJoinAndSelect('sys_user', 'user')
+      .innerJoinAndSelect('sys_user', 'user', 'tutor.userId=user.id')
       .innerJoinAndSelect(
         'sys_user_role',
         'user_role',
         'user_role.user_id = user.id',
       )
       .innerJoinAndSelect('sys_role', 'role', 'role.id = user_role.role_id')
-      .select(['reserve.*', 'tutor.course,tutor.grade', 'role.name', 'users.*'])
+      .select(['reserve.*', 'tutor.course,tutor.grade', 'role', 'user.*'])
       .where('reserve.status = :status', { status: '1' })
       .andWhere('role.name NOT IN (:...role)', {
-        role: ['student'],
+        role: ['teacher'],
       })
       .orderBy('reserve.updated_at', 'DESC')
       .offset((page - 1) * limit)

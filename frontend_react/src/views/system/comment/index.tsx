@@ -13,7 +13,7 @@ interface ModalProps {
 }
 const ReserveManage: FC = () => {
   const defaultColumns: ColumnsType<TableAPI.DataType> = [
-    { title: '发布者', dataIndex: 'user_name', key: '0' },
+    { title: '发布者', dataIndex: 'name', key: '0' },
     { title: '课程名称', dataIndex: 'course', key: '1' },
     { title: '课程年级', dataIndex: 'grade', key: '2' },
     {
@@ -32,9 +32,6 @@ const ReserveManage: FC = () => {
       key: '5',
       render: (_, record) => (
         <Space>
-          <Button onClick={() => addHandle(record)} type="primary" ghost>
-            新增
-          </Button>
           <Button onClick={() => updateHandle(record)} type="primary" ghost>
             修改
           </Button>
@@ -76,9 +73,7 @@ const ReserveManage: FC = () => {
     setPage(page);
     setLimit(limit);
   };
-  const addHandle = (record: any) => {
-    innerRef.current?.showModal(record);
-  };
+
   const updateHandle = (record: any) => {
     innerRef.current?.showModal(record);
   };
@@ -117,7 +112,7 @@ const ReserveManage: FC = () => {
         tableList={tableList}
         loadList={searchInfo}
         changePage={changePage}
-        onAddHandle={addHandle}
+        onAddHandle={updateHandle}
         onDeleteHandle={deleteHandle}
       />
       <AddComment innerRef={innerRef} onLoadList={loadList} />

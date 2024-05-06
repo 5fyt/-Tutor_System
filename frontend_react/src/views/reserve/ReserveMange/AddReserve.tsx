@@ -24,7 +24,7 @@ interface ModalProps {
 const AddReserve: FC<ModalProps> = ({ innerRef, onLoadList }) => {
   const [visible, setVisible] = useState(false);
   const [id, setId] = useState<number>(0);
-
+  const [tutorId, setTutorId] = useState(0);
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const formRef = useRef<any>();
@@ -37,7 +37,7 @@ const AddReserve: FC<ModalProps> = ({ innerRef, onLoadList }) => {
     try {
       formRef.current?.validateFields().then(async (submitInfo: any) => {
         const data = {
-          tutorId: id,
+          tutorId,
           startDate: dayjs(submitInfo.date[0], 'YYYY-MM-DD').format('YYYY-MM-DD'),
           endDate: dayjs(submitInfo.date[1], 'YYYY-MM-DD').format('YYYY-MM-DD'),
           startTime: dayjs(submitInfo.startTime, 'HH:mm').format('HH:mm'),
@@ -79,10 +79,14 @@ const AddReserve: FC<ModalProps> = ({ innerRef, onLoadList }) => {
     formRef.current?.resetFields();
   };
   const showModal = (value?: any) => {
-    if (value) {
+    setId(0);
+    if (typeof value !== 'number') {
       setId(value.id);
       console.log(value);
+      setTutorId(value.tutor_id);
       form.setFieldsValue({ detailAddress: value.detailAddress });
+    } else {
+      setTutorId(value);
     }
 
     setVisible(true);

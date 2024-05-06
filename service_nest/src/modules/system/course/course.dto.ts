@@ -25,6 +25,7 @@ export class CreateCourseDto {
     description: '课程名称',
   })
   @IsString()
+  @IsOptional()
   @MinLength(2)
   name: string;
 

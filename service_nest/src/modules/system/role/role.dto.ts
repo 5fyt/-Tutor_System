@@ -42,7 +42,6 @@ export class CreateRoleDto {
   })
   @ArrayNotEmpty()
   @ArrayMinSize(1)
-  @ArrayMaxSize(3)
   permissionIds: number[];
 }
 export class PageSearchRoleDto {

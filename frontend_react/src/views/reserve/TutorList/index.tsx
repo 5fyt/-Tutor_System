@@ -1,6 +1,6 @@
 import { FC, memo, useCallback, useEffect, useState, useRef } from 'react';
 import { CheckSquareOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Card, message } from 'antd';
+import { Avatar, Card, message, Button } from 'antd';
 import { getTutorListByRole } from '@/api/system/tutor';
 import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
@@ -16,6 +16,7 @@ const TutorList: FC = () => {
   const [limit, setLimit] = useState(10);
   const [total, setTotal] = useState(0);
   const [tutorData, setTutorData] = useState([]);
+  // const [conDis, setconDis] = useState(false);
   const innerRef = useRef<ModalProps>(null);
   const onChange: PaginationProps['onChange'] = (current, pageSize) => {
     console.log(current, pageSize);
@@ -32,7 +33,7 @@ const TutorList: FC = () => {
     [limit, page]
   );
   const reserveHandle = (item: any) => {
-    innerRef.current?.showModal(item);
+    innerRef.current?.showModal(item.id);
   };
   const confirmServe = async (item: any) => {
     const { code } = await updateReserveStatus({ id: item.id });
@@ -57,12 +58,12 @@ const TutorList: FC = () => {
                   />
                 }
                 actions={[
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <span style={{ color: '#45956A', marginRight: '5px' }} onClick={() => confirmServe(item)}>
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Button style={{ color: '#45956A', marginRight: '5px' }} onClick={() => confirmServe(item)}>
                       确定预约
-                    </span>
+                    </Button>
                     <div onClick={() => reserveHandle(item)}>
-                      <span style={{ color: '#040404', marginRight: '3px' }}>预约课程</span>
+                      <Button style={{ color: '#040404', marginRight: '3px' }}>预约课程</Button>
                       <CheckSquareOutlined />
                     </div>
                   </div>

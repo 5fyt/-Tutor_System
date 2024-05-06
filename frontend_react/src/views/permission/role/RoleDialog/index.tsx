@@ -84,6 +84,8 @@ const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
     }
   };
   const cancelHandle = () => {
+    // setSelectedKeys([]);
+    // setTargetKeys([]);
     setVisible(false);
     formRef.current?.resetFields();
   };
@@ -91,8 +93,10 @@ const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
     if (value) {
       const { title, description, id } = value;
       const { permissionIds } = await roleInfo({ id });
-      setSelectedKeys(permissionIds);
+
       setTargetKeys(permissionIds);
+      setSelectedKeys(permissionIds);
+
       setId(id);
       form.setFieldsValue({ name: title, remark: description });
     }
@@ -140,7 +144,7 @@ const AddRole: FC<ModalProps> = ({ innerRef, onLoadList }) => {
               }
             ]}
           >
-            <Input placeholder="请输入六位用户名" />
+            <Input disabled={id ? true : false} placeholder="请输入角色名" />
           </Form.Item>
 
           <Form.Item<FieldType>

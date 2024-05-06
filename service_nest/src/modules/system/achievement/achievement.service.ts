@@ -8,7 +8,7 @@ import {
   PageSearchScoreDto,
 } from './achievement.dto';
 import { ScoreInfo } from './achievement.class';
-
+import { SysRoleService } from '../role/role.service';
 @Injectable()
 export class SysScoreService {
   constructor(
@@ -16,6 +16,7 @@ export class SysScoreService {
     private scoreRepository: Repository<SysAchievement>,
     @InjectEntityManager()
     private entityManager: EntityManager,
+    private roleService: SysRoleService,
   ) {}
 
   async scoreList(): Promise<ScoreInfo[]> {
@@ -116,32 +117,65 @@ export class SysScoreService {
 
   async pageStudent(
     param: PageSearchScoreDto,
-    uid: number,
+    uid?: number,
   ): Promise<[SysAchievement[], number]> {
+    const roles: number[] = await this.roleService.getRoleIdByUser(uid);
+    const roleNamePromises: Promise<string>[] = roles.map(async (role) => {
+      const { roleInfo } = await this.roleService.info(role);
+      return roleInfo?.name;
+    });
+    const roleName: string[] = await Promise.all(roleNamePromises);
     const { limit, page, allScore } = param;
-    const qb = await this.scoreRepository
-      .createQueryBuilder('score')
-      .innerJoinAndSelect('sys_user', 'user', 'score.userId=user.id')
-      .innerJoinAndSelect('sys_tutor', 'tutor', 'tutor.userId=user.id')
-      .select(['score.*', 'tutor.grade,tutor.course', 'user.name'])
-      .orderBy('score.updated_at', 'DESC')
-      .where(
-        new Brackets((qb) => {
-          if (allScore) {
-            return qb.where('reserve.startDate LIKE :allScore', {
-              allScore: `%${allScore}%`,
-            });
-          } else {
-            return qb;
-          }
-        }),
-      )
-      .andWhere('user.id =:userId', { userId: uid })
-      .offset((page - 1) * limit)
-      .limit(limit);
+    if (roleName.includes('admin')) {
+      const qb = await this.scoreRepository
+        .createQueryBuilder('score')
+        .innerJoinAndSelect('sys_user', 'user', 'score.userId=user.id')
+        .innerJoinAndSelect('sys_tutor', 'tutor', 'score.userId=tutor.userId')
+        .select(['score.*', 'tutor.*', 'user.name'])
+        .orderBy('score.updated_at', 'DESC')
+        .where(
+          new Brackets((qb) => {
+            if (allScore) {
+              return qb.where('reserve.startDate LIKE :allScore', {
+                allScore: `%${allScore}%`,
+              });
+            } else {
+              return qb;
+            }
+          }),
+        )
 
-    const [_, total] = await qb.getManyAndCount();
-    const list = await qb.getRawMany();
-    return [list, total];
+        .offset((page - 1) * limit)
+        .limit(limit);
+
+      const [_, total] = await qb.getManyAndCount();
+      const list = await qb.getRawMany();
+      return [list, total];
+    } else {
+      const qb = await this.scoreRepository
+        .createQueryBuilder('score')
+        .innerJoinAndSelect('sys_user', 'user', 'score.userId=user.id')
+        .innerJoinAndSelect('sys_tutor', 'tutor', 'tutor.userId=user.id')
+        .select(['score.*', 'tutor.grade,tutor.course', 'user.name'])
+        .orderBy('score.updated_at', 'DESC')
+        .where(
+          new Brackets((qb) => {
+            if (allScore) {
+              return qb.where('reserve.startDate LIKE :allScore', {
+                allScore: `%${allScore}%`,
+              });
+            } else {
+              return qb;
+            }
+          }),
+        )
+        .andWhere('user.id =:userId', { userId: uid })
+        .offset((page - 1) * limit)
+        .limit(limit);
+
+      const [_, total] = await qb.getManyAndCount();
+      const list = await qb.getRawMany();
+      return [list, total];
+    }
   }
 }

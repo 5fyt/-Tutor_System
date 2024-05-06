@@ -51,8 +51,11 @@ const PublishInfo: FC<ModalProps> = ({ innerRef, onLoadList }) => {
     try {
       formRef.current?.validateFields().then(async (submitInfo: any) => {
         if (id) {
-          console.log(parseFloat(submitInfo.money));
-          const { code } = await updateTutor({ id, ...submitInfo, money: parseFloat(submitInfo.money) });
+          if (typeof submitInfo.course !== 'string') {
+            const filterCourse = courseOption.filter(item => item.value === submitInfo.course)[0]?.label;
+            submitInfo = { ...submitInfo, course: filterCourse };
+          }
+          const { code, message } = await updateTutor({ id, ...submitInfo, money: parseFloat(submitInfo.money) });
           if (code === 200) {
             messageApi.success('更新成功');
             onLoadList();
@@ -62,7 +65,7 @@ const PublishInfo: FC<ModalProps> = ({ innerRef, onLoadList }) => {
               formRef.current?.resetFields();
             }, 100);
           } else {
-            messageApi.error('更新失败');
+            messageApi.error('更新失败' || message);
           }
         } else {
           const { grade, course, money, ...data } = submitInfo;
@@ -161,7 +164,7 @@ const PublishInfo: FC<ModalProps> = ({ innerRef, onLoadList }) => {
           </Form.Item>
           <Form.Item<FieldType>
             label="年级"
-            name="course"
+            name="grade"
             rules={[
               {
                 required: true,
@@ -173,7 +176,7 @@ const PublishInfo: FC<ModalProps> = ({ innerRef, onLoadList }) => {
           </Form.Item>
           <Form.Item<FieldType>
             label="课程"
-            name="grade"
+            name="course"
             rules={[
               {
                 required: true,
